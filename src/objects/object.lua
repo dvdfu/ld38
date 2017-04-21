@@ -48,7 +48,7 @@ function Object:destroy()
 end
 
 function Object:draw()
-    love.graphics.rectangle('fill', self.pos.x, self.pos.y, self.size.x, self.size.y)
+    love.graphics.rectangle('line', self.pos.x, self.pos.y, self.size.x, self.size.y)
 end
 
 return Object
