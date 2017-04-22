@@ -1,9 +1,9 @@
 local Class = require 'modules.hump.class'
-local Body = require 'src.objects.body'
+local Object = require 'src.objects.object'
 local Animation = require 'src.animation'
 
 local Bee = Class.new()
-Bee:include(Body)
+Bee:include(Object)
 Bee.MAX_ACCEL = 0.1
 Bee.MAX_SPEED = 4
 
@@ -13,7 +13,7 @@ local sprites = {
 }
 
 function Bee:init(objects, x, y, player)
-    Body.init(self, objects, x, y)
+    Object.init(self, objects, x, y)
     self.player = player
     self.offset = math.random()
     self.lag = 1 + math.random() * 2
