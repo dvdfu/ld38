@@ -36,7 +36,7 @@ function Bee:update(dt)
     delta = delta:trimmed(Bee.MAX_SPEED) / 100 / self.lag
     self.body:applyForce(delta:unpack())
 
-    self.offset = (self.offset + dt) % 1
+    self.offset = (self.offset + dt / 60) % 1
     self.wingAnim:update(dt)
 end
 
@@ -45,8 +45,8 @@ function Bee:draw()
     local vx, vy = self.body:getLinearVelocity()
     local angle = math.atan2(vy, vx)
     local offset = math.sin(self.offset * math.pi * 2) * 2
-    self.wingAnim:draw(x, y + offset, angle, 1, 1, 4, 6)
-    love.graphics.draw(sprites.bee, x, y + offset, angle, 0.5, 0.5, 8, 8)
+    self.wingAnim:draw(x, y + offset, angle, 1, 1, 4, 4)
+    love.graphics.draw(sprites.bee, x, y + offset, angle, 1, 1, 4, 4)
 end
 
 return Bee
