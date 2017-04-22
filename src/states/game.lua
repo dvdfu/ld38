@@ -21,7 +21,7 @@ function Game:enter()
     self.timer:every(120, function()
         local x, y = self.camera:getPosition():unpack()
         local type = math.random(0, 1) == 0 and 'BIRD' or 'HUMMINGBIRD'
-        Enemy(self.objects, x + 700, y + 120, type, self.player, self.camera)
+        Enemy(self.objects, x + 700, math.random(20, 220), type, self.player, self.camera)
         -- Raindrop(self.objects, 200, -100, math.random(4, 50))
     end)
 end

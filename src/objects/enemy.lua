@@ -11,30 +11,27 @@ Enemy.TYPES = {
   BIRD = {
     RADIUS = 16,
     SPEED = 4,
-    OFFSET_X = 160,
-    OFFSET_Y = -30,
     SPRITE = love.graphics.newImage('res/raindrop_medium.png'),
     DAMPING = 0.5,
     SCALE = 1,
+    LOCKING_DISTANCE = 200,
   },
   HUMMINGBIRD = {
     RADIUS = 8,
-    SPEED = 2,
-    OFFSET_X = 160,
-    OFFSET_Y = 30,
+    SPEED = 8,
     SPRITE = love.graphics.newImage('res/raindrop_small.png'),
     DAMPING = 0.9,
     SCALE = 1,
+    LOCKING_DISTANCE = 300,
   }
 }
 
-function Enemy:init(objects, x, y, type, player, camera)
+function Enemy:init(objects, x, y, type, player)
   Object.init(self, objects, x, y)
   self.player = player
-  self.camera = camera
   self.type = type
-  self.attacking = false
   self.metadata = Enemy.TYPES[self.type]
+  self.locked = false
   self:addTag('enemy')
   self:build(objects:getWorld(), x, y)
 end
@@ -47,34 +44,33 @@ function Enemy:build(world, x, y)
   self.fixture:setUserData(self)
 end
 
-function Enemy:getRestTarget()
-  return self.camera:getPosition() + Vector(self.metadata.OFFSET_X, self.metadata.OFFSET_Y)
-end
-
 function Enemy:update(dt)
-  if self.attacking then
-    x, y = self.delta:unpack()
-    self.body:applyForce(-math.abs(x), y)
-  else
-    local target = self:getRestTarget()
+  local delta
 
-    local delta = (target - self:getPosition()):trimmed(self.metadata.SPEED)
-    x, y = delta:unpack()
-    self.body:applyForce(x, y)
+  if not self.locked then
+    delta = self.player:getPosition() - self:getPosition()
 
-    if delta:len() < 1 then
-      self.attacking = true
-      self.delta = (self.player:getPosition() - self:getPosition()):trimmed(self.metadata.SPEED)
+    if delta:len() < self.metadata.LOCKING_DISTANCE then
+      self.locked = true
+      self.delta = self.player:getPosition() - self:getPosition()
     end
+  else
+    delta = self.delta
   end
+
+  x, y = delta:trimmed(self.metadata.SPEED):unpack()
+  self.body:setLinearVelocity(x, y)
 end
 
 function Enemy:draw()
   local x, y = self.body:getPosition()
   love.graphics.draw(self.metadata.SPRITE, x, y, 0, self.metadata.SCALE, self.metadata.SCALE, self.metadata.RADIUS, self.metadata.RADIUS)
   love.graphics.circle('line', x, y, self.metadata.RADIUS)
-  x, y = self:getRestTarget():unpack()
-  love.graphics.circle('line', x, y, self.metadata.RADIUS)
+  
+  -- if self.locked then love.graphics.setColor(255, 0, 0) end
+  -- local px, py = self.player:getPosition():unpack()
+  -- love.graphics.line(x, y, px, py)
+  -- love.graphics.setColor(255, 255, 255)
 end
 
 return Enemy
