@@ -11,6 +11,10 @@ end
 function love.update(dt)
     dt = 1
     Gamestate.update(dt)
+
+    if love.keyboard.isDown('escape') then
+        love.event.quit()
+    end
 end
 
 function love.draw()
