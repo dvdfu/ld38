@@ -8,3 +8,7 @@ function love.load()
     Gamestate.registerEvents()
     Gamestate.switch(Game)
 end
+
+function love.draw()
+    love.graphics.scale(2, 2)
+end
