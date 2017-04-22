@@ -10,11 +10,11 @@ function Object:init(objects, x, y, w, h)
     self.size = Vector(w, h)
     self.vel = Vector(0, 0)
     self.dead = false
+    self.tags = {}
 end
 
 function Object:update(dt)
     self:move(self.vel.x, self.vel.y)
-    self.tag = {}
 end
 
 function Object:move(dx, dy)
