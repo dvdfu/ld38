@@ -5,11 +5,8 @@ local Object = Class.new()
 
 function Object:init(objects, x, y)
     objects:add(self)
-    self:build(objects:getWorld(), x, y)
     self.tags = {}
 end
-
-function Object:build(...) end
 
 function Object:update(dt) end
 

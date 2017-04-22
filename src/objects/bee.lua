@@ -14,6 +14,7 @@ local sprites = {
 
 function Bee:init(objects, x, y, player)
     Object.init(self, objects, x, y)
+    self:build(objects:getWorld(), x, y)
     self.player = player
     self.offset = math.random()
     self.lag = 1 + math.random() * 2

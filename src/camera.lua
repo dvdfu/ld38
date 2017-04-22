@@ -44,7 +44,7 @@ function Camera:update(dt)
     end
 
     self.pos = self.pos + delta * dt
-    self.pos.y = 240 -- just for us!
+    self.pos.y = Camera.HALF_SCREEN.y -- just for us!
 end
 
 function Camera:follow(target)
