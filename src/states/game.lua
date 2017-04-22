@@ -17,11 +17,11 @@ function Game:enter()
     self.player = Player(self.objects, 180, 120)
     self.camera = Camera(self.player, { damping = 12 })
 
-    Enemy(self.objects, 700, 120, 'bird', self.player)
-    -- self.timer = Timer.new()
-    -- self.timer:every(60, function()
-    --     Raindrop(self.objects, 200, -100, math.random(4, 50))
-    -- end)
+    self.timer = Timer.new()
+    self.timer:after(120, function()
+        Enemy(self.objects, 700, 120, 'BIRD', self.player)
+        -- Raindrop(self.objects, 200, -100, math.random(4, 50))
+    end)
 end
 
 function Game:update(dt)
@@ -42,6 +42,7 @@ function Game:draw()
         self.player:draw()
         self.objects:draw()
     end)
+    love.graphics.circle('line', 300, 30, 15)
 end
 
 return Game
