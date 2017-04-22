@@ -9,56 +9,72 @@ Enemy:include(Object)
 
 Enemy.TYPES = {
   BIRD = {
-    RADIUS = 15,
+    RADIUS = 16,
+    SPEED = 4,
+    OFFSET_X = 160,
+    OFFSET_Y = -30,
+    SPRITE = love.graphics.newImage('res/raindrop_medium.png'),
+    DAMPING = 0.5,
+    SCALE = 1,
+  },
+  HUMMINGBIRD = {
+    RADIUS = 8,
     SPEED = 2,
-    REST_X = 300,
-    REST_Y = 30,
+    OFFSET_X = 160,
+    OFFSET_Y = 30,
+    SPRITE = love.graphics.newImage('res/raindrop_small.png'),
+    DAMPING = 0.9,
+    SCALE = 1,
   }
 }
 
-function Enemy:init(objects, x, y, type, player)
+function Enemy:init(objects, x, y, type, player, camera)
   Object.init(self, objects, x, y)
   self.player = player
+  self.camera = camera
   self.type = type
   self.attacking = false
-  self.target = Vector(Enemy.TYPES[self.type].REST_X, Enemy.TYPES[self.type].REST_Y)
+  self.metadata = Enemy.TYPES[self.type]
   self:addTag('enemy')
   self:build(objects:getWorld(), x, y)
 end
 
 function Enemy:build(world, x, y)
   self.body = love.physics.newBody(world, x, y, 'dynamic')
-  self.body:setLinearDamping(0.1, 0.1)
-  self.shape = love.physics.newCircleShape(Enemy.TYPES[self.type].RADIUS)
+  self.body:setLinearDamping(self.metadata.DAMPING, self.metadata.DAMPING)
+  self.shape = love.physics.newCircleShape(self.metadata.RADIUS)
   self.fixture = love.physics.newFixture(self.body, self.shape)
   self.fixture:setUserData(self)
 end
 
+function Enemy:getRestTarget()
+  return self.camera:getPosition() + Vector(self.metadata.OFFSET_X, self.metadata.OFFSET_Y)
+end
 
 function Enemy:update(dt)
-  local delta = (self.target - self:getPosition()):normalized()*Enemy.TYPES[self.type].SPEED
-
-  if not self.attacking then
-    if self.timer then
-      self.timer:update(dt)
-    elseif delta:len() < 1 then
-      self.timer = Timer.new()
-      self.timer:after(5, function()
-        self.attacking = true
-        self.target = self.player:getPosition()
-      end)
-    end
-
-    self.body:applyForce(delta:unpack())
-  else
-    x, y = delta:unpack()
+  if self.attacking then
+    x, y = self.delta:unpack()
     self.body:applyForce(-math.abs(x), y)
+  else
+    local target = self:getRestTarget()
+
+    local delta = (target - self:getPosition()):trimmed(self.metadata.SPEED)
+    x, y = delta:unpack()
+    self.body:applyForce(x, y)
+
+    if delta:len() < 1 then
+      self.attacking = true
+      self.delta = (self.player:getPosition() - self:getPosition()):trimmed(self.metadata.SPEED)
+    end
   end
 end
 
 function Enemy:draw()
   local x, y = self.body:getPosition()
-  love.graphics.circle('line', x, y, Enemy.TYPES[self.type].RADIUS)
+  love.graphics.draw(self.metadata.SPRITE, x, y, 0, self.metadata.SCALE, self.metadata.SCALE, self.metadata.RADIUS, self.metadata.RADIUS)
+  love.graphics.circle('line', x, y, self.metadata.RADIUS)
+  x, y = self:getRestTarget():unpack()
+  love.graphics.circle('line', x, y, self.metadata.RADIUS)
 end
 
 return Enemy
