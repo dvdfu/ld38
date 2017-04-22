@@ -6,11 +6,11 @@ local Player = Class.new()
 Player:include(Object)
 Player.MOVE_SPEED = 3
 
-function Player:init(world, x, y)
-    Object.init(self, world, x, y, 32, 32)
+function Player:init(object, x, y)
+    Object.init(self, object, x, y, 32, 32)
 
     for i = 1, 40 do
-        Bee(world, x + math.random(-50, 50), y + math.random(-50, 50), self)
+        Bee(object, x + math.random(-50, 50), y + math.random(-50, 50), self)
     end
 end
 
@@ -46,7 +46,5 @@ end
 function Player:collisionType()
     return 'ignore'
 end
-
-function Player:draw() end
 
 return Player
