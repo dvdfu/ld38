@@ -13,11 +13,8 @@ local sprites = {
 function Game:enter()
     self.world = Bump.newWorld()
     self.objects = {}
-    self.player = Player(self.world, 100, 100)
+    self.player = Player(self.world, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
     table.insert(self.objects, self.player)
-    table.insert(self.objects, Ground(self.world, 0, 200, 200, 32))
-    table.insert(self.objects, Ground(self.world, 100, 300, 400, 32))
-    table.insert(self.objects, Ground(self.world, 300, 200, 32, 200))
 
     self.camera = Camera(self.player, {
         damping = 12,
@@ -26,6 +23,10 @@ function Game:enter()
 end
 
 function Game:update(dt)
+    if love.keyboard.isDown('escape') then
+        love.event.quit()
+    end
+
     for _, object in pairs(self.objects) do
         object:update(dt)
     end
