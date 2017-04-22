@@ -27,19 +27,19 @@ function Raindrop:build(world, x, y, radius)
 end
 
 function Raindrop:update(dt)
-    self.body:applyForce(0, 2)
+    self.body:setLinearVelocity(0, 4)
 end
 
 function Raindrop:draw()
     local x, y = self.body:getPosition()
     if self.radius > 16 then
-        local scale = 32 / self.radius
+        local scale = self.radius / 32
         love.graphics.draw(sprites.large, x, y, 0, scale, scale, 32, 32)
     elseif self.radius > 8 then
-        local scale = 16 / self.radius
+        local scale = self.radius / 16
         love.graphics.draw(sprites.medium, x, y, 0, scale, scale, 16, 16)
     else
-        local scale = 8 / self.radius
+        local scale = self.radius / 8
         love.graphics.draw(sprites.small, x, y, 0, scale, scale, 8, 8)
     end
 end

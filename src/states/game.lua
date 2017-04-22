@@ -14,7 +14,7 @@ function Game:enter()
     self.objects = Objects()
     self.player = Player(self.objects, 180, 120)
     self.camera = Camera(self.player, { damping = 12 })
-    Raindrop(self.objects, 200, -100, 30)
+    Raindrop(self.objects, 200, -100, math.random(4, 50))
 end
 
 function Game:update(dt)
