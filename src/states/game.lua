@@ -1,6 +1,7 @@
 local Vector = require 'modules.hump.camera'
 local Player = require 'src.objects.player'
 local Raindrop = require 'src.objects.raindrop'
+local Enemy = require 'src.objects.enemy'
 local Camera = require 'src.camera'
 local Objects = require 'src.objects'
 
@@ -14,7 +15,8 @@ function Game:enter()
     self.objects = Objects()
     self.player = Player(self.objects, 180, 120)
     self.camera = Camera(self.player, { damping = 12 })
-    Raindrop(self.objects, 200, 100, 30)
+    -- Raindrop(self.objects, 200, 100, 30)
+    Enemy(self.objects, 700, 120, 'bird', self.player)
 end
 
 function Game:update(dt)

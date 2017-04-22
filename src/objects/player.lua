@@ -9,7 +9,7 @@ function Player:init(objects, x, y)
     self.pos = Vector(x, y)
     self.vel = Vector()
 
-    for i = 1, 200 do
+    for i = 1, 50 do
         Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
     end
 end
