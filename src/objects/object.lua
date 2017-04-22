@@ -13,6 +13,7 @@ end
 
 function Object:update(dt)
     self:move(self.vel.x, self.vel.y)
+    self.tag = {}
 end
 
 function Object:move(dx, dy)
@@ -45,6 +46,14 @@ end
 
 function Object:destroy()
     self.world:remove(self)
+end
+
+function Object:addTag(tag)
+    self.tags[tag] = true
+end
+
+function Object:hasTag(tag)
+    return self.tags[tag] == true
 end
 
 function Object:draw()
