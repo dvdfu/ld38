@@ -1,6 +1,7 @@
 local Class = require 'modules.hump.class'
 local Object = require 'src.objects.object'
 local Animation = require 'src.animation'
+local Vector = require 'modules.hump.vector'
 
 local Enemy = Class.new()
 Enemy:include(Object)
@@ -8,7 +9,7 @@ Enemy:include(Object)
 Enemy.TYPES = {
   bird = {
     radius = 15,
-    max_speed = 26,
+    max_speed = 2,
     sprite = love.graphics.newImage('res/raindrop_medium.png'),
   }
 }
@@ -31,9 +32,8 @@ end
 
 function Enemy:update(dt)
     local delta = self.player:getPosition() - self:getPosition()
-    delta = delta:normalized()*self.metadata.max_speed
-    print('=====================================================================', delta, delta)
-    self.body:applyForce(delta:unpack())
+    x, y = (delta:normalized()*self.metadata.max_speed):unpack()
+    self.body:applyForce(-math.abs(x), y)
 end
 
 function Enemy:draw()
