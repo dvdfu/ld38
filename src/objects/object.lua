@@ -3,12 +3,13 @@ local Vector = require 'modules.hump.vector'
 
 local Object = Class.new()
 
-function Object:init(world, x, y, w, h)
-    world:add(self, x, y, w, h)
-    self.world = world
+function Object:init(objects, x, y, w, h)
+    objects:add(self, x, y, w, h)
+    self.objects = objects
     self.pos = Vector(x, y)
     self.size = Vector(w, h)
     self.vel = Vector(0, 0)
+    self.dead = false
 end
 
 function Object:update(dt)
@@ -18,7 +19,7 @@ end
 
 function Object:move(dx, dy)
     if dx == 0 and dy == 0 then return end
-    local ax, ay, cols, len = self.world:move(self, self.pos.x + dx, self.pos.y + dy, self.filter)
+    local ax, ay, cols, len = self.objects:move(self, self.pos.x + dx, self.pos.y + dy, self.filter)
     for _, col in pairs(cols) do
         self:collide(col)
     end
@@ -28,7 +29,7 @@ end
 
 function Object:canMove(dx, dy)
     local x, y = self.pos.x + dx, self.pos.y + dy
-    local ax, ay, cols, len = self.world:check(self, x, y, self.filter)
+    local ax, ay, cols, len = self.objects:check(self, x, y, self.filter)
     return len == 0 or (ax == x and ay == y)
 end
 
@@ -44,8 +45,12 @@ function Object:collisionType()
     return 'ignore'
 end
 
-function Object:destroy()
-    self.world:remove(self)
+function Object:isDead()
+    return self.dead
+end
+
+function Object:getCenter()
+    return self.pos + self.size / 2
 end
 
 function Object:addTag(tag)
