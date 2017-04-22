@@ -1,16 +1,16 @@
 local Class = require 'modules.hump.class'
-local Object = require 'src.objects.object'
+local Vector = require 'modules.hump.vector'
 local Bee = require 'src.objects.bee'
 
 local Player = Class.new()
-Player:include(Object)
 Player.MOVE_SPEED = 3
 
-function Player:init(object, x, y)
-    Object.init(self, object, x, y, 32, 32)
+function Player:init(objects, x, y)
+    self.pos = Vector(x, y)
+    self.vel = Vector()
 
-    for i = 1, 40 do
-        Bee(object, x + math.random(-50, 50), y + math.random(-50, 50), self)
+    for i = 1, 100 do
+        Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
     end
 end
 
@@ -30,21 +30,15 @@ function Player:update(dt)
         self.vel.y = 0
     end
 
-    Object.update(self, dt)
+    self.pos = self.pos + self.vel * dt
 end
 
-function Player:collide(col)
-    if col.normal.y ~= 0 then
-        self.vel.y = 0
-    end
-
-    if col.normal.x ~= 0 then
-        self.vel.x = 0
-    end
+function Player:getPosition()
+    return self.pos
 end
 
-function Player:collisionType()
-    return 'ignore'
+function Player:draw()
+    love.graphics.circle('line', self.pos.x, self.pos.y, 16)
 end
 
 return Player

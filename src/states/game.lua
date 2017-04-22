@@ -1,6 +1,5 @@
 local Vector = require 'modules.hump.camera'
 local Player = require 'src.objects.player'
-local Ground = require 'src.objects.ground'
 local Camera = require 'src.camera'
 local Objects = require 'src.objects'
 
@@ -20,6 +19,7 @@ function Game:enter()
 end
 
 function Game:update(dt)
+    self.player:update(dt)
     self.objects:update(dt)
     self.camera:follow(self.player)
     self.camera:update(dt)
@@ -33,6 +33,7 @@ function Game:draw()
     end
 
     self.camera:draw(function()
+        self.player:draw()
         self.objects:draw()
     end)
 end

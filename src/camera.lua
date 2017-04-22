@@ -19,7 +19,7 @@ end
 function Camera:update(dt)
     self.timer:update(dt)
 
-    local delta = self.target.pos + self.target.size / 2 - self.pos
+    local delta = self.target:getPosition() - self.pos
 
     -- camera movement buffer
     if delta.x > self.buffer.x then
