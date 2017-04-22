@@ -15,6 +15,7 @@ function Raindrop:init(objects, x, y, radius)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y, radius)
     self.radius = radius
+    self:addTag('raindrop')
 end
 
 function Raindrop:build(world, x, y, radius)
@@ -22,21 +23,23 @@ function Raindrop:build(world, x, y, radius)
     self.body:setLinearDamping(0.1, 0.1)
     self.shape = love.physics.newCircleShape(radius)
     self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.fixture:setUserData(self)
 end
 
 function Raindrop:update(dt)
+    self.body:setLinearVelocity(0, 4)
 end
 
 function Raindrop:draw()
     local x, y = self.body:getPosition()
     if self.radius > 16 then
-        local scale = 32 / self.radius
+        local scale = self.radius / 32
         love.graphics.draw(sprites.large, x, y, 0, scale, scale, 32, 32)
     elseif self.radius > 8 then
-        local scale = 16 / self.radius
+        local scale = self.radius / 16
         love.graphics.draw(sprites.medium, x, y, 0, scale, scale, 16, 16)
     else
-        local scale = 8 / self.radius
+        local scale = self.radius / 8
         love.graphics.draw(sprites.small, x, y, 0, scale, scale, 8, 8)
     end
 end

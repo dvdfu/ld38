@@ -11,9 +11,13 @@ end
 function love.update(dt)
     dt = 1
     Gamestate.update(dt)
+end
 
-    if love.keyboard.isDown('escape') then
+function love.keypressed(key)
+    if key == 'escape' then
         love.event.quit()
+    elseif key == 'r' then
+        Gamestate.switch(Game)
     end
 end
 
