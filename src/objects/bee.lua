@@ -1,4 +1,5 @@
 local Class = require 'modules.hump.class'
+local Signal = require 'modules.hump.signal'
 local Object = require 'src.objects.object'
 local Animation = require 'src.animation'
 local Constants = require 'src.constants'
@@ -62,6 +63,7 @@ function Bee:die(other)
     self.fixture:setSensor(true)
     local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
     self.body:applyLinearImpulse(delta:unpack())
+    Signal.emit('cam_shake', 4)
 end
 
 function Bee:draw()

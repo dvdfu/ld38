@@ -1,4 +1,5 @@
 local Vector = require 'modules.hump.camera'
+local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
 local Player = require 'src.objects.player'
 local Raindrop = require 'src.objects.raindrop'
@@ -10,6 +11,12 @@ local Game = {}
 local sprites = {
     backgroundBlur = love.graphics.newImage('res/background_blur.png'),
 }
+
+function Game:init()
+    Signal.register('cam_shake', function(shake)
+        self.camera:shake(shake)
+    end)
+end
 
 function Game:enter()
     self.objects = Objects()
