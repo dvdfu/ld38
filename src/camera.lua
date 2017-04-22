@@ -10,11 +10,10 @@ function Camera:init(target, settings)
     self.damping = settings.damping or 1
     self.buffer = settings.buffer or Vector()
 
+    self.target = target
     self.pos = Vector()
     self.timer = Timer.new()
     self.shakeVec = Vector()
-
-    self:follow(target)
 end
 
 function Camera:update(dt)
@@ -45,6 +44,7 @@ function Camera:update(dt)
     end
 
     self.pos = self.pos + delta * dt
+    self.pos.y = 240 -- just for us!
 end
 
 function Camera:follow(target)
