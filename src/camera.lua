@@ -19,7 +19,7 @@ end
 function Camera:update(dt)
     self.timer:update(dt)
 
-    local delta = self.target.pos + self.target.size / 2 - self.pos
+    local delta = self.target:getPosition() - self.pos
 
     -- camera movement buffer
     if delta.x > self.buffer.x then
@@ -44,7 +44,7 @@ function Camera:update(dt)
     end
 
     self.pos = self.pos + delta * dt
-    self.pos.y = 240 -- just for us!
+    self.pos.y = Camera.HALF_SCREEN.y -- just for us!
 end
 
 function Camera:follow(target)

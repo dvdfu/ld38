@@ -1,17 +1,25 @@
 local Class = require 'modules.hump.class'
-local Bump = require 'modules.bump.bump'
 
 local Objects = Class.new()
 
+local function beginContact(a, b, coll) end
+
+local function endContact(a, b, coll) end
+
+local function preSolve(a, b, coll) end
+
+local function postSolve(a, b, coll, normalimpulse, tangentimpulse) end
+
 function Objects:init()
-    self.world = Bump.newWorld()
+    self.world = love.physics.newWorld(0, 0, true)
+    self.world:setCallbacks(beginContact, endContact, preSolve, postSolve)
     self.objects = {}
 end
 
 function Objects:update(dt)
+    self.world:update(dt)
     for k, object in pairs(self.objects) do
         if object:isDead() then
-            self.world:remove(object)
             self.objects[k] = nil
         else
             object:update(dt)
@@ -19,17 +27,12 @@ function Objects:update(dt)
     end
 end
 
-function Objects:add(object, x, y, w, h)
-    self.world:add(object, x, y, w, h)
+function Objects:add(object)
     table.insert(self.objects, object)
 end
 
-function Objects:move(...)
-    return self.world:move(...)
-end
-
-function Objects:check(...)
-    return self.world:check(...)
+function Objects:getWorld()
+    return self.world
 end
 
 function Objects:draw()
