@@ -4,6 +4,10 @@ local Ground = require 'src.objects.ground'
 
 local Game = {}
 
+local sprites = {
+    backgroundBlur = love.graphics.newImage('res/background_blur.png'),
+}
+
 function Game:enter()
     self.world = Bump.newWorld()
     self.objects = {}
@@ -20,6 +24,10 @@ function Game:update(dt)
 end
 
 function Game:draw()
+    for x = 0, love.graphics.getWidth(), 480 do
+        love.graphics.draw(sprites.backgroundBlur, x, 0)
+    end
+
     for _, object in pairs(self.objects) do
         object:draw()
     end
