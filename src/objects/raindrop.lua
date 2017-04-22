@@ -15,6 +15,7 @@ function Raindrop:init(objects, x, y, radius)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y, radius)
     self.radius = radius
+    self:addTag('raindrop')
 end
 
 function Raindrop:build(world, x, y, radius)
@@ -22,9 +23,11 @@ function Raindrop:build(world, x, y, radius)
     self.body:setLinearDamping(0.1, 0.1)
     self.shape = love.physics.newCircleShape(radius)
     self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.fixture:setUserData(self)
 end
 
 function Raindrop:update(dt)
+    self.body:applyForce(0, 2)
 end
 
 function Raindrop:draw()

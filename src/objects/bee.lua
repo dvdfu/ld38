@@ -18,7 +18,6 @@ function Bee:init(objects, x, y, player)
     self.player = player
     self.offset = math.random()
     self.lag = 1 + math.random() * 2
-    self:addTag('bee')
 
     self.wingAnim = Animation(sprites.wings, 2, 6)
     self.wingAnim:update(math.random() * 6)
@@ -30,6 +29,7 @@ function Bee:build(world, x, y)
     self.shape = love.physics.newCircleShape(4)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setRestitution(1)
+    self.fixture:setUserData(self)
 end
 
 function Bee:update(dt)
@@ -39,6 +39,12 @@ function Bee:update(dt)
 
     self.offset = (self.offset + dt / 60) % 1
     self.wingAnim:update(dt)
+end
+
+function Bee:collide(col, other)
+    if other:hasTag('raindrop') then
+        self.body:destroy()
+    end
 end
 
 function Bee:draw()
