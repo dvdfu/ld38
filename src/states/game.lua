@@ -1,4 +1,5 @@
 local Vector = require 'modules.hump.camera'
+local Timer = require 'modules.hump.timer'
 local Player = require 'src.objects.player'
 local Raindrop = require 'src.objects.raindrop'
 local Camera = require 'src.camera'
@@ -14,7 +15,10 @@ function Game:enter()
     self.objects = Objects()
     self.player = Player(self.objects, 180, 120)
     self.camera = Camera(self.player, { damping = 12 })
-    Raindrop(self.objects, 200, -100, math.random(4, 50))
+    self.timer = Timer.new()
+    self.timer:every(60, function()
+        Raindrop(self.objects, 200, -100, math.random(4, 50))
+    end)
 end
 
 function Game:update(dt)
@@ -22,6 +26,7 @@ function Game:update(dt)
     self.objects:update(dt)
     self.camera:follow(self.player)
     self.camera:update(dt)
+    self.timer:update(dt)
 end
 
 function Game:draw()

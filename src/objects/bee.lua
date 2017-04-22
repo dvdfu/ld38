@@ -18,7 +18,7 @@ function Bee:init(objects, x, y, player)
     self:build(objects:getWorld(), x, y)
     self.player = player
     self.offset = math.random()
-    self.lag = 1 + math.random() * 2
+    self.lag = 1 + math.random()
     self.dead = false
 
     self.wingAnim = Animation(sprites.wings, 2, 6)
