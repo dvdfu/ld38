@@ -13,13 +13,13 @@ local sprites = {
 function Game:enter()
     self.world = Bump.newWorld()
     self.objects = {}
-    local player = Player(self.world, 100, 100)
-    table.insert(self.objects, player)
+    self.player = Player(self.world, 100, 100)
+    table.insert(self.objects, self.player)
     table.insert(self.objects, Ground(self.world, 0, 200, 200, 32))
     table.insert(self.objects, Ground(self.world, 100, 300, 400, 32))
     table.insert(self.objects, Ground(self.world, 300, 200, 32, 200))
 
-    self.camera = Camera(player, {
+    self.camera = Camera(self.player, {
         damping = 12,
         buffer = Vector(32, 24)
     })
@@ -30,6 +30,7 @@ function Game:update(dt)
         object:update(dt)
     end
 
+    self.camera:follow(self.player)
     self.camera:update(dt)
 end
 
