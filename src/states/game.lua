@@ -15,7 +15,8 @@ local Rain = require 'src.rain'
 local Game = {}
 
 local sprites = {
-    backgroundBlur = love.graphics.newImage('res/background_blur.png'),
+    background = love.graphics.newImage('res/background_blur.png'),
+    foreground = love.graphics.newImage('res/foreground_blur.png'),
 }
 
 function Game:init()
@@ -72,7 +73,11 @@ function Game:draw()
     local camPos = self.camera:getPosition()
     local camX = -((camPos.x / 4) % 480)
     for x = camX, love.graphics.getWidth(), 480 do
-        love.graphics.draw(sprites.backgroundBlur, x, 0)
+        love.graphics.draw(sprites.background, x, 0)
+    end
+    camX = -((camPos.x / 2) % 320)
+    for x = camX, love.graphics.getWidth(), 320 do
+        love.graphics.draw(sprites.foreground, x, Constants.GAME_HEIGHT - 160)
     end
     self.rain:draw()
     self.camera:draw(function()
