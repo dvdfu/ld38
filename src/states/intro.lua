@@ -33,7 +33,10 @@ end
 
 function Intro:draw()
     love.graphics.draw(sprites.backgroundBlur, 0, 0)
+    love.graphics.draw(sprites.backgroundBlur, 480, 0)
 
+    love.graphics.push()
+    love.graphics.translate(0, 80) -- I'm too lazy to edit all the Y values lol
     love.graphics.setFont(Constants.FONTS.REDALERT)
     love.graphics.setColor(255, 255, 255)
     love.graphics.printf("According to all known laws of aviation,", 0, 30, Constants.GAME_WIDTH, 'center')
@@ -43,6 +46,7 @@ function Intro:draw()
     love.graphics.printf("because bees don't care what humans think is impossible.", 0, 108, Constants.GAME_WIDTH, 'center')
     love.graphics.printf("Press ENTER to START!", 0, 130, Constants.GAME_WIDTH, 'center')
     love.graphics.setColor(255, 255, 255)
+    love.graphics.pop()
 
     self.transition:draw()
 end

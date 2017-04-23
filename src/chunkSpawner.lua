@@ -5,7 +5,7 @@ local Raindrop = require 'src.objects.raindrop'
 local Constants = require 'src.constants'
 
 local Chunk = Class.new()
-Chunk.FLOWERS = 3 -- 1 to 3 flowers per chunk
+Chunk.FLOWERS = 4 -- 1 to 3 flowers per chunk
 
 function Chunk:init(objects, id)
     self.x = id * Constants.GAME_WIDTH
@@ -15,7 +15,7 @@ function Chunk:init(objects, id)
         local numFlowers = math.random(1, Chunk.FLOWERS)
         for i = 1, numFlowers do
             local fx = (i - math.random()) * Constants.GAME_WIDTH / numFlowers
-            table.insert(objects, Flower(objects, self.x + fx, self.h - math.random(20, 120)))
+            table.insert(objects, Flower(objects, self.x + fx, self.h - math.random(40, 200)))
         end
     end
 
