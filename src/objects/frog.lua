@@ -1,5 +1,6 @@
 local Class = require 'modules.hump.class'
 local Timer = require 'modules.hump.timer'
+local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
 
 local sprites = {
@@ -7,6 +8,7 @@ local sprites = {
     mouth = love.graphics.newImage('res/frog_mouth.png'),
     tongue = love.graphics.newImage('res/frog_tongue.png'),
     tongueTip = love.graphics.newImage('res/frog_tongue_tip.png'),
+    eye = love.graphics.newImage('res/frog_eye.png'),
 }
 
 local Tongue = Class.new()
@@ -97,10 +99,20 @@ function Frog:draw()
     local delta = tongue - self:getPosition()
     love.graphics.draw(sprites.frog, x, y - math.min(0, delta.y / 64), 0, 1, 1, 128, 120)
 
+    self:drawEyes()
+
     love.graphics.draw(sprites.tongue, x, y, math.atan2(delta.y, delta.x), delta:len() / 32, 1, 0, 16)
     love.graphics.draw(sprites.tongueTip, tongue.x, tongue.y, 0, 1.5, 1.5, 16, 16)
 
     love.graphics.draw(sprites.mouth, x, y - math.min(0, delta.y / 4), 0, 1, 1, 80, 80)
+end
+
+function Frog:drawEyes()
+    local x, y = self:getPosition():unpack()
+    local delta = self.player:getPosition() - self.pos
+    local angle = math.atan2(delta.y, delta.x)
+    love.graphics.draw(sprites.eye, x + 84 + 12 * math.cos(angle), y - 55 + 12 * math.sin(angle), 0, 1, 1, 8, 8)
+    love.graphics.draw(sprites.eye, x - 84 + 12 * math.cos(angle), y - 55 + 12 * math.sin(angle), 0, 1, 1, 8, 8)
 end
 
 return Frog
