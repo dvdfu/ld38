@@ -27,7 +27,7 @@ function Enemy:update(dt)
     if not self.locked then
         delta = self.player:getPosition() - self:getPosition()
 
-        if delta:len() > 500 then return
+        if delta:len() > self:getPassiveDistance() then return
         elseif self.passive then self.passive = false end
 
         if delta:len() < self:getLockingDistance() then
@@ -56,12 +56,6 @@ function Enemy:debug()
         love.graphics.line(x, y, px, py)
     end
 
-    if self.delta then
-        love.graphics.setColor(0, 255, 0)
-        local dx, dy = self.delta:unpack()
-        love.graphics.line(x, y, dx, dy)
-    end
-
     love.graphics.setColor(255, 255, 255)
 end
 
@@ -70,5 +64,6 @@ function Enemy:getDamping() end
 function Enemy:getRadius() end
 function Enemy:getLockingDistance() end
 function Enemy:getSpeed() end
+function Enemy:getPassiveDistance() end
 
 return Enemy
