@@ -32,7 +32,7 @@ function Game:enter()
     self.objects = Objects()
     self.player = Player(self.objects, 180, 120)
     local x, y = self.player:getPosition():unpack()
-    self.camera = Camera(x, y, { damping = 12 })
+    self.camera = Camera(x, Constants.GAME_HEIGHT / 2, 12)
     self.chunkSpawner = ChunkSpawner(self.objects, self.player)
 
     self.rain = Rain()
@@ -51,8 +51,7 @@ function Game:update(dt)
     self.objects:update(dt)
 
     local px, py = self.player:getPosition():unpack()
-    px = px + 100
-    self.camera:follow(px, py)
+    self.camera:follow(px + 100)
 
     self.chunkSpawner:update(dt)
     self.camera:update(dt)
