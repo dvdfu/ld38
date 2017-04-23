@@ -11,6 +11,7 @@ local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
 local Gamestate = require 'modules.hump.gamestate'
+local Transition = require 'src.states.transition'
 
 local Game = {}
 
@@ -23,9 +24,11 @@ function Game:init()
         self.camera:shake(shake)
     end)
     Music.game()
+    self.transition = Transition()
 end
 
 function Game:enter()
+    self.transition:fadeIn()
     self.objects = Objects()
     self.player = Player(self.objects, 180, 120)
     local x, y = self.player:getPosition():unpack()
@@ -54,6 +57,7 @@ function Game:enter()
 end
 
 function Game:update(dt)
+    self.transition:update(dt)
     self.player:update(dt)
     self.objects:update(dt)
     local px, py = self.player:getPosition():unpack()
@@ -84,6 +88,7 @@ function Game:draw()
         self.player:draw()
         self.objects:draw()
     end)
+    self.transition:draw()
 end
 
 return Game
