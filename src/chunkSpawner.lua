@@ -85,6 +85,7 @@ function ChunkSpawner:init(objects, player)
     self.objects = objects
     self.player = player
     self.chunkCount = 0
+    self.destroyedChunkCount = 0
     self.chunks = {}
 
     self:generateChunks()
@@ -100,6 +101,10 @@ end
 function ChunkSpawner:update(dt)
     if self.player:getPosition().x > (self.chunkCount - 1) * Constants.GAME_WIDTH then
         self:generateChunks()
+    end
+
+    for i = self.destroyedChunkCount, (self.player:getPosition().x / Constants.GAME_WIDTH) - 1 do
+        self.chunks[i] = nil
     end
 
     for _, chunk in pairs(self.chunks) do
