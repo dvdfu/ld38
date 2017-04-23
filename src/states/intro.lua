@@ -16,6 +16,7 @@ function Intro:init()
 end
 
 function Intro:enter()
+    self.transitioning = false
     self.transition:fadeIn()
 end
 
@@ -24,7 +25,8 @@ function Intro:update(dt)
 end
 
 function Intro:keypressed(key)
-    if key == 'return' then
+    if not self.transitioning and key == 'return' then
+        self.transitioning = true
         self.transition:fadeOut(function()
             Gamestate.switch(Game)
         end)
