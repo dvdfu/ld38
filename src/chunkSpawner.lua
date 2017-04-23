@@ -21,8 +21,8 @@ function Chunk:init(objects, id, player)
         self:spawnFrog()
     else
         self:spawnFlies(math.random(0, 2))
-        self:spawnDrips(math.random(1, 2))
-        self:spawnFlowers(math.random(1, 4))
+        self:spawnDrips(math.random(1, 8))
+        self:spawnFlowers(math.random(1, 8))
     end
 end
 
@@ -48,8 +48,8 @@ end
 
 function Chunk:spawnDrips(n)
     for i = 1, n do
-        local size = math.random(4, 30)
-        local cooldown = 40 + 2 * size
+        local size = math.random(4, 24)
+        local cooldown = 20 + 3 * size
         local x = math.random() * Constants.GAME_WIDTH
         self.timer:every(cooldown, function()
             Raindrop(self.objects, self.x + x, -50, size)
