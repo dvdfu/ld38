@@ -6,13 +6,10 @@ local Constants = require 'src.constants'
 local Camera = Class.new()
 Camera.HALF_SCREEN = Vector(Constants.GAME_WIDTH, Constants.GAME_HEIGHT) / 2
 
-function Camera:init(x, y, settings)
-    settings = settings or {}
-    self.damping = settings.damping or 1
-    self.buffer = settings.buffer or Vector()
-
+function Camera:init(x, y, damping)
+    self.damping = damping or 1
     self.target = Vector(x, y)
-    self.pos = Vector()
+    self.pos = Vector(x, y)
     self.timer = Timer.new()
     self.shakeVec = Vector()
 end
@@ -20,37 +17,19 @@ end
 function Camera:update(dt)
     self.timer:update(dt)
 
-    local delta = self.target - self.pos
-
-    -- camera movement buffer
-    if delta.x > self.buffer.x then
-        delta.x = delta.x - self.buffer.x
-    elseif delta.x < -self.buffer.x then
-        delta.x = delta.x + self.buffer.x
-    else
-        delta.x = 0
+    local dx = self.target.x - self.pos.x
+    if dx > 0.1 then
+        -- damp camera movement if non-trivial
+        dx = dx / self.damping
     end
 
-    if delta.y > self.buffer.y then
-        delta.y = delta.y - self.buffer.y
-    elseif delta.y < -self.buffer.y then
-        delta.y = delta.y + self.buffer.y
-    else
-        delta.y = 0
-    end
-
-    -- damp camera movement if non-trivial
-    if delta:len2() > 0.1 then
-        delta = delta / self.damping
-    end
-
-    self.pos = self.pos + delta * dt
-    self.pos.y = Camera.HALF_SCREEN.y -- just for us!
+    self.pos.x = self.pos.x + dx * dt
 end
 
-function Camera:follow(x, y)
-    self.target.x = x
-    self.target.y = y
+function Camera:follow(x)
+    if x > self.target.x then
+        self.target.x = x
+    end
 end
 
 function Camera:shake(shake, direction)

@@ -1,4 +1,4 @@
-local Vector = require 'modules.hump.camera'
+local Vector = require 'modules.hump.vector'
 local Gamestate = require 'modules.hump.gamestate'
 local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
@@ -15,7 +15,8 @@ local Rain = require 'src.rain'
 local Game = {}
 
 local sprites = {
-    backgroundBlur = love.graphics.newImage('res/background_blur.png'),
+    background = love.graphics.newImage('res/background_blur.png'),
+    foreground = love.graphics.newImage('res/foreground_blur.png'),
 }
 
 function Game:init()
@@ -31,7 +32,7 @@ function Game:enter()
     self.objects = Objects()
     self.player = Player(self.objects, 180, 120)
     local x, y = self.player:getPosition():unpack()
-    self.camera = Camera(x, y, { damping = 12 })
+    self.camera = Camera(x, Constants.GAME_HEIGHT / 2, 12)
     self.chunkSpawner = ChunkSpawner(self.objects, self.player)
 
     self.rain = Rain()
@@ -44,11 +45,14 @@ end
 
 function Game:update(dt)
     self.transition:update(dt)
+    local mousePos = self.camera:getPosition() + Vector(love.mouse.getPosition()) / 2 - Camera.HALF_SCREEN
+    self.player:setMouse(mousePos)
     self.player:update(dt)
     self.objects:update(dt)
+
     local px, py = self.player:getPosition():unpack()
-    px = px + 100
-    self.camera:follow(px, py)
+    self.camera:follow(px + 100)
+
     self.chunkSpawner:update(dt)
     self.camera:update(dt)
     self.rain:update(dt)
@@ -68,13 +72,17 @@ function Game:draw()
     local camPos = self.camera:getPosition()
     local camX = -((camPos.x / 4) % 480)
     for x = camX, love.graphics.getWidth(), 480 do
-        love.graphics.draw(sprites.backgroundBlur, x, 0)
+        love.graphics.draw(sprites.background, x, 0)
+    end
+    camX = -((camPos.x / 2) % 320)
+    for x = camX, love.graphics.getWidth(), 320 do
+        love.graphics.draw(sprites.foreground, x, Constants.GAME_HEIGHT - 160)
     end
     self.rain:draw()
     self.camera:draw(function()
         self.chunkSpawner:draw()
-        self.player:draw()
         self.objects:draw()
+        self.player:draw()
     end)
     self.transition:draw()
 end

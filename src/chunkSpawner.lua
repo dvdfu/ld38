@@ -1,29 +1,58 @@
 local Class = require 'modules.hump.class'
 local Timer = require 'modules.hump.timer'
 local Flower = require 'src.objects.flower'
+local Fly = require 'src.objects.fly'
+local Frog = require 'src.objects.frog'
 local Raindrop = require 'src.objects.raindrop'
 local Constants = require 'src.constants'
 
 local Chunk = Class.new()
-Chunk.FLOWERS = 4 -- 1 to 3 flowers per chunk
 
-function Chunk:init(objects, id)
+function Chunk:init(objects, id, player)
     self.x = id * Constants.GAME_WIDTH
     self.h = Constants.GAME_HEIGHT
     self.timer = Timer.new()
+    self.objects = objects
+    self.player = player
 
-    if id > 0 then
-        local numFlowers = math.random(1, Chunk.FLOWERS)
-        for i = 1, numFlowers do
-            local fx = (i - math.random()) * Constants.GAME_WIDTH / numFlowers
-            table.insert(objects, Flower(objects, self.x + fx, self.h - math.random(40, 200)))
-        end
+    if id == 0 then return end
 
-        local dropletSize = math.random(4, 30)
-        local cooldown = 40 + 2 * dropletSize
-        self.raindropSpawner = Constants.GAME_WIDTH * math.random() -- x position
+    if math.random(1, 8) == 1 then
+        self:spawnFrog()
+    else
+        self:spawnFlies(math.random(0, 2))
+        self:spawnDrips(math.random(1, 8))
+        self:spawnFlowers(math.random(1, 8))
+    end
+end
+
+function Chunk:spawnFrog()
+    Frog(self.objects, self.x + Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT, self.player)
+end
+
+function Chunk:spawnFlies(n)
+    for i = 1, n do
+        local x = self.x + math.random() * Constants.GAME_WIDTH
+        local y = math.random() * Constants.GAME_HEIGHT
+        Fly(self.objects, x, y, self.player)
+    end
+end
+
+function Chunk:spawnFlowers(n)
+    for i = 1, n do
+        local x = (i - math.random()) * Constants.GAME_WIDTH / n
+        local h = math.random(40, 200)
+        Flower(self.objects, self.x + x, self.h - h)
+    end
+end
+
+function Chunk:spawnDrips(n)
+    for i = 1, n do
+        local size = math.random(4, 24)
+        local cooldown = 20 + 3 * size
+        local x = math.random() * Constants.GAME_WIDTH
         self.timer:every(cooldown, function()
-            Raindrop(objects, self.x + self.raindropSpawner, -50, dropletSize)
+            Raindrop(self.objects, self.x + x, -50, size)
         end)
     end
 end
@@ -46,6 +75,8 @@ function Chunk:draw()
     end
 end
 
+--------------------------------------------------------------------------------
+
 local ChunkSpawner = Class.new()
 ChunkSpawner.NUM_CHUNKS = 2
 
@@ -60,7 +91,7 @@ end
 
 function ChunkSpawner:generateChunks()
     for i = 1, ChunkSpawner.NUM_CHUNKS do
-        table.insert(self.chunks, Chunk(self.objects, self.chunkCount, Constants.GAME_WIDTH))
+        table.insert(self.chunks, Chunk(self.objects, self.chunkCount, self.player))
         self.chunkCount = self.chunkCount + 1
     end
 end
