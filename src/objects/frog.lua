@@ -55,7 +55,8 @@ function Frog:init(objects, x, y, player)
     self.player = player
     self.tongue = Tongue(objects, x, y, self)
     self.joint = love.physics.newRopeJoint(self.body, self.tongue.body, 0, 0, 0, 0, 200, false)
-
+    
+    self:addTag('frog')
     self.attacked = false
 end
 
