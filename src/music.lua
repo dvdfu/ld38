@@ -2,6 +2,8 @@ local Timer = require 'modules.hump.timer'
 
 local Music = {}
 
+Music.SOUNDTRACK_MAX_VOLUME = 0.8
+
 Music.LOUD_RAIN_VOLUME = 0.75
 Music.LOUD_RAIN_PITCH = 1.0
 Music.QUIET_RAIN_VOLUME = 0.4
@@ -38,10 +40,9 @@ function Music.game()
 end
 
 function Music.setFade(x)
-    local max = 0.8
     if x < 0 then x = 0 end
-    if x > max then x = max end
-    soft:setVolume(max - x)
+    if x > Music.SOUNDTRACK_MAX_VOLUME then x = Music.SOUNDTRACK_MAX_VOLUME end
+    soft:setVolume(Music.SOUNDTRACK_MAX_VOLUME - x)
     loud:setVolume(x)
 end
 
