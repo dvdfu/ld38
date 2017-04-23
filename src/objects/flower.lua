@@ -25,21 +25,16 @@ end
 
 -- the bounding box encompasses the petals
 function Flower:build(world, x, y)
-    local xCenter = x - self.petalSize.x / 2
-    local yCenter = y - self.stemSize.y - self.petalSize.y / 2
-    self.body = love.physics.newBody(world, xCenter, yCenter, 'static')
-    self.shape = love.physics.newRectangleShape(xCenter, yCenter, self.petalSize.x, self.petalSize.y)
+    self.body = love.physics.newBody(world, x, y, 'static')
+    self.shape = love.physics.newRectangleShape(x, y, self.petalSize.x, self.petalSize.y)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
 end
 
-function Flower:update(dt)
-end
-
 function Flower:draw()
     local x, y = self.body:getPosition()
-    love.graphics.draw(sprites.stem,   x - self.stemSize.x / 2 + 3, y + self.petalSize.y / 2)
     love.graphics.draw(sprites.petals, x - self.petalSize.x / 2,    y - self.petalSize.y / 2)
+    love.graphics.draw(sprites.stem,   x - self.stemSize.x / 2 + 3, y + self.petalSize.y / 2)
     love.graphics.draw(sprites.stamen, x - self.stamenSize.x / 2,   y - self.petalSize.y + 9)
 end
 
