@@ -15,27 +15,23 @@ local sprites = {
 function Flower:init(objects, x, y)
     Object.init(self, objects, x, y)
 
-    self.petalSize = Vector(sprites.petals:getWidth(), sprites.petals:getHeight())
-    self.stemSize = Vector(sprites.stem:getWidth(), sprites.stem:getHeight())
-    self.stamenSize = Vector(sprites.stamen:getWidth(), sprites.stamen:getHeight())
-
     self:build(objects:getWorld(), x, y)
     self:addTag('flower')
 end
 
 -- the bounding box encompasses the petals
 function Flower:build(world, x, y)
-    self.body = love.physics.newBody(world, x, y, 'static')
-    self.shape = love.physics.newRectangleShape(x, y, self.petalSize.x, self.petalSize.y)
+    self.body = love.physics.newBody(world, x, y)
+    self.shape = love.physics.newRectangleShape(140, 24)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
 end
 
 function Flower:draw()
     local x, y = self.body:getPosition()
-    love.graphics.draw(sprites.petals, x - self.petalSize.x / 2,    y - self.petalSize.y / 2)
-    love.graphics.draw(sprites.stem,   x - self.stemSize.x / 2 + 3, y + self.petalSize.y / 2)
-    love.graphics.draw(sprites.stamen, x - self.stamenSize.x / 2,   y - self.petalSize.y + 9)
+    love.graphics.draw(sprites.stem, x, y + 24, 0, 1, 1, 29, 0)
+    love.graphics.draw(sprites.petals, x, y, 0, 1, 1, 80, 18)
+    love.graphics.draw(sprites.stamen, x, y - 2, 0, 1, 1, 16, 32)
 end
 
 return Flower
