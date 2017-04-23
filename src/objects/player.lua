@@ -5,7 +5,7 @@ local Bullet = require 'src.objects.bullet'
 local Constants = require 'src.constants'
 
 local Player = Class.new()
-Player.BEE_COUNT = 5
+Player.BEE_COUNT = 100
 Player.MOVE_SPEED = 3
 
 local sprites = {
