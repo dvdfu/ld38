@@ -11,6 +11,9 @@ local sprites = {
 
 local Tongue = Class.new()
 Tongue:include(Object)
+Tongue.FORCE = 80
+Tongue.COOLDOWN = 120
+Tongue.RETREAT = 2
 
 function Tongue:init(objects, x, y, frog)
     Object.init(self, objects, x, y)
@@ -30,16 +33,16 @@ end
 
 function Tongue:update(dt)
     local delta = self.frog:getPosition() - self:getPosition()
-    delta = delta:trimmed(2)
+    delta = delta:trimmed(Tongue.RETREAT)
     self.body:applyForce(delta:unpack())
     self.timer:update(dt)
 end
 
 function Tongue:shoot(pos)
     local delta = pos - self:getPosition()
-    delta = delta:normalized() * 80
+    delta = delta:normalized() * Tongue.FORCE
     self.body:applyLinearImpulse(delta:unpack())
-    self.timer:after(120, function()
+    self.timer:after(Tongue.COOLDOWN, function()
         self.frog:resetAttack()
     end)
 end
@@ -55,7 +58,7 @@ function Frog:init(objects, x, y, player)
     self.player = player
     self.tongue = Tongue(objects, x, y, self)
     self.joint = love.physics.newRopeJoint(self.body, self.tongue.body, 0, 0, 0, 0, 200, false)
-    
+
     self:addTag('frog')
     self.attacked = false
 end
