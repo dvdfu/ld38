@@ -64,6 +64,11 @@ function Frog:build(world, x, y)
     self.shape = love.physics.newCircleShape(96)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
+
+    local leftEye = love.physics.newCircleShape(-84, -55, 28)
+    local rightEye = love.physics.newCircleShape(84, -55, 28)
+    love.physics.newFixture(self.body, leftEye):setUserData(self)
+    love.physics.newFixture(self.body, rightEye):setUserData(self)
 end
 
 function Frog:update(dt)
@@ -82,14 +87,14 @@ end
 
 function Frog:draw()
     local x, y = self:getPosition():unpack()
-    love.graphics.draw(sprites.frog, x, y, 0, 1, 1, 128, 120)
-
     local tongue = self.tongue:getPosition()
     local delta = tongue - self:getPosition()
+    love.graphics.draw(sprites.frog, x, y - math.min(0, delta.y / 64), 0, 1, 1, 128, 120)
+
     love.graphics.draw(sprites.tongue, x, y, math.atan2(delta.y, delta.x), delta:len() / 32, 1, 0, 16)
     love.graphics.draw(sprites.tongueTip, tongue.x, tongue.y, 0, 1.5, 1.5, 16, 16)
 
-    love.graphics.draw(sprites.mouth, x, y - math.min(0, delta.y / 6), 0, 1, 1, 80, 80)
+    love.graphics.draw(sprites.mouth, x, y - math.min(0, delta.y / 4), 0, 1, 1, 80, 80)
 end
 
 return Frog

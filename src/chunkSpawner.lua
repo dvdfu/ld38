@@ -17,7 +17,7 @@ function Chunk:init(objects, id, player)
 
     if id == 0 then return end
 
-    if math.random(1, 4) == 1 then
+    if true then
         self:spawnFrog()
     else
         self:spawnFlies(math.random(0, 2))
