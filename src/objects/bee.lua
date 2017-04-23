@@ -1,5 +1,6 @@
 local Class = require 'modules.hump.class'
 local Signal = require 'modules.hump.signal'
+local Timer = require 'modules.hump.timer'
 local Object = require 'src.objects.object'
 local Animation = require 'src.animation'
 local Constants = require 'src.constants'
@@ -21,6 +22,7 @@ function Bee:init(objects, x, y, player)
     self.offset = math.random()
     self.lag = 1 + math.random()
     self.dead = false
+    self.timer = Timer.new()
 
     self.wingAnim = Animation(sprites.wings, 2, 6)
     self.wingAnim:update(math.random() * 6)
@@ -31,7 +33,6 @@ function Bee:build(world, x, y)
     self.body:setLinearDamping(0.1, 0.1)
     self.shape = love.physics.newCircleShape(4)
     self.fixture = love.physics.newFixture(self.body, self.shape)
-    self.fixture:setRestitution(1)
     self.fixture:setUserData(self)
 end
 
@@ -48,6 +49,7 @@ function Bee:update(dt)
         self.offset = (self.offset + dt / 60) % 1
         self.wingAnim:update(dt)
     end
+    self.timer:update(dt)
 end
 
 function Bee:collide(col, other)
@@ -60,7 +62,9 @@ function Bee:die(other)
     if self.dead then return end
     self.dead = true
 
-    self.fixture:setSensor(true)
+    self.timer:after(180, function()
+        self.body:destroy()
+    end)
     local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
     self.body:applyLinearImpulse(delta:unpack())
     Signal.emit('cam_shake', 4)
