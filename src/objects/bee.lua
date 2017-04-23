@@ -63,10 +63,12 @@ function Bee:die(other)
     self.timer:after(180, function()
         self.body:destroy()
     end)
-    local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
-    self.body:applyLinearImpulse(delta:unpack())
-    Signal.emit('cam_shake', 4)
-    Signal.emit('bee_death')
+
+    if other then
+        local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
+        self.body:applyLinearImpulse(delta:unpack())
+        Signal.emit('cam_shake', 4)
+    end
 end
 
 function Bee:draw()

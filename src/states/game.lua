@@ -41,6 +41,7 @@ function Game:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
+    self.bee_count = self.player:numBees()
 end
 
 function Game:update(dt)
@@ -59,7 +60,8 @@ function Game:update(dt)
     Music.update(dt)
 
     -- for now
-    Music.setFade(1 - self.player.bees / 100)
+    self.bee_count = self.player:numBees()
+    Music.setFade(1 - self.bee_count / 100)
 
     -- if the player is under something, quieten the rain
     Music.setPrevQuietRain()
@@ -81,6 +83,8 @@ end
 function Game:keypressed(key)
     if Constants.DEBUG and key == 'r' then
         Gamestate.switch(Game)
+    elseif key == 'e' then
+        Constants.DEBUG = not Constants.DEBUG
     end
 end
 
