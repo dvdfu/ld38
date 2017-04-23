@@ -1,13 +1,14 @@
 local Class = require 'modules.hump.class'
 local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
+local Bee = require 'src.objects.bee'
 local Object = require 'src.objects.object'
 local Animation = require 'src.animation'
 local Constants = require 'src.constants'
 
 local Bullet = Class.new()
 Bullet:include(Object)
-Bullet.SPEED = 0.05
+Bullet.SPEED = 10
 
 local sprites = {
     bee = love.graphics.newImage('res/bee.png'),
@@ -40,10 +41,7 @@ function Bullet:update(dt)
     if self.dead then
         self.body:applyForce(0, 0.02)
     else
-        self.body:applyForce(Bullet.SPEED, 0)
-        -- -- local delta = self.player:getPosition() - self:getPosition()
-        -- delta = delta:trimmed(Bullet.MAX_SPEED)
-        -- self.body:applyForce(delta:unpack())
+        self.body:setLinearVelocity(Bullet.SPEED, 0)
         self.offset = (self.offset + dt / 60) % 1
         self.wingAnim:update(dt)
     end
@@ -51,7 +49,8 @@ function Bullet:update(dt)
 end
 
 function Bullet:collide(col, other)
-    if other:hasTag('enemy') then
+    if other:hasTag('enemy') or other:hasTag('raindrop') then
+        Signal.emit('cam_shake', 8)
         self:die(other)
     end
 end
@@ -72,14 +71,7 @@ function Bullet:die(other)
 end
 
 function Bullet:draw()
-    if self:isDead() then return end
-    local x, y = self.body:getPosition()
-    local vx, vy = self.body:getLinearVelocity()
-    local direction = vx < 0 and -1 or 1
-    local angle = math.atan2(vy, vx * direction)
-    local offset = math.sin(self.offset * math.pi * 2) * 2
-    self.wingAnim:draw(             x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
-    love.graphics.draw(sprites.bee, x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
+    Bee.draw(self)
 end
 
 return Bullet
