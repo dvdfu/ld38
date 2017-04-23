@@ -11,6 +11,7 @@ Bee.MAX_SPEED = 4
 
 local sprites = {
     bee = love.graphics.newImage('res/bee.png'),
+    dead = love.graphics.newImage('res/bee_dead.png'),
     wings = love.graphics.newImage('res/bee_wings.png'),
 }
 
@@ -68,7 +69,6 @@ function Bee:die(other)
     if other then
         local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
         self.body:applyLinearImpulse(delta:unpack())
-        Signal.emit('cam_shake', 4)
     end
 end
 
@@ -79,8 +79,12 @@ function Bee:draw()
     local direction = vx < 0 and -1 or 1
     local angle = math.atan2(vy, vx * direction)
     local offset = math.sin(self.offset * math.pi * 2) * 2
-    self.wingAnim:draw(             x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
-    love.graphics.draw(sprites.bee, x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
+    if self.dead then
+        love.graphics.draw(sprites.dead, x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
+    else
+        self.wingAnim:draw(              x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
+        love.graphics.draw(sprites.bee,  x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
+    end
 end
 
 return Bee

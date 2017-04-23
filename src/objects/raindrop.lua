@@ -1,4 +1,6 @@
 local Class = require 'modules.hump.class'
+local Signal = require 'modules.hump.signal'
+local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
 local Animation = require 'src.animation'
@@ -42,14 +44,15 @@ function Raindrop:collide(col, other)
     if other:hasTag('flower') or other:hasTag('frog') then
         sounds.droplet:setPitch(1.2 - self.radius / 60)
         sounds.droplet:play()
+        Signal.emit('splash', self.pos.x, self.pos.y, self.radius)
         self.body:destroy()
     end
 end
 
 function Raindrop:draw()
-    local x, y = self.body:getPosition()
-    local wobble = math.sin(self.wobble * math.pi * 2) / 16
+    local x, y = self.pos:unpack()
     local radius = self.radius + 3 -- buffer spaces
+    local wobble = math.sin(self.wobble * math.pi * 2) / 16
     if radius > 16 then
         local scale = radius / 32
         love.graphics.draw(sprites.large, x, y, 0, scale + wobble, scale - wobble, 32, 32)

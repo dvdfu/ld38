@@ -11,7 +11,7 @@ local sprites = {
     petals = love.graphics.newImage('res/flower_petals.png'),
     stamen = love.graphics.newImage('res/flower_stamen.png'),
     stem = love.graphics.newImage('res/flower_stem.png'),
-    droplet = love.graphics.newImage('res/droplet.png')
+    droplet = love.graphics.newImage('res/droplet.png'),
 }
 
 -- (x, y) is the point at the bottom of the stem, so the bottom middle of the entire flower

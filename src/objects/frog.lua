@@ -1,5 +1,6 @@
 local Class = require 'modules.hump.class'
 local Timer = require 'modules.hump.timer'
+local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
 
 local sprites = {
@@ -7,6 +8,8 @@ local sprites = {
     mouth = love.graphics.newImage('res/frog_mouth.png'),
     tongue = love.graphics.newImage('res/frog_tongue.png'),
     tongueTip = love.graphics.newImage('res/frog_tongue_tip.png'),
+    eye = love.graphics.newImage('res/frog_eye.png'),
+    droplet = love.graphics.newImage('res/droplet.png'),
 }
 
 local Tongue = Class.new()
@@ -62,6 +65,22 @@ function Frog:init(objects, x, y, player)
 
     self:addTag('frog')
     self.attacked = false
+
+    self.particles = love.graphics.newParticleSystem(sprites.droplet)
+    local quads = {}
+    for i = 1, 4 do
+        quads[i] = love.graphics.newQuad((i - 1) * 32, 0, 32, 32, 32 * 4, 32)
+    end
+    self.particles:setQuads(quads)
+    self.particles:setPosition(x, y - 70)
+    self.particles:setOffset(16, 32)
+    self.particles:setParticleLifetime(10)
+    self.particles:setAreaSpread('ellipse', 128, 24)
+
+    self.timer = Timer.new()
+    self.timer:every(4, function()
+        self.particles:emit(1)
+    end)
 end
 
 function Frog:build(world, x, y)
@@ -85,6 +104,8 @@ function Frog:update(dt)
             self.tongue:shoot(self.player:getPosition())
         end
     end
+    self.particles:update(dt)
+    self.timer:update(dt)
 end
 
 function Frog:resetAttack()
@@ -95,12 +116,27 @@ function Frog:draw()
     local x, y = self:getPosition():unpack()
     local tongue = self.tongue:getPosition()
     local delta = tongue - self:getPosition()
-    love.graphics.draw(sprites.frog, x, y - math.min(0, delta.y / 64), 0, 1, 1, 128, 120)
+    local offset = math.min(0, delta.y / 64)
+
+    love.graphics.push()
+    love.graphics.translate(0, -offset)
+    love.graphics.draw(sprites.frog, x, y, 0, 1, 1, 128, 120)
+    self:drawEyes()
+    love.graphics.pop()
 
     love.graphics.draw(sprites.tongue, x, y, math.atan2(delta.y, delta.x), delta:len() / 32, 1, 0, 16)
     love.graphics.draw(sprites.tongueTip, tongue.x, tongue.y, 0, 1.5, 1.5, 16, 16)
 
     love.graphics.draw(sprites.mouth, x, y - math.min(0, delta.y / 4), 0, 1, 1, 80, 80)
+    love.graphics.draw(self.particles)
+end
+
+function Frog:drawEyes()
+    local x, y = self:getPosition():unpack()
+    local delta = self.player:getPosition() - self.pos
+    local angle = math.atan2(delta.y, delta.x)
+    love.graphics.draw(sprites.eye, x + 84 + 12 * math.cos(angle), y - 55 + 12 * math.sin(angle), angle, 1, 1, 8, 8)
+    love.graphics.draw(sprites.eye, x - 84 + 12 * math.cos(angle), y - 55 + 12 * math.sin(angle), angle, 1, 1, 8, 8)
 end
 
 return Frog
