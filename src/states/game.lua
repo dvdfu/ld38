@@ -49,6 +49,15 @@ function Game:update(dt)
     local mousePos = self.camera:getPosition() + Vector(love.mouse.getPosition()) / 2 - Camera.HALF_SCREEN
     self.player:setMouse(mousePos)
     self.player:update(dt)
+
+    -- Remove objects that are off the screen
+    for _, object in pairs(self.objects.objects) do
+        if object:getPosition().x < self.player:getPosition().x - Constants.GAME_WIDTH or
+           object:getPosition().y > Constants.GAME_HEIGHT * 1.5 then
+            object.body:destroy()
+        end
+    end
+
     self.objects:update(dt)
 
     local px, py = self.player:getPosition():unpack()
