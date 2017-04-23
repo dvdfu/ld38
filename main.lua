@@ -2,10 +2,11 @@ love.graphics.setLineStyle('rough')
 love.graphics.setDefaultFilter('nearest', 'nearest')
 
 local Gamestate = require 'modules.hump.gamestate'
+local Intro = require 'src.states.intro'
 local Game = require 'src.states.game'
 
 function love.load()
-    Gamestate.switch(Game)
+    Gamestate.switch(Intro)
 end
 
 function love.update(dt)
