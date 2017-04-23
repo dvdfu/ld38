@@ -21,31 +21,31 @@ function Enemy:build(world, x, y)
 end
 
 function Enemy:update(dt)
-  local delta
+    local delta
 
-  if not self.locked then
-    delta = self.player:getPosition() - self:getPosition()
+    if not self.locked then
+        delta = self.player:getPosition() - self:getPosition()
 
-    if delta:len() < self:getLockingDistance() then
-      self.locked = true
-      self.delta = self.player:getPosition() - self:getPosition()
+        if delta:len() < self:getLockingDistance() then
+            self.locked = true
+            self.delta = self.player:getPosition() - self:getPosition()
+        end
+    else
+        delta = self.delta
     end
-  else
-    delta = self.delta
-  end
 
-  x, y = delta:trimmed(self:getSpeed()):unpack()
-  self.body:setLinearVelocity(x, y)
+    x, y = delta:trimmed(self:getSpeed()):unpack()
+    self.body:setLinearVelocity(x, y)
 end
 
 function Enemy:debug()
-  local x, y = self.body:getPosition()
-  love.graphics.circle('line', x, y, self:getRadius())
+    local x, y = self.body:getPosition()
+    love.graphics.circle('line', x, y, self:getRadius())
 
-  if self.locked then love.graphics.setColor(255, 0, 0) end
-  local px, py = self.player:getPosition():unpack()
-  love.graphics.line(x, y, px, py)
-  love.graphics.setColor(255, 255, 255)
+    if self.locked then love.graphics.setColor(255, 0, 0) end
+    local px, py = self.player:getPosition():unpack()
+    love.graphics.line(x, y, px, py)
+    love.graphics.setColor(255, 255, 255)
 end
 
 -- Need to be implemented by subclass.

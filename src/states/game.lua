@@ -10,6 +10,8 @@ local Constants = require 'src.constants'
 local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
+local Gamestate = require 'modules.hump.gamestate'
+local Transition = require 'src.states.transition'
 
 local Game = {}
 
@@ -21,10 +23,12 @@ function Game:init()
     Signal.register('cam_shake', function(shake)
         self.camera:shake(shake)
     end)
-    Music.init()
+    Music.game()
+    self.transition = Transition()
 end
 
 function Game:enter()
+    self.transition:fadeIn()
     self.objects = Objects()
     self.player = Player(self.objects, 180, 120)
     local x, y = self.player:getPosition():unpack()
@@ -53,6 +57,7 @@ function Game:enter()
 end
 
 function Game:update(dt)
+    self.transition:update(dt)
     self.player:update(dt)
     self.objects:update(dt)
     local px, py = self.player:getPosition():unpack()
@@ -66,6 +71,12 @@ function Game:update(dt)
     Music.setFade(1 - self.player.bees / 100)
 end
 
+function Game:keypressed(key)
+    if Constants.DEBUG and key == 'r' then
+        Gamestate.switch(Game)
+    end
+end
+
 function Game:draw()
     local camPos = self.camera:getPosition()
     local camX = -((camPos.x / 4) % 480)
@@ -77,6 +88,7 @@ function Game:draw()
         self.player:draw()
         self.objects:draw()
     end)
+    self.transition:draw()
 end
 
 return Game

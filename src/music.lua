@@ -7,12 +7,15 @@ local rain = love.audio.newSource('res/sounds/rain.wav')
 function Music.init()
     soft:setLooping(true)
     loud:setLooping(true)
-    rain:setLooping(true)
-    rain:setVolume(0.4)
     Music.setFade(0)
 
     soft:play()
     loud:play()
+end
+
+function Music.game()
+    rain:setLooping(true)
+    rain:setVolume(0.4)
     rain:play()
 end
 

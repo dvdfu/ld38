@@ -33,7 +33,6 @@ function Bird:getSpeed()
     return Bird.SPEED
 end
 
-
 function Bird:draw()
     if Constants.DEBUG then self:debug() end
 
