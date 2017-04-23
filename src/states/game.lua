@@ -124,7 +124,7 @@ function Game:draw()
         40, 'right')
     love.graphics.printf(self.beeCount,
         Constants.GAME_WIDTH / 2 - 20,
-        Constants.GAME_HEIGHT - 60,
+        Constants.GAME_HEIGHT - 68,
         40, 'right')
 
     self.transition:draw()

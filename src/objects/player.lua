@@ -33,7 +33,7 @@ end
 function Player:numBees()
     local count = 0
     for k, bee in pairs(self.bees) do
-        if bee:isDead() then
+        if bee.dead then
             self.bees[k] = nil
         else
             count = count + 1
