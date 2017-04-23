@@ -49,15 +49,14 @@ function Fly:getSpeed()
 end
 
 function Fly:draw()
-    if Constants.DEBUG then self:debug() end
-
     local x, y = self.body:getPosition()
     local time = math.sin(self.time * math.pi * 2)
-    y = y + 6 * time
-    self.wings:draw(x, y - 12, 0, -1, 1, 0, 24)
-    love.graphics.draw(sprites.body, x, y, 0, 1, 1, 32, 24)
-    self.wings:draw(x, y - 12, 0, 1, 1, 0, 24)
-    love.graphics.draw(sprites.legs, x - 4, y - 2, 0, 1, 1, 16, 0, time / 10)
+    y = y + 10 * time
+    self.wings:draw(x - 4, y - 12, 0, -1, 1, 0, 24)
+    love.graphics.draw(sprites.body, x, y, 0, 1, 1, 32, 36)
+    self.wings:draw(x + 10, y - 12, 0, 1, 1, 0, 24)
+    love.graphics.draw(sprites.legs, x, y - 4, 0, 1, 1, 32, 0, time / 10)
+    if Constants.DEBUG then self:debug() end
 end
 
 return Fly
