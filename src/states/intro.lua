@@ -11,7 +11,7 @@ local sprites = {
 local Intro = {}
 
 function Intro:init()
-    Music.intro()
+    Music.init()
     self.transition = Transition()
 end
 

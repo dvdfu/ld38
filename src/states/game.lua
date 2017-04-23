@@ -28,7 +28,8 @@ end
 function Game:enter()
     self.objects = Objects()
     self.player = Player(self.objects, 180, 120)
-    self.camera = Camera(self.player, { damping = 12 })
+    local x, y = self.player:getPosition():unpack()
+    self.camera = Camera(x, y, { damping = 12 })
     self.rain = Rain()
 
     ----------------------------------------------------------------------------
@@ -55,10 +56,15 @@ end
 function Game:update(dt)
     self.player:update(dt)
     self.objects:update(dt)
-    self.camera:follow(self.player)
+    local px, py = self.player:getPosition():unpack()
+    px = px + 100
+    self.camera:follow(px, py)
     self.camera:update(dt)
     self.rain:update(dt)
     self.timer:update(dt)
+
+    -- for now
+    Music.setFade(1 - self.player.bees / 100)
 end
 
 function Game:keypressed(key)

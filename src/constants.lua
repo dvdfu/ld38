@@ -1,5 +1,5 @@
 return {
-    GAME_WIDTH = 360,
+    GAME_WIDTH = 425,
     GAME_HEIGHT = 240,
     DEBUG = true,
     FONTS = {
