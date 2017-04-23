@@ -41,6 +41,7 @@ function Game:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
+    self.beeCount = self.player:numBees()
 end
 
 function Game:update(dt)
@@ -59,7 +60,8 @@ function Game:update(dt)
     Music.update(dt)
 
     -- for now
-    Music.setFade(1 - self.player.bees / 100)
+    self.beeCount = self.player:numBees()
+    Music.setFade(1 - self.beeCount / 100)
 
     -- if the player is under something, quieten the rain
     Music.setPrevQuietRain()
@@ -81,10 +83,13 @@ end
 function Game:keypressed(key)
     if Constants.DEBUG and key == 'r' then
         Gamestate.switch(Game)
+    elseif key == 'e' then
+        Constants.DEBUG = not Constants.DEBUG
     end
 end
 
 function Game:draw()
+    -- draw backgrounds
     local camPos = self.camera:getPosition()
     local camX = -((camPos.x / 4) % 480)
     for x = camX, love.graphics.getWidth(), 480 do
@@ -96,6 +101,7 @@ function Game:draw()
         love.graphics.draw(sprites.foreground, x, Constants.GAME_HEIGHT - 160)
     end
 
+    -- draw objects
     self.rain:draw()
     self.camera:draw(function()
         self.chunkSpawner:draw()
@@ -104,6 +110,8 @@ function Game:draw()
     end)
 
     love.graphics.setFont(Constants.FONTS.REDALERT)
+
+    -- print HUD distance
     local distance = math.floor(self.player:getDistance() / 12)
     local meters = math.floor(distance / 100)
     local centimeters = distance % 100
@@ -113,6 +121,10 @@ function Game:draw()
     love.graphics.printf(meters .. '.' .. centimeters .. ' m',
         Constants.GAME_WIDTH / 2 - 20,
         Constants.GAME_HEIGHT - 80,
+        40, 'right')
+    love.graphics.printf(self.beeCount,
+        Constants.GAME_WIDTH / 2 - 20,
+        Constants.GAME_HEIGHT - 60,
         40, 'right')
 
     self.transition:draw()

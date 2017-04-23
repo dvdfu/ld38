@@ -19,10 +19,6 @@ function love.keypressed(key)
     Gamestate.keypressed(key)
     if key == 'escape' then
         love.event.quit()
-    elseif key == 'r' then
-        Gamestate.switch(Game)
-    elseif key == 'e' then
-        Constants.DEBUG = not Constants.DEBUG
     end
 end
 
