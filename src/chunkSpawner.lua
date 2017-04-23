@@ -50,7 +50,7 @@ end
 function Chunk:spawnDrips(n)
     for i = 1, n do
         local size = math.random(4, 24)
-        local cooldown = 20 + 3 * size
+        local cooldown = 32 + 2 * size
         local x = math.random() * Constants.GAME_WIDTH
         self.timer:every(cooldown, function()
             Raindrop(self.objects, self.x + x, -50, size)

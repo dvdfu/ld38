@@ -17,12 +17,18 @@ local Game = {}
 local sprites = {
     background = love.graphics.newImage('res/background_blur.png'),
     foreground = love.graphics.newImage('res/foreground_blur.png'),
+    splash = love.graphics.newImage('res/raindrop_particle.png'),
 }
 
 function Game:init()
     Signal.register('cam_shake', function(shake)
         self.camera:shake(shake)
     end)
+    Signal.register('splash', function(x, y, size)
+        self.splashParticles:setPosition(x, y + size / 2)
+        self.splashParticles:emit(math.floor(size / 4))
+    end)
+
     Music.game()
     self.transition = Transition()
 end
@@ -42,6 +48,15 @@ function Game:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
     self.beeCount = self.player:numBees()
+
+    self.splashParticles = love.graphics.newParticleSystem(sprites.splash)
+    self.splashParticles:setOffset(8, 8)
+    self.splashParticles:setSizes(2, 0)
+    self.splashParticles:setParticleLifetime(20)
+    self.splashParticles:setDirection(-math.pi / 2)
+    self.splashParticles:setSpread(math.pi / 2)
+    self.splashParticles:setSpeed(2, 4)
+    self.splashParticles:setLinearAcceleration(0, 0.2)
 end
 
 function Game:update(dt)
@@ -68,6 +83,7 @@ function Game:update(dt)
     self.camera:update(dt)
     self.rain:update(dt)
     self.timer:update(dt)
+    self.splashParticles:update(dt)
     Music.update(dt)
 
     -- for now
@@ -117,6 +133,7 @@ function Game:draw()
     self.camera:draw(function()
         self.chunkSpawner:draw()
         self.objects:draw()
+        love.graphics.draw(self.splashParticles)
         self.player:draw()
     end)
 
