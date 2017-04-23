@@ -6,12 +6,12 @@ local Constants = require 'src.constants'
 local Camera = Class.new()
 Camera.HALF_SCREEN = Vector(Constants.GAME_WIDTH, Constants.GAME_HEIGHT) / 2
 
-function Camera:init(target, settings)
+function Camera:init(x, y, settings)
     settings = settings or {}
     self.damping = settings.damping or 1
     self.buffer = settings.buffer or Vector()
 
-    self.target = target
+    self.target = Vector(x, y)
     self.pos = Vector()
     self.timer = Timer.new()
     self.shakeVec = Vector()
@@ -20,7 +20,7 @@ end
 function Camera:update(dt)
     self.timer:update(dt)
 
-    local delta = self.target:getPosition() - self.pos
+    local delta = self.target - self.pos
 
     -- camera movement buffer
     if delta.x > self.buffer.x then
@@ -48,8 +48,9 @@ function Camera:update(dt)
     self.pos.y = Camera.HALF_SCREEN.y -- just for us!
 end
 
-function Camera:follow(target)
-    self.target = target
+function Camera:follow(x, y)
+    self.target.x = x
+    self.target.y = y
 end
 
 function Camera:shake(shake, direction)
