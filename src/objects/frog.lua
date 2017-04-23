@@ -9,6 +9,7 @@ local sprites = {
     tongue = love.graphics.newImage('res/frog_tongue.png'),
     tongueTip = love.graphics.newImage('res/frog_tongue_tip.png'),
     eye = love.graphics.newImage('res/frog_eye.png'),
+    droplet = love.graphics.newImage('res/droplet.png'),
 }
 
 local Tongue = Class.new()
@@ -64,6 +65,22 @@ function Frog:init(objects, x, y, player)
 
     self:addTag('frog')
     self.attacked = false
+
+    self.particles = love.graphics.newParticleSystem(sprites.droplet)
+    local quads = {}
+    for i = 1, 4 do
+        quads[i] = love.graphics.newQuad((i - 1) * 32, 0, 32, 32, 32 * 4, 32)
+    end
+    self.particles:setQuads(quads)
+    self.particles:setPosition(x, y - 70)
+    self.particles:setOffset(16, 32)
+    self.particles:setParticleLifetime(10)
+    self.particles:setAreaSpread('ellipse', 128, 24)
+
+    self.timer = Timer.new()
+    self.timer:every(4, function()
+        self.particles:emit(1)
+    end)
 end
 
 function Frog:build(world, x, y)
@@ -87,6 +104,8 @@ function Frog:update(dt)
             self.tongue:shoot(self.player:getPosition())
         end
     end
+    self.particles:update(dt)
+    self.timer:update(dt)
 end
 
 function Frog:resetAttack()
@@ -105,6 +124,7 @@ function Frog:draw()
     love.graphics.draw(sprites.tongueTip, tongue.x, tongue.y, 0, 1.5, 1.5, 16, 16)
 
     love.graphics.draw(sprites.mouth, x, y - math.min(0, delta.y / 4), 0, 1, 1, 80, 80)
+    love.graphics.draw(self.particles)
 end
 
 function Frog:drawEyes()
