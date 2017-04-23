@@ -71,11 +71,11 @@ function Game:update(dt)
                 return -1
             end
 
-            Music.maybePlayQuietRain()
+            Music.tryPlayingQuietRain()
             return 0
         end)
     end
-    Music.maybePlayLoudRain()
+    Music.tryPlayingLoudRain()
 end
 
 function Game:keypressed(key)

@@ -52,7 +52,7 @@ function Music.setPrevQuietRain()
     quietRain = false
 end
 
-function Music.maybePlayLoudRain()
+function Music.tryPlayingLoudRain()
     if prevQuietRain and not quietRain then
         local newModifiers = {
             rainVolume = Music.LOUD_RAIN_VOLUME,
@@ -67,7 +67,7 @@ function Music.maybePlayLoudRain()
     end
 end
 
-function Music.maybePlayQuietRain()
+function Music.tryPlayingQuietRain()
     if not prevQuietRain then
         local newModifiers = {
             rainVolume = Music.QUIET_RAIN_VOLUME,
