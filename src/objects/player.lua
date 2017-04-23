@@ -5,7 +5,7 @@ local Bullet = require 'src.objects.bullet'
 local Constants = require 'src.constants'
 
 local Player = Class.new()
-Player.BEE_COUNT = 100
+Player.BEE_COUNT = 5
 Player.MOVE_SPEED = 3
 
 local sprites = {
@@ -87,7 +87,7 @@ function Player:setMouse(pos)
 end
 
 function Player:shoot()
-    if self:numBees() < 1 then return end
+    if self:numBees() < 2 then return end
     local bullet_bee
     for k, bee in pairs(self.bees) do
         if bee:isDead() then
