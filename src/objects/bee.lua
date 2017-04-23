@@ -50,7 +50,7 @@ function Bee:update(dt)
 end
 
 function Bee:collide(col, other)
-    if other:hasTag('raindrop') or other:hasTag('enemy') then
+    if other:hasTag('raindrop') or other:hasTag('enemy') or other:hasTag('tongue') then
         self:die(other)
     end
 end
