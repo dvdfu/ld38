@@ -1,6 +1,7 @@
 local Constants = require 'src.constants'
 local Gamestate = require 'modules.hump.gamestate'
 local Game = require 'src.states.game'
+local Transition = require 'src.states.transition'
 local Music = require 'src.music'
 
 local sprites = {
@@ -11,17 +12,22 @@ local Intro = {}
 
 function Intro:init()
     Music.intro()
+    self.transition = Transition()
 end
 
 function Intro:enter()
+    self.transition:fadeIn()
 end
 
 function Intro:update(dt)
+    self.transition:update(dt)
 end
 
 function Intro:keypressed(key)
     if key == 'return' then
-        Gamestate.switch(Game)
+        self.transition:fadeOut(function()
+            Gamestate.switch(Game)
+        end)
     end
 end
 
@@ -53,6 +59,8 @@ function Intro:draw()
     love.graphics.printf("because bees don't care what humans think is impossible.", 0, 108, Constants.GAME_WIDTH, 'center')
     love.graphics.printf("Press ENTER to START!", 0, 130, Constants.GAME_WIDTH, 'center')
     love.graphics.setColor(255, 255, 255)
+
+    self.transition:draw()
 end
 
 return Intro
