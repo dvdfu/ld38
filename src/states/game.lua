@@ -30,7 +30,7 @@ end
 function Game:enter()
     self.transition:fadeIn()
     self.objects = Objects()
-    self.player = Player(self.objects, 180, 120)
+    self.player = Player(self.objects, 0, 120)
     local x, y = self.player:getPosition():unpack()
     self.camera = Camera(x, Constants.GAME_HEIGHT / 2, 12)
     self.chunkSpawner = ChunkSpawner(self.objects, self.player)
@@ -90,16 +90,31 @@ function Game:draw()
     for x = camX, love.graphics.getWidth(), 480 do
         love.graphics.draw(sprites.background, x, 0)
     end
+
     camX = -((camPos.x / 2) % 320)
     for x = camX, love.graphics.getWidth(), 320 do
         love.graphics.draw(sprites.foreground, x, Constants.GAME_HEIGHT - 160)
     end
+
     self.rain:draw()
     self.camera:draw(function()
         self.chunkSpawner:draw()
         self.objects:draw()
         self.player:draw()
     end)
+
+    love.graphics.setFont(Constants.FONTS.REDALERT)
+    local distance = math.floor(self.player:getDistance() / 12)
+    local meters = math.floor(distance / 100)
+    local centimeters = distance % 100
+    if centimeters < 10 then
+        centimeters = '0' .. centimeters
+    end
+    love.graphics.printf(meters .. '.' .. centimeters .. ' m',
+        Constants.GAME_WIDTH / 2 - 20,
+        Constants.GAME_HEIGHT - 80,
+        40, 'right')
+
     self.transition:draw()
 end
 

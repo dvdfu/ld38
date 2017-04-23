@@ -31,6 +31,8 @@ function Player:init(objects, x, y)
     Signal.register('bee_death', function()
         self.bees = self.bees - 1
     end)
+
+    self.distance = 0
 end
 
 function Player:update(dt)
@@ -59,10 +61,20 @@ function Player:update(dt)
         end
         self.pos = self.pos + self.vel * dt
     end
+
+    self.distance = math.max(self.distance, self.pos.x)
 end
 
 function Player:getPosition()
     return self.pos
+end
+
+function Player:getDistance()
+    return self.distance
+end
+
+function Player:getBees()
+    return self.bees
 end
 
 function Player:setMouse(pos)
