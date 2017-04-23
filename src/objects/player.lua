@@ -40,7 +40,7 @@ function Player:getPosition()
 end
 
 function Player:draw()
-    -- love.graphics.circle('line', self.pos.x, self.pos.y, 16)
+    love.graphics.circle('line', self.pos.x, self.pos.y, 16)
 end
 
 return Player

@@ -32,9 +32,12 @@ function Game:enter()
         local x, y = self.camera:getPosition():unpack()
         local type = math.random(0, 1) == 0 and 'BIRD' or 'HUMMINGBIRD'
         Enemy(self.objects, x + 700, math.random(20, 220), type, self.player, self.camera)
-        -- Raindrop(self.objects, 200, -100, math.random(4, 50))
     end)
-    
+
+    self.timer:every(60, function()
+        Raindrop(self.objects, 200, -100, math.random(4, 50))
+    end)
+
     self.timer:every(1, function()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
