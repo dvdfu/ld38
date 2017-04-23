@@ -1,4 +1,5 @@
 local Class = require 'modules.hump.class'
+local Signal = require 'modules.hump.signal'
 local Vector = require 'modules.hump.vector'
 local Bee = require 'src.objects.bee'
 local Constants = require 'src.constants'
@@ -7,14 +8,22 @@ local Player = Class.new()
 Player.BEE_COUNT = 100
 Player.MOVE_SPEED = 3
 
+local sprites = {
+    cursor = love.graphics.newImage('res/cursor.png')
+}
+
 function Player:init(objects, x, y)
     self.pos = Vector(x, y)
     self.vel = Vector()
 
-    self.bees = {}
+    self.bees = Player.BEE_COUNT
     for i = 1, Player.BEE_COUNT do
-        table.insert(self.bees, Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self))
+        Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
     end
+
+    Signal.register('bee_death', function()
+        self.bees = self.bees - 1
+    end)
 end
 
 function Player:update(dt)
@@ -41,7 +50,7 @@ function Player:getPosition()
 end
 
 function Player:draw()
-    if Constants.DEBUG then love.graphics.circle('line', self.pos.x, self.pos.y, 16) end
+    love.graphics.draw(sprites.cursor, self.pos.x, self.pos.y, 0, 1, 1, 16, 16)
 end
 
 return Player
