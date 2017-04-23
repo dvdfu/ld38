@@ -5,22 +5,20 @@ local Object = require 'src.objects.object'
 local Animation = require 'src.animation'
 local Constants = require 'src.constants'
 
-local Bee = Class.new()
-Bee:include(Object)
-Bee.MAX_SPEED = 4
+local Bullet = Class.new()
+Bullet:include(Object)
+Bullet.SPEED = 0.05
 
 local sprites = {
     bee = love.graphics.newImage('res/bee.png'),
     wings = love.graphics.newImage('res/bee_wings.png'),
 }
 
-function Bee:init(objects, x, y, radius, lag, player)
+function Bullet:init(objects, x, y, radius)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y, radius)
-    self:addTag('bee')
-    self.player = player
+    self:addTag('bullet')
     self.offset = math.random()
-    self.lag = lag
     self.radius = radius
     self.dead = false
     self.timer = Timer.new()
@@ -29,54 +27,51 @@ function Bee:init(objects, x, y, radius, lag, player)
     self.wingAnim:update(math.random() * 6)
 end
 
-function Bee:build(world, x, y, radius)
+function Bullet:build(world, x, y, radius)
     self.body = love.physics.newBody(world, x, y, 'dynamic')
     self.body:setLinearDamping(0.1, 0.1)
     self.shape = love.physics.newCircleShape(radius)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
+    self.fixture:setSensor(true)
 end
 
-function Bee:update(dt)
+function Bullet:update(dt)
     if self.dead then
         self.body:applyForce(0, 0.02)
     else
-        local delta = self.player:getPosition() - self:getPosition()
-        delta = delta:trimmed(Bee.MAX_SPEED) / 100 / self.lag
-        self.body:applyForce(delta:unpack())
+        self.body:applyForce(Bullet.SPEED, 0)
+        -- -- local delta = self.player:getPosition() - self:getPosition()
+        -- delta = delta:trimmed(Bullet.MAX_SPEED)
+        -- self.body:applyForce(delta:unpack())
         self.offset = (self.offset + dt / 60) % 1
         self.wingAnim:update(dt)
     end
     self.timer:update(dt)
 end
 
-function Bee:getRadius()
-    return self.radius
-end
-
-function Bee:collide(col, other)
-    if other:hasTag('raindrop') or other:hasTag('enemy') or other:hasTag('tongue') then
+function Bullet:collide(col, other)
+    if other:hasTag('enemy') then
         self:die(other)
     end
 end
 
-function Bee:die(other)
+function Bullet:die(other)
     if self.dead then return end
     self.dead = true
 
+    self.timer:after(180, function()
+        self.body:destroy()
+    end)
+
     if other then
-        self.timer:after(180, function()
-            self.body:destroy()
-        end)
         local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
         self.body:applyLinearImpulse(delta:unpack())
         Signal.emit('cam_shake', 4)
-    else
-        self.body:destroy()
     end
 end
 
-function Bee:draw()
+function Bullet:draw()
     if self:isDead() then return end
     local x, y = self.body:getPosition()
     local vx, vy = self.body:getLinearVelocity()
@@ -87,4 +82,4 @@ function Bee:draw()
     love.graphics.draw(sprites.bee, x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
 end
 
-return Bee
+return Bullet

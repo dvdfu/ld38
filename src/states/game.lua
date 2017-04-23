@@ -85,6 +85,8 @@ function Game:keypressed(key)
         Gamestate.switch(Game)
     elseif key == 'e' then
         Constants.DEBUG = not Constants.DEBUG
+    elseif key == 'space' then
+        self.player:shoot()
     end
 end
 

@@ -1,6 +1,7 @@
 local Class = require 'modules.hump.class'
 local Vector = require 'modules.hump.vector'
 local Bee = require 'src.objects.bee'
+local Bullet = require 'src.objects.bullet'
 local Constants = require 'src.constants'
 
 local Player = Class.new()
@@ -17,6 +18,7 @@ function Player:init(objects, x, y)
     self.mouse = Vector()
     self.usingMouse = true
     self.bees = {}
+    self.objects = objects
 
     for i = 1, Player.BEE_COUNT do
         self.bees[i] = Bee(objects,
@@ -74,6 +76,23 @@ end
 
 function Player:setMouse(pos)
     self.mouse = pos
+end
+
+function Player:shoot()
+    if self:numBees() < 1 then return end
+    local bullet_bee
+    for k, bee in pairs(self.bees) do
+        if bee:isDead() then
+            self.bees[k] = nil
+        else
+            bullet_bee = bee
+            self.bees[k] = nil
+            break
+        end
+    end
+    local x, y = bullet_bee:getPosition():unpack()
+    bullet_bee:die()
+    local bullet = Bullet(self.objects, x, y, bullet_bee:getRadius())
 end
 
 function Player:draw()

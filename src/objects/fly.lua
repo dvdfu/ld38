@@ -1,5 +1,6 @@
 local Class = require 'modules.hump.class'
 local Enemy = require 'src.objects.enemy'
+local Timer = require 'modules.hump.timer'
 local Animation = require 'src.animation'
 local Constants = require 'src.constants'
 
@@ -23,9 +24,11 @@ function Fly:init(objects, x, y, player)
     self:addTag('fly')
     self.wings = Animation(sprites.wings, 2, 1)
     self.time = 0
+    self.timer = Timer.new()
 end
 
 function Fly:update(dt)
+    self.timer:update(dt)
     self.wings:update(dt)
     self.time = (self.time + dt / 30) % 1
     Enemy.update(self, dt)
@@ -51,7 +54,27 @@ function Fly:getPassiveDistance()
     return Fly.PASSIVE_DISTANCE
 end
 
+
+function Fly:collide(col, other)
+    if other:hasTag('bullet') then
+        self:die(other)
+    end
+end
+
+function Fly:die(other)
+    if self.dead then return end
+    self.dead = true
+
+    self.body:destroy()
+
+    local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
+    self.body:applyLinearImpulse(delta:unpack())
+end
+
+
 function Fly:draw()
+    if self:isDead() then return end
+
     local x, y = self.body:getPosition()
     local time = math.sin(self.time * math.pi * 2)
     y = y + 10 * time
