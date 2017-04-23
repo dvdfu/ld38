@@ -30,18 +30,6 @@ function Player:init(objects, x, y)
     self.distance = 0
 end
 
-function Player:numBees()
-    local count = 0
-    for k, bee in pairs(self.bees) do
-        if bee.dead then
-            self.bees[k] = nil
-        else
-            count = count + 1
-        end
-    end
-    return count
-end
-
 function Player:update(dt)
     if love.mouse.isDown(1) then
         self.usingMouse = true
@@ -80,8 +68,16 @@ function Player:getDistance()
     return self.distance
 end
 
-function Player:getBees()
-    return self.bees
+function Player:numBees()
+    local count = 0
+    for k, bee in pairs(self.bees) do
+        if bee.dead then
+            self.bees[k] = nil
+        else
+            count = count + 1
+        end
+    end
+    return count
 end
 
 function Player:setMouse(pos)
