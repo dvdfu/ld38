@@ -10,8 +10,9 @@ function Player:init(objects, x, y)
     self.pos = Vector(x, y)
     self.vel = Vector()
 
+    self.bees = {}
     for i = 1, Player.BEE_COUNT do
-        Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
+        table.insert(self.bees, Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self))
     end
 end
 
