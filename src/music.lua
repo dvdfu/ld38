@@ -1,16 +1,20 @@
 local Music = {}
 
-local loud = love.audio.newSource('res/sounds/bee_dangerous.mp3')
-local soft = love.audio.newSource('res/sounds/bee_calm.mp3')
+local loud = love.audio.newSource('res/sounds/bee_dangerous.wav')
+local soft = love.audio.newSource('res/sounds/bee_calm.wav')
+local ambient = love.audio.newSource('res/sounds/bee_ambient.wav')
 local rain = love.audio.newSource('res/sounds/rain.wav')
 
 function Music.init()
     soft:setLooping(true)
     loud:setLooping(true)
+    ambient:setLooping(true)
+    ambient:setVolume(0.2)
     Music.setFade(0)
 
     soft:play()
     loud:play()
+    ambient:play()
 end
 
 function Music.game()

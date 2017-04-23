@@ -12,6 +12,10 @@ local sprites = {
     large = love.graphics.newImage('res/raindrop_large.png'),
 }
 
+local sounds = {
+    droplet = love.audio.newSource('res/sounds/droplet.wav')
+}
+
 function Raindrop:init(objects, x, y, radius)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y, radius)
@@ -35,6 +39,8 @@ end
 
 function Raindrop:collide(col, other)
     if other:hasTag('flower') then
+        sounds.droplet:setPitch(1.2 - self.radius / 60)
+        sounds.droplet:play()
         self.body:destroy()
     end
 end
