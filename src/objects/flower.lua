@@ -55,7 +55,7 @@ end
 function Flower:draw()
     local x, y = self.body:getPosition()
     local shear = math.sin(self.shear * math.pi * 2) / 10
-    love.graphics.draw(sprites.stem, x, y + 24, 0, 1, 1, 29, 0)
+    love.graphics.draw(sprites.stem, x, y + 24, 0, 1, 2, 29, 0)
     love.graphics.draw(sprites.petals, x, y, 0, 1, 1, 80, 18)
     love.graphics.draw(sprites.stamen, x, y - 2, 0, 1, 1, 16, 32, shear)
     love.graphics.draw(self.particles)
