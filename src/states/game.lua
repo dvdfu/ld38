@@ -1,18 +1,16 @@
 local Vector = require 'modules.hump.camera'
+local Gamestate = require 'modules.hump.gamestate'
 local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
+local Transition = require 'src.states.transition'
 local Player = require 'src.objects.player'
 local Raindrop = require 'src.objects.raindrop'
-local Bird = require 'src.objects.bird'
-local Hummingbird = require 'src.objects.hummingbird'
 local Camera = require 'src.camera'
+local ChunkSpawner = require 'src.chunkSpawner'
 local Constants = require 'src.constants'
 local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
-local Gamestate = require 'modules.hump.gamestate'
-local Transition = require 'src.states.transition'
-local ChunkSpawner = require 'src.chunkSpawner'
 
 local Game = {}
 
@@ -36,26 +34,11 @@ function Game:enter()
     self.camera = Camera(x, y, { damping = 12 })
     self.chunkSpawner = ChunkSpawner(self.objects, self.player)
 
-    ----------------------------------------------------------------------------
-    -- TODO: Add spawning logic here.
-    self.timer = Timer.new()
-    self.timer:every(120, function()
-        local x, y = self.camera:getPosition():unpack()
-        if math.random(0, 1) == 0 then
-            Bird(self.objects, x + 700, math.random(20, 220), self.player)
-        else
-            Hummingbird(self.objects, x + 700, math.random(20, 220), self.player)
-        end
-    end)
-
     self.rain = Rain()
+    self.timer = Timer.new()
     self.timer:every(1, function()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
-
-    -- self.timer:every(60, function()
-    --     Raindrop(self.objects, 200, -100, math.random(4, 50))
-    -- end)
 end
 
 function Game:update(dt)
