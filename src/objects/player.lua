@@ -1,6 +1,7 @@
 local Class = require 'modules.hump.class'
 local Vector = require 'modules.hump.vector'
 local Bee = require 'src.objects.bee'
+local Constants = require 'src.constants'
 
 local Player = Class.new()
 Player.BEE_COUNT = 100
@@ -40,7 +41,7 @@ function Player:getPosition()
 end
 
 function Player:draw()
-    love.graphics.circle('line', self.pos.x, self.pos.y, 16)
+    if Constants.DEBUG then love.graphics.circle('line', self.pos.x, self.pos.y, 16) end
 end
 
 return Player

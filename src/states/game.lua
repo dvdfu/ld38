@@ -3,7 +3,8 @@ local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
 local Player = require 'src.objects.player'
 local Raindrop = require 'src.objects.raindrop'
-local Enemy = require 'src.objects.enemy'
+local Bird = require 'src.objects.bird'
+local Hummingbird = require 'src.objects.hummingbird'
 local Camera = require 'src.camera'
 local Constants = require 'src.constants'
 local Objects = require 'src.objects'
@@ -27,16 +28,21 @@ function Game:enter()
     self.camera = Camera(self.player, { damping = 12 })
     self.rain = Rain()
 
+    ----------------------------------------------------------------------------
+    -- TODO: Add spawning logic here.
     self.timer = Timer.new()
     self.timer:every(120, function()
         local x, y = self.camera:getPosition():unpack()
-        local type = math.random(0, 1) == 0 and 'BIRD' or 'HUMMINGBIRD'
-        Enemy(self.objects, x + 700, math.random(20, 220), type, self.player, self.camera)
+        if math.random(0, 1) == 0 then
+            Bird(self.objects, x + 700, math.random(20, 220), self.player)
+        else
+            Hummingbird(self.objects, x + 700, math.random(20, 220), self.player)
+        end
     end)
-
     self.timer:every(60, function()
         Raindrop(self.objects, 200, -100, math.random(4, 50))
     end)
+    ----------------------------------------------------------------------------
 
     self.timer:every(1, function()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
