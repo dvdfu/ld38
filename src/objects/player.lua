@@ -26,18 +26,8 @@ function Player:init(objects, x, y)
             1 + 1 * math.random(),
             self)
     end
-end
 
-function Player:numBees()
-    local count = 0
-    for k, bee in pairs(self.bees) do
-        if bee:isDead() then
-            self.bees[k] = nil
-        else
-            count = count + 1
-        end
-    end
-    return count
+    self.distance = 0
 end
 
 function Player:update(dt)
@@ -66,10 +56,28 @@ function Player:update(dt)
         end
         self.pos = self.pos + self.vel * dt
     end
+
+    self.distance = math.max(self.distance, self.pos.x)
 end
 
 function Player:getPosition()
     return self.pos
+end
+
+function Player:getDistance()
+    return self.distance
+end
+
+function Player:numBees()
+    local count = 0
+    for k, bee in pairs(self.bees) do
+        if bee.dead then
+            self.bees[k] = nil
+        else
+            count = count + 1
+        end
+    end
+    return count
 end
 
 function Player:setMouse(pos)
