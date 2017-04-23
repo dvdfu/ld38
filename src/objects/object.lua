@@ -10,6 +10,9 @@ end
 
 function Object:update(dt) end
 
+function Object:collide(col, other)
+end
+
 function Object:getPosition()
     return Vector(self.body:getPosition())
 end

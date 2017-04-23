@@ -8,7 +8,12 @@ local function endContact(a, b, coll) end
 
 local function preSolve(a, b, coll) end
 
-local function postSolve(a, b, coll, normalimpulse, tangentimpulse) end
+local function postSolve(a, b, coll, normalimpulse, tangentimpulse)
+    local objA = a:getUserData()
+    local objB = b:getUserData()
+    objA:collide(coll, objB)
+    objB:collide(coll, objA)
+end
 
 function Objects:init()
     self.world = love.physics.newWorld(0, 0, true)

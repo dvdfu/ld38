@@ -3,14 +3,16 @@ local Vector = require 'modules.hump.vector'
 local Bee = require 'src.objects.bee'
 
 local Player = Class.new()
+Player.BEE_COUNT = 100
 Player.MOVE_SPEED = 3
 
 function Player:init(objects, x, y)
     self.pos = Vector(x, y)
     self.vel = Vector()
 
-    for i = 1, 200 do
-        Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
+    self.bees = {}
+    for i = 1, Player.BEE_COUNT do
+        table.insert(self.bees, Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self))
     end
 end
 
