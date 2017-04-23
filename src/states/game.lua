@@ -41,7 +41,7 @@ function Game:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
-    self.bee_count = self.player:numbees()
+    self.bee_count = self.player:numBees()
 end
 
 function Game:update(dt)
@@ -60,7 +60,7 @@ function Game:update(dt)
     Music.update(dt)
 
     -- for now
-    self.bee_count = self.player:numbees()
+    self.bee_count = self.player:numBees()
     Music.setFade(1 - self.bee_count / 100)
 
     -- if the player is under something, quieten the rain

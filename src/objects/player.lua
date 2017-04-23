@@ -28,7 +28,7 @@ function Player:init(objects, x, y)
     end
 end
 
-function Player:numbees()
+function Player:numBees()
     local count = 0
     for k, bee in pairs(self.bees) do
         if bee:isDead() then
