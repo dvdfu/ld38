@@ -48,14 +48,10 @@ function Enemy:debug()
 
     love.graphics.circle('line', x, y, self:getRadius())
 
-    if not self.locked and not self.passive then
-        love.graphics.setColor(255, 0, 0)
-        love.graphics.line(x, y, px, py)
-    elseif self.passive then
-        love.graphics.setColor(0, 0, 255)
-        love.graphics.line(x, y, px, py)
-    end
+    if not self.locked then love.graphics.setColor(255, 0, 0) end
+    if self.passive then love.graphics.setColor(0, 0, 255) end
 
+    love.graphics.line(x, y, px, py)
     love.graphics.setColor(255, 255, 255)
 end
 
