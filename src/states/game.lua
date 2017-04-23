@@ -54,7 +54,9 @@ function Game:update(dt)
     for _, object in pairs(self.objects.objects) do
         if object:getPosition().x < self.player:getPosition().x - Constants.GAME_WIDTH or
            object:getPosition().y > Constants.GAME_HEIGHT * 1.5 then
-            object.body:destroy()
+            if not object.body:isDead() then
+                object.body:destroy()
+            end
         end
     end
 
