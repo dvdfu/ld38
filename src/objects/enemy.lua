@@ -8,6 +8,7 @@ function Enemy:init(objects, x, y, player)
     Object.init(self, objects, x, y)
     self.player = player
     self.locked = false
+    self.passive = true
     self:addTag('enemy')
     self:build(objects:getWorld(), x, y)
 end
@@ -26,6 +27,9 @@ function Enemy:update(dt)
     if not self.locked then
         delta = self.player:getPosition() - self:getPosition()
 
+        if delta:len() > 500 then return
+        elseif self.passive then self.passive = false end
+
         if delta:len() < self:getLockingDistance() then
             self.locked = true
             self.delta = self.player:getPosition() - self:getPosition()
@@ -40,11 +44,24 @@ end
 
 function Enemy:debug()
     local x, y = self.body:getPosition()
+    local px, py = self.player:getPosition():unpack()
+
     love.graphics.circle('line', x, y, self:getRadius())
 
-    if self.locked then love.graphics.setColor(255, 0, 0) end
-    local px, py = self.player:getPosition():unpack()
-    love.graphics.line(x, y, px, py)
+    if not self.locked and not self.passive then
+        love.graphics.setColor(255, 0, 0)
+        love.graphics.line(x, y, px, py)
+    elseif self.passive then
+        love.graphics.setColor(0, 0, 255)
+        love.graphics.line(x, y, px, py)
+    end
+
+    if self.delta then
+        love.graphics.setColor(0, 255, 0)
+        local dx, dy = self.delta:unpack()
+        love.graphics.line(x, y, dx, dy)
+    end
+
     love.graphics.setColor(255, 255, 255)
 end
 

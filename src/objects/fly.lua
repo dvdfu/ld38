@@ -7,11 +7,11 @@ local Fly = Class.new()
 Fly:include(Enemy)
 
 Fly.RADIUS = 20
-Fly.SPEED = 4
+Fly.SPEED = 6
 Fly.SPRITE = love.graphics.newImage('res/raindrop_small.png')
 Fly.DAMPING = 0.9
 Fly.SCALE = 1
-Fly.LOCKING_DISTANCE = 300
+Fly.LOCKING_DISTANCE = 200
 
 local sprites = {
     body = love.graphics.newImage('res/fly_body.png'),
