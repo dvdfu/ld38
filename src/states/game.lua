@@ -88,6 +88,7 @@ function Game:draw()
     end
     self.rain:draw()
     self.camera:draw(function()
+        self.chunkSpawner:draw()
         self.player:draw()
         self.objects:draw()
     end)

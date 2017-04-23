@@ -4,6 +4,7 @@ love.graphics.setDefaultFilter('nearest', 'nearest')
 local Gamestate = require 'modules.hump.gamestate'
 local Intro = require 'src.states.intro'
 local Game = require 'src.states.game'
+local Constants = require 'src.constants'
 
 function love.load()
     Gamestate.switch(Intro)
@@ -19,6 +20,10 @@ function love.keypressed(key)
     if key == 'escape' then
         love.event.quit()
     else
+    elseif key == 'r' then
+        Gamestate.switch(Game)
+    elseif key == 'e' then
+        Constants.DEBUG = not Constants.DEBUG
     end
 end
 

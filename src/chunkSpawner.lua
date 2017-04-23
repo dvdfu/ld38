@@ -31,4 +31,10 @@ function ChunkSpawner:update(dt)
     end
 end
 
+function ChunkSpawner:draw()
+    for _, chunk in pairs(self.chunks) do
+        chunk:draw()
+    end
+end
+
 return ChunkSpawner
