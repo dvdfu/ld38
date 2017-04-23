@@ -13,7 +13,7 @@ function Chunk:init(objects, id)
     if id > 0 then
         for i = 1, Chunk.FLOWERS do
             local fx = (i - math.random()) * Constants.GAME_WIDTH / Chunk.FLOWERS
-            table.insert(objects, Flower(objects, self.x + fx, self.h - math.random(20, 80)))
+            table.insert(objects, Flower(objects, self.x + fx, self.h - math.random(10, 80)))
         end
     end
 end
