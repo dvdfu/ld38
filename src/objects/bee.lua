@@ -8,6 +8,7 @@ local Constants = require 'src.constants'
 local Bee = Class.new()
 Bee:include(Object)
 Bee.MAX_SPEED = 4
+Bee.BULLET_SPEED = 10
 
 local sprites = {
     bee = love.graphics.newImage('res/bee.png'),
@@ -24,6 +25,7 @@ function Bee:init(objects, x, y, radius, lag, player)
     self.radius = radius
     self.dead = false
     self.timer = Timer.new()
+    self.state = 'bee'
 
     self.wingAnim = Animation(sprites.wings, 2, 6)
     self.wingAnim:update(math.random() * 6)
@@ -41,6 +43,10 @@ function Bee:update(dt)
     Object.update(self, dt)
     if self.dead then
         self.body:applyForce(0, 0.02)
+    elseif self.state == 'bullet' then
+        self.body:setLinearVelocity(Bee.BULLET_SPEED, 0)
+        self.offset = (self.offset + dt / 60) % 1
+        self.wingAnim:update(dt)
     else
         local delta = self.player:getPosition() - self:getPosition()
         delta = delta:trimmed(Bee.MAX_SPEED) / 100 / self.lag
@@ -51,13 +57,16 @@ function Bee:update(dt)
     self.timer:update(dt)
 end
 
-function Bee:getRadius()
-    return self.radius
-end
-
 function Bee:collide(col, other)
-    if other:hasTag('raindrop') or other:hasTag('enemy') or other:hasTag('tongue') then
-        self:die(other)
+    if self.state == 'bee' then
+        if other:hasTag('raindrop') or other:hasTag('enemy') or other:hasTag('tongue') then
+            self:die(other)
+        end
+    else
+        if other:hasTag('raindrop') or other:hasTag('enemy') then
+            Signal.emit('cam_shake', 8)
+            self:die(other)
+        end
     end
 end
 
@@ -74,6 +83,17 @@ function Bee:die(other)
         Signal.emit('cam_shake', 4)
     else
         self.body:destroy()
+    end
+end
+
+function Bee:shoot()
+    if self.state == 'bee' then
+        self.state = 'bullet'
+        self:addTag('bullet')
+        self.fixture:setSensor(true)
+        self.timer:after(180, function()
+            self:die()
+        end)
     end
 end
 

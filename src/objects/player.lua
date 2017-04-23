@@ -1,7 +1,6 @@
 local Class = require 'modules.hump.class'
 local Vector = require 'modules.hump.vector'
 local Bee = require 'src.objects.bee'
-local Bullet = require 'src.objects.bullet'
 local Constants = require 'src.constants'
 
 local Player = Class.new()
@@ -93,14 +92,11 @@ function Player:shoot()
         if bee:isDead() then
             self.bees[k] = nil
         else
-            bullet_bee = bee
+            bee:shoot()
             self.bees[k] = nil
             break
         end
     end
-    local x, y = bullet_bee:getPosition():unpack()
-    bullet_bee:die()
-    local bullet = Bullet(self.objects, x, y, bullet_bee:getRadius())
 end
 
 function Player:draw()
