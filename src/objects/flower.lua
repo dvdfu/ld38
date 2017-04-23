@@ -1,4 +1,5 @@
 local Class = require 'modules.hump.class'
+local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
 
 local Flower = Class.new()
@@ -10,15 +11,24 @@ local sprites = {
     stem = love.graphics.newImage('res/flower_stem.png')
 }
 
+-- (x, y) is the point at the bottom of the stem, so the bottom middle of the entire flower
 function Flower:init(objects, x, y)
     Object.init(self, objects, x, y)
+
+    self.petalSize = Vector(sprites.petals:getWidth(), sprites.petals:getHeight())
+    self.stemSize = Vector(sprites.stem:getWidth(), sprites.stem:getHeight())
+    self.stamenSize = Vector(sprites.stamen:getWidth(), sprites.stamen:getHeight())
+
     self:build(objects:getWorld(), x, y)
     self:addTag('flower')
 end
 
+-- the bounding box encompasses the petals
 function Flower:build(world, x, y)
-    self.body = love.physics.newBody(world, x, y, 'static')
-    self.shape = love.physics.newCircleShape(4)
+    local xCenter = x - self.petalSize.x / 2
+    local yCenter = y - self.stemSize.y - self.petalSize.y / 2
+    self.body = love.physics.newBody(world, xCenter, yCenter, 'static')
+    self.shape = love.physics.newRectangleShape(xCenter, yCenter, self.petalSize.x, self.petalSize.y)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
 end
@@ -28,9 +38,9 @@ end
 
 function Flower:draw()
     local x, y = self.body:getPosition()
-    love.graphics.draw(sprites.stem, x - sprites.stem:getWidth() / 2 + 3, y - sprites.stem:getHeight())
-    love.graphics.draw(sprites.petals, x - sprites.petals:getWidth() / 2, y - sprites.stem:getHeight() - sprites.petals:getHeight())
-    love.graphics.draw(sprites.stamen, x - sprites.stamen:getWidth() / 2, y - sprites.stem:getHeight() - sprites.petals:getHeight() - sprites.stamen:getHeight() + 17)
+    love.graphics.draw(sprites.stem,   x - self.stemSize.x / 2 + 3, y + self.petalSize.y / 2)
+    love.graphics.draw(sprites.petals, x - self.petalSize.x / 2,    y - self.petalSize.y / 2)
+    love.graphics.draw(sprites.stamen, x - self.stamenSize.x / 2,   y - self.petalSize.y + 9)
 end
 
 return Flower
