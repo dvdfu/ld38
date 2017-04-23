@@ -7,11 +7,10 @@ local Fly = Class.new()
 Fly:include(Enemy)
 
 Fly.RADIUS = 20
-Fly.SPEED = 4
-Fly.SPRITE = love.graphics.newImage('res/raindrop_small.png')
+Fly.SPEED = 6
 Fly.DAMPING = 0.9
-Fly.SCALE = 1
-Fly.LOCKING_DISTANCE = 300
+Fly.LOCKING_DISTANCE = 200
+Fly.PASSIVE_DISTANCE = 500
 
 local sprites = {
     body = love.graphics.newImage('res/fly_body.png'),
@@ -46,6 +45,10 @@ end
 
 function Fly:getSpeed()
     return Fly.SPEED
+end
+
+function Fly:getPassiveDistance()
+    return Fly.PASSIVE_DISTANCE
 end
 
 function Fly:draw()
