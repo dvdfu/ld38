@@ -1,4 +1,5 @@
 local Class = require 'modules.hump.class'
+local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
 local Animation = require 'src.animation'
 

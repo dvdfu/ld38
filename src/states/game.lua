@@ -12,6 +12,7 @@ local Objects = require 'src.objects'
 local Rain = require 'src.rain'
 local Gamestate = require 'modules.hump.gamestate'
 local Transition = require 'src.states.transition'
+local ChunkSpawner = require 'src.chunkSpawner'
 
 local Game = {}
 
@@ -33,7 +34,7 @@ function Game:enter()
     self.player = Player(self.objects, 180, 120)
     local x, y = self.player:getPosition():unpack()
     self.camera = Camera(x, y, { damping = 12 })
-    self.rain = Rain()
+    self.chunkSpawner = ChunkSpawner(self.objects, self.player)
 
     ----------------------------------------------------------------------------
     -- TODO: Add spawning logic here.
@@ -46,14 +47,15 @@ function Game:enter()
             Hummingbird(self.objects, x + 700, math.random(20, 220), self.player)
         end
     end)
-    self.timer:every(60, function()
-        Raindrop(self.objects, 200, -100, math.random(4, 50))
-    end)
-    ----------------------------------------------------------------------------
 
+    self.rain = Rain()
     self.timer:every(1, function()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
+
+    -- self.timer:every(60, function()
+    --     Raindrop(self.objects, 200, -100, math.random(4, 50))
+    -- end)
 end
 
 function Game:update(dt)
@@ -63,6 +65,7 @@ function Game:update(dt)
     local px, py = self.player:getPosition():unpack()
     px = px + 100
     self.camera:follow(px, py)
+    self.chunkSpawner:update(dt)
     self.camera:update(dt)
     self.rain:update(dt)
     self.timer:update(dt)
@@ -85,6 +88,7 @@ function Game:draw()
     end
     self.rain:draw()
     self.camera:draw(function()
+        self.chunkSpawner:draw()
         self.player:draw()
         self.objects:draw()
     end)
