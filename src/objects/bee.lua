@@ -70,10 +70,11 @@ function Bee:draw()
     if self:isDead() then return end
     local x, y = self.body:getPosition()
     local vx, vy = self.body:getLinearVelocity()
-    local angle = math.atan2(vy, vx)
+    local direction = vx < 0 and -1 or 1
+    local angle = math.atan2(vy, vx * direction)
     local offset = math.sin(self.offset * math.pi * 2) * 2
-    self.wingAnim:draw(x, y + offset, angle, 1, 1, 4, 4)
-    love.graphics.draw(sprites.bee, x, y + offset, angle, 1, 1, 4, 4)
+    self.wingAnim:draw(x, y + offset, angle, direction, 1, 4, 4)
+    love.graphics.draw(sprites.bee, x, y + offset, angle, direction, 1, 4, 4)
 end
 
 return Bee

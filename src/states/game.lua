@@ -7,6 +7,7 @@ local Bird = require 'src.objects.bird'
 local Hummingbird = require 'src.objects.hummingbird'
 local Camera = require 'src.camera'
 local Constants = require 'src.constants'
+local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
 
@@ -20,6 +21,7 @@ function Game:init()
     Signal.register('cam_shake', function(shake)
         self.camera:shake(shake)
     end)
+    Music.init()
 end
 
 function Game:enter()
