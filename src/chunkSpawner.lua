@@ -1,6 +1,50 @@
 local Class = require 'modules.hump.class'
-local Chunk = require 'src.chunk'
+local Timer = require 'modules.hump.timer'
+local Flower = require 'src.objects.flower'
+local Raindrop = require 'src.objects.raindrop'
 local Constants = require 'src.constants'
+
+local Chunk = Class.new()
+Chunk.FLOWERS = 3 -- 1 to 3 flowers per chunk
+
+function Chunk:init(objects, id)
+    self.x = id * Constants.GAME_WIDTH
+    self.h = Constants.GAME_HEIGHT
+
+    if id > 0 then
+        local numFlowers = math.random(1, Chunk.FLOWERS)
+        for i = 1, numFlowers do
+            local fx = (i - math.random()) * Constants.GAME_WIDTH / numFlowers
+            table.insert(objects, Flower(objects, self.x + fx, self.h - math.random(20, 120)))
+        end
+    end
+
+    local dropletSize = math.random(4, 30)
+    local cooldown = 20 + 2 * dropletSize
+    self.raindropSpawner = Constants.GAME_WIDTH * math.random() -- x position
+    self.timer = Timer.new()
+    self.timer:every(cooldown, function()
+        Raindrop(objects, self.x + self.raindropSpawner, -50, dropletSize)
+    end)
+end
+
+function Chunk:update(dt)
+    self.timer:update(dt)
+end
+
+function Chunk:draw()
+    if Constants.DEBUG then
+        love.graphics.push('all')
+            if (self.x / Constants.GAME_WIDTH) % 2 == 0 then
+                love.graphics.setColor(52, 152, 219, 50)
+            else
+                love.graphics.setColor(231, 76, 60, 50)
+            end
+
+            love.graphics.rectangle('fill', self.x, 0, Constants.GAME_WIDTH, self.h)
+        love.graphics.pop()
+    end
+end
 
 local ChunkSpawner = Class.new()
 ChunkSpawner.NUM_CHUNKS = 2

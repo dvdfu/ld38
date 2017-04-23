@@ -33,17 +33,24 @@ function Raindrop:update(dt)
     self.wobble = (self.wobble + dt / 30) % 1
 end
 
+function Raindrop:collide(col, other)
+    if other:hasTag('flower') then
+        self.body:destroy()
+    end
+end
+
 function Raindrop:draw()
     local x, y = self.body:getPosition()
     local wobble = math.sin(self.wobble * math.pi * 2) / 16
-    if self.radius > 16 then
-        local scale = self.radius / 32
+    local radius = self.radius + 3 -- buffer spaces
+    if radius > 16 then
+        local scale = radius / 32
         love.graphics.draw(sprites.large, x, y, 0, scale + wobble, scale - wobble, 32, 32)
-    elseif self.radius > 8 then
-        local scale = self.radius / 16
+    elseif radius > 8 then
+        local scale = radius / 16
         love.graphics.draw(sprites.medium, x, y, 0, scale + wobble, scale - wobble, 16, 16)
     else
-        local scale = self.radius / 8
+        local scale = radius / 8
         love.graphics.draw(sprites.small, x, y, 0, scale + wobble, scale - wobble, 8, 8)
     end
 end

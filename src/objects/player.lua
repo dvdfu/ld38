@@ -18,7 +18,12 @@ function Player:init(objects, x, y)
 
     self.bees = Player.BEE_COUNT
     for i = 1, Player.BEE_COUNT do
-        Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
+        Bee(objects,
+            x + math.random(-50, 50),
+            y + math.random(-50, 50),
+            3 + 2 * math.random(),
+            1 + 1 * math.random(),
+            self)
     end
 
     Signal.register('bee_death', function()
