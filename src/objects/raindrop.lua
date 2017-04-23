@@ -15,6 +15,7 @@ function Raindrop:init(objects, x, y, radius)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y, radius)
     self.radius = radius
+    self.wobble = 0
     self:addTag('raindrop')
 end
 
@@ -28,19 +29,21 @@ end
 
 function Raindrop:update(dt)
     self.body:setLinearVelocity(0, 4)
+    self.wobble = (self.wobble + dt / 30) % 1
 end
 
 function Raindrop:draw()
     local x, y = self.body:getPosition()
+    local wobble = math.sin(self.wobble * math.pi * 2) / 16
     if self.radius > 16 then
         local scale = self.radius / 32
-        love.graphics.draw(sprites.large, x, y, 0, scale, scale, 32, 32)
+        love.graphics.draw(sprites.large, x, y, 0, scale + wobble, scale - wobble, 32, 32)
     elseif self.radius > 8 then
         local scale = self.radius / 16
-        love.graphics.draw(sprites.medium, x, y, 0, scale, scale, 16, 16)
+        love.graphics.draw(sprites.medium, x, y, 0, scale + wobble, scale - wobble, 16, 16)
     else
         local scale = self.radius / 8
-        love.graphics.draw(sprites.small, x, y, 0, scale, scale, 8, 8)
+        love.graphics.draw(sprites.small, x, y, 0, scale + wobble, scale - wobble, 8, 8)
     end
 end
 
