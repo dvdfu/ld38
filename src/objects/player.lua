@@ -1,4 +1,5 @@
 local Class = require 'modules.hump.class'
+local Signal = require 'modules.hump.signal'
 local Vector = require 'modules.hump.vector'
 local Bee = require 'src.objects.bee'
 local Constants = require 'src.constants'
@@ -11,10 +12,14 @@ function Player:init(objects, x, y)
     self.pos = Vector(x, y)
     self.vel = Vector()
 
-    self.bees = {}
+    self.bees = Player.BEE_COUNT
     for i = 1, Player.BEE_COUNT do
-        table.insert(self.bees, Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self))
+        Bee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
     end
+
+    Signal.register('bee_death', function()
+        self.bees = self.bees - 1
+    end)
 end
 
 function Player:update(dt)

@@ -58,6 +58,9 @@ function Game:update(dt)
     self.camera:update(dt)
     self.rain:update(dt)
     self.timer:update(dt)
+
+    -- for now
+    Music.setFade(1 - self.player.bees / 100)
 end
 
 function Game:draw()
