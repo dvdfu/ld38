@@ -40,10 +40,6 @@ function Transition:fadeIn(after)
         if after then after() end
     end)
 end
---
--- function Transition:inProgress()
---     return self.progress > 0 and self.progress < self.props.limit
--- end
 
 function Transition:draw()
     if self.progress == 0 then return end
