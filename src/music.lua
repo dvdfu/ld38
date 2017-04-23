@@ -3,7 +3,7 @@ local Timer = require 'modules.hump.timer'
 local Music = {}
 
 Music.SOUNDTRACK_MAX_VOLUME = 0.8
-
+Music.MODIFIER_DURATION = 40
 Music.LOUD_RAIN_VOLUME = 0.75
 Music.LOUD_RAIN_PITCH = 1.0
 Music.QUIET_RAIN_VOLUME = 0.4
@@ -60,7 +60,7 @@ function Music.tryPlayingLoudRain()
         }
 
         modifierTimer:clear()
-        modifierTimer:tween(40, musicModifiers, newModifiers, 'in-out-quad', function()
+        modifierTimer:tween(Music.MODIFIER_DURATION, musicModifiers, newModifiers, 'in-out-quad', function()
             modifiersChanging = false
         end)
         modifiersChanging = true
@@ -75,7 +75,7 @@ function Music.tryPlayingQuietRain()
         }
 
         modifierTimer:clear()
-        modifierTimer:tween(40, musicModifiers, newModifiers, 'linear', function()
+        modifierTimer:tween(Music.MODIFIER_DURATION, musicModifiers, newModifiers, 'linear', function()
             modifiersChanging = false
         end)
         modifiersChanging = true
