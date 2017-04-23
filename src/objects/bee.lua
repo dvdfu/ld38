@@ -38,7 +38,7 @@ end
 
 function Bee:update(dt)
     if self.dead then
-        self.body:applyForce(0, 0.05)
+        self.body:applyForce(0, 0.02)
     else
         local delta = self.player:getPosition() - self:getPosition()
         delta = delta:trimmed(Bee.MAX_SPEED) / 100 / self.lag

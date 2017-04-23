@@ -2,6 +2,7 @@ local Class = require 'modules.hump.class'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
+local Constants = require 'src.constants'
 
 local Flower = Class.new()
 Flower:include(Object)
@@ -55,7 +56,8 @@ end
 function Flower:draw()
     local x, y = self.body:getPosition()
     local shear = math.sin(self.shear * math.pi * 2) / 10
-    love.graphics.draw(sprites.stem, x, y + 24, 0, 1, 2, 29, 0)
+    local height = Constants.GAME_HEIGHT - y
+    love.graphics.draw(sprites.stem, x, y + 24, 0, 1, height / 64, 29, 0)
     love.graphics.draw(sprites.petals, x, y, 0, 1, 1, 80, 18)
     love.graphics.draw(sprites.stamen, x, y - 2, 0, 1, 1, 16, 32, shear)
     love.graphics.draw(self.particles)

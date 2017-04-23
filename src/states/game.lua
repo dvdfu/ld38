@@ -38,6 +38,7 @@ function Game:enter()
     self.timer = Timer.new()
     self.timer:every(1, function()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
+        self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
 end
 
