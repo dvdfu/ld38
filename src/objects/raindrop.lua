@@ -38,7 +38,7 @@ function Raindrop:update(dt)
 end
 
 function Raindrop:collide(col, other)
-    if other:hasTag('flower') then
+    if other:hasTag('flower') or other:hasTag('frog') then
         sounds.droplet:setPitch(1.2 - self.radius / 60)
         sounds.droplet:play()
         self.body:destroy()
