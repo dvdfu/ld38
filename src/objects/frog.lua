@@ -116,9 +116,13 @@ function Frog:draw()
     local x, y = self:getPosition():unpack()
     local tongue = self.tongue:getPosition()
     local delta = tongue - self:getPosition()
-    love.graphics.draw(sprites.frog, x, y - math.min(0, delta.y / 64), 0, 1, 1, 128, 120)
+    local offset = math.min(0, delta.y / 64)
 
+    love.graphics.push()
+    love.graphics.translate(0, -offset)
+    love.graphics.draw(sprites.frog, x, y, 0, 1, 1, 128, 120)
     self:drawEyes()
+    love.graphics.pop()
 
     love.graphics.draw(sprites.tongue, x, y, math.atan2(delta.y, delta.x), delta:len() / 32, 1, 0, 16)
     love.graphics.draw(sprites.tongueTip, tongue.x, tongue.y, 0, 1.5, 1.5, 16, 16)
@@ -131,8 +135,8 @@ function Frog:drawEyes()
     local x, y = self:getPosition():unpack()
     local delta = self.player:getPosition() - self.pos
     local angle = math.atan2(delta.y, delta.x)
-    love.graphics.draw(sprites.eye, x + 84 + 12 * math.cos(angle), y - 55 + 12 * math.sin(angle), 0, 1, 1, 8, 8)
-    love.graphics.draw(sprites.eye, x - 84 + 12 * math.cos(angle), y - 55 + 12 * math.sin(angle), 0, 1, 1, 8, 8)
+    love.graphics.draw(sprites.eye, x + 84 + 12 * math.cos(angle), y - 55 + 12 * math.sin(angle), angle, 1, 1, 8, 8)
+    love.graphics.draw(sprites.eye, x - 84 + 12 * math.cos(angle), y - 55 + 12 * math.sin(angle), angle, 1, 1, 8, 8)
 end
 
 return Frog
