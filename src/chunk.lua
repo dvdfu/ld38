@@ -12,7 +12,6 @@ function Chunk:init(objects, player, id, x, w)
     self.h = love.graphics.getHeight() / 2
     self.raindrops = {}
 
-    -- table.insert(self.objects, Raindrop(self.objects, 200, 100, math.random(0, 36)))
     if id > 0 then
         local n = 3
         for i = 1, n do
@@ -22,9 +21,7 @@ function Chunk:init(objects, player, id, x, w)
         end
 
         if math.random() < 1.1 then
-            local a = math.random(x, x + w)
-            table.insert(self.raindrops, a)
-            print("Spawning raindrop at", a)
+            table.insert(self.raindrops, math.random(x, x + w))
         end
     end
 end
