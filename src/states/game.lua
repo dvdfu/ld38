@@ -10,6 +10,7 @@ local Constants = require 'src.constants'
 local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
+local Gamestate = require 'modules.hump.gamestate'
 
 local Game = {}
 
@@ -21,7 +22,7 @@ function Game:init()
     Signal.register('cam_shake', function(shake)
         self.camera:shake(shake)
     end)
-    Music.init()
+    Music.game()
 end
 
 function Game:enter()
@@ -58,6 +59,12 @@ function Game:update(dt)
     self.camera:update(dt)
     self.rain:update(dt)
     self.timer:update(dt)
+end
+
+function Game:keypressed(key)
+    if Constants.DEBUG and key == 'r' then
+        Gamestate.switch(Game)
+    end
 end
 
 function Game:draw()

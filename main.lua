@@ -15,10 +15,10 @@ function love.update(dt)
 end
 
 function love.keypressed(key)
+    Gamestate.keypressed(key)
     if key == 'escape' then
         love.event.quit()
-    elseif key == 'r' then
-        Gamestate.switch(Game)
+    else
     end
 end
 
