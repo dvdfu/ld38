@@ -1,13 +1,14 @@
 local Class = require 'modules.hump.class'
 local Timer = require 'modules.hump.timer'
 local Flower = require 'src.objects.flower'
+local Fly = require 'src.objects.fly'
 local Raindrop = require 'src.objects.raindrop'
 local Constants = require 'src.constants'
 
 local Chunk = Class.new()
 Chunk.FLOWERS = 4 -- 1 to 3 flowers per chunk
 
-function Chunk:init(objects, id)
+function Chunk:init(objects, id, player)
     self.x = id * Constants.GAME_WIDTH
     self.h = Constants.GAME_HEIGHT
     self.timer = Timer.new()
@@ -25,6 +26,8 @@ function Chunk:init(objects, id)
         self.timer:every(cooldown, function()
             Raindrop(objects, self.x + self.raindropSpawner, -50, dropletSize)
         end)
+
+        Fly(objects, self.x, 100, player)
     end
 end
 
@@ -60,7 +63,7 @@ end
 
 function ChunkSpawner:generateChunks()
     for i = 1, ChunkSpawner.NUM_CHUNKS do
-        table.insert(self.chunks, Chunk(self.objects, self.chunkCount, Constants.GAME_WIDTH))
+        table.insert(self.chunks, Chunk(self.objects, self.chunkCount, self.player))
         self.chunkCount = self.chunkCount + 1
     end
 end
