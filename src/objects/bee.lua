@@ -64,6 +64,7 @@ function Bee:die(other)
     local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
     self.body:applyLinearImpulse(delta:unpack())
     Signal.emit('cam_shake', 4)
+    Signal.emit('bee_death')
 end
 
 function Bee:draw()
