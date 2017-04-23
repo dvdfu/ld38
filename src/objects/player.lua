@@ -15,6 +15,7 @@ local sprites = {
 function Player:init(objects, x, y)
     self.pos = Vector(x, y)
     self.vel = Vector()
+    self.mouse = Vector()
 
     self.bees = Player.BEE_COUNT
     for i = 1, Player.BEE_COUNT do
@@ -32,30 +33,22 @@ function Player:init(objects, x, y)
 end
 
 function Player:update(dt)
-    if love.keyboard.isDown('a') then
-        self.vel.x = -Player.MOVE_SPEED
-    elseif love.keyboard.isDown('d') then
-        self.vel.x = Player.MOVE_SPEED
-    else
-        self.vel.x = 0
+    if love.mouse.isDown(1) then
+        local delta = self.mouse - self.pos
+        self.pos = self.pos + delta:trimmed(Player.MOVE_SPEED) * dt
     end
-    if love.keyboard.isDown('w') then
-        self.vel.y = -Player.MOVE_SPEED
-    elseif love.keyboard.isDown('s') then
-        self.vel.y = Player.MOVE_SPEED
-    else
-        self.vel.y = 0
-    end
-
-    self.pos = self.pos + self.vel * dt
 end
 
 function Player:getPosition()
     return self.pos
 end
 
+function Player:setMouse(pos)
+    self.mouse = pos
+end
+
 function Player:draw()
-    love.graphics.draw(sprites.cursor, self.pos.x, self.pos.y, 0, 1, 1, 16, 16)
+    love.graphics.draw(sprites.cursor, self.mouse.x, self.mouse.y, 0, 1, 1, 16, 16)
 end
 
 return Player

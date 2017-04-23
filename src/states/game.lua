@@ -1,4 +1,4 @@
-local Vector = require 'modules.hump.camera'
+local Vector = require 'modules.hump.vector'
 local Gamestate = require 'modules.hump.gamestate'
 local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
@@ -44,11 +44,15 @@ end
 
 function Game:update(dt)
     self.transition:update(dt)
+    local mousePos = self.camera:getPosition() + Vector(love.mouse.getPosition()) / 2 - Camera.HALF_SCREEN
+    self.player:setMouse(mousePos)
     self.player:update(dt)
     self.objects:update(dt)
+
     local px, py = self.player:getPosition():unpack()
     px = px + 100
     self.camera:follow(px, py)
+
     self.chunkSpawner:update(dt)
     self.camera:update(dt)
     self.rain:update(dt)
@@ -73,8 +77,8 @@ function Game:draw()
     self.rain:draw()
     self.camera:draw(function()
         self.chunkSpawner:draw()
-        self.player:draw()
         self.objects:draw()
+        self.player:draw()
     end)
     self.transition:draw()
 end
