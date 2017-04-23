@@ -33,6 +33,7 @@ function Raindrop:build(world, x, y, radius)
 end
 
 function Raindrop:update(dt)
+    Object.update(self, dt)
     self.body:setLinearVelocity(0, 4)
     self.wobble = (self.wobble + dt / 30) % 1
 end

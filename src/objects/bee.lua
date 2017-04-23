@@ -38,6 +38,7 @@ function Bee:build(world, x, y, radius)
 end
 
 function Bee:update(dt)
+    Object.update(self, dt)
     if self.dead then
         self.body:applyForce(0, 0.02)
     else

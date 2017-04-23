@@ -48,6 +48,7 @@ function Flower:build(world, x, y)
 end
 
 function Flower:update(dt)
+    Object.update(self, dt)
     self.shear = (self.shear + dt / 60) % 1
     self.particles:update(dt)
     self.timer:update(dt)

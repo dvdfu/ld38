@@ -21,6 +21,7 @@ function Enemy:build(world, x, y)
 end
 
 function Enemy:update(dt)
+    Object.update(self, dt)
     local delta
     delta = self.player:getPosition() - self:getPosition()
 

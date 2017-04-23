@@ -32,6 +32,7 @@ function Tongue:build(world, x, y)
 end
 
 function Tongue:update(dt)
+    Object.update(self, dt)
     local delta = self.frog:getPosition() - self:getPosition()
     delta = delta:trimmed(Tongue.RETREAT)
     self.body:applyForce(delta:unpack())
@@ -76,9 +77,10 @@ function Frog:build(world, x, y)
 end
 
 function Frog:update(dt)
+    Object.update(self, dt)
     if not self.attacked then
         local delta = self.player:getPosition() - self:getPosition()
-        if math.abs(delta.x) < 120 and delta.y < 0 then
+        if math.abs(delta.x) < 200 and delta.y < 0 then
             self.attacked = true
             self.tongue:shoot(self.player:getPosition())
         end

@@ -6,19 +6,27 @@ local Object = Class.new()
 function Object:init(objects, x, y)
     objects:add(self)
     self.tags = {}
+    self.pos = Vector(x, y)
 end
 
-function Object:update(dt) end
+function Object:update(dt)
+    local x, y = self.body:getPosition()
+    self.pos = Vector(x, y)
+end
 
 function Object:collide(col, other)
 end
 
 function Object:getPosition()
-    return Vector(self.body:getPosition())
+    return self.pos
 end
 
 function Object:isDead()
     return self.body:isDestroyed()
+end
+
+function Object:destory()
+    self.body:destroy()
 end
 
 function Object:addTag(tag)
