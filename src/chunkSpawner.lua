@@ -20,10 +20,10 @@ function Chunk:init(objects, id)
     end
 
     local dropletSize = math.random(4, 30)
-    local frequency = 45 + dropletSize
+    local cooldown = 20 + 2 * dropletSize
     self.raindropSpawner = Constants.GAME_WIDTH * math.random() -- x position
     self.timer = Timer.new()
-    self.timer:every(frequency, function()
+    self.timer:every(cooldown, function()
         Raindrop(objects, self.x + self.raindropSpawner, -50, dropletSize)
     end)
 end
