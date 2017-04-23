@@ -10,6 +10,7 @@ Chunk.FLOWERS = 4 -- 1 to 3 flowers per chunk
 function Chunk:init(objects, id)
     self.x = id * Constants.GAME_WIDTH
     self.h = Constants.GAME_HEIGHT
+    self.timer = Timer.new()
 
     if id > 0 then
         local numFlowers = math.random(1, Chunk.FLOWERS)
@@ -17,15 +18,14 @@ function Chunk:init(objects, id)
             local fx = (i - math.random()) * Constants.GAME_WIDTH / numFlowers
             table.insert(objects, Flower(objects, self.x + fx, self.h - math.random(40, 200)))
         end
-    end
 
-    local dropletSize = math.random(4, 30)
-    local cooldown = 20 + 2 * dropletSize
-    self.raindropSpawner = Constants.GAME_WIDTH * math.random() -- x position
-    self.timer = Timer.new()
-    self.timer:every(cooldown, function()
-        Raindrop(objects, self.x + self.raindropSpawner, -50, dropletSize)
-    end)
+        local dropletSize = math.random(4, 30)
+        local cooldown = 40 + 2 * dropletSize
+        self.raindropSpawner = Constants.GAME_WIDTH * math.random() -- x position
+        self.timer:every(cooldown, function()
+            Raindrop(objects, self.x + self.raindropSpawner, -50, dropletSize)
+        end)
+    end
 end
 
 function Chunk:update(dt)
