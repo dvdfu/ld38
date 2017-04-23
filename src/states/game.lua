@@ -52,14 +52,30 @@ function Game:update(dt)
 
     local px, py = self.player:getPosition():unpack()
     self.camera:follow(px + 100)
-
     self.chunkSpawner:update(dt)
     self.camera:update(dt)
     self.rain:update(dt)
     self.timer:update(dt)
+    Music.update(dt)
 
     -- for now
     Music.setFade(1 - self.player.bees / 100)
+
+    -- if the player is under something, quieten the rain
+    Music.setPrevQuietRain()
+    if py > 0 then
+        self.objects:getWorld():rayCast(px, py, px, 0, function (fixture, x, y, xn, yn, fraction)
+            if fixture:getUserData():hasTag('bee') or
+               fixture:getUserData():hasTag('raindrop') or
+               fixture:getUserData():hasTag('enemy') then
+                return -1
+            end
+
+            Music.maybePlayQuietRain()
+            return 0
+        end)
+    end
+    Music.maybePlayLoudRain()
 end
 
 function Game:keypressed(key)
