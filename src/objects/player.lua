@@ -8,6 +8,10 @@ local Player = Class.new()
 Player.BEE_COUNT = 100
 Player.MOVE_SPEED = 3
 
+local sprites = {
+    cursor = love.graphics.newImage('res/cursor.png')
+}
+
 function Player:init(objects, x, y)
     self.pos = Vector(x, y)
     self.vel = Vector()
@@ -46,7 +50,7 @@ function Player:getPosition()
 end
 
 function Player:draw()
-    if Constants.DEBUG then love.graphics.circle('line', self.pos.x, self.pos.y, 16) end
+    love.graphics.draw(sprites.cursor, self.pos.x, self.pos.y, 0, 1, 1, 16, 16)
 end
 
 return Player

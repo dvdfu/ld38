@@ -1,9 +1,10 @@
 local Class = require 'modules.hump.class'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
+local Constants = require 'src.constants'
 
 local Camera = Class.new()
-Camera.HALF_SCREEN = Vector(720, 480) / 4
+Camera.HALF_SCREEN = Vector(Constants.GAME_WIDTH, Constants.GAME_HEIGHT) / 2
 
 function Camera:init(target, settings)
     settings = settings or {}
