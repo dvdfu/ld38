@@ -35,6 +35,12 @@ function Player:spawnBee(objects, x, y, player, radius, lag)
 end
 
 function Player:update(dt)
+    self.distance = math.max(self.distance, self.pos.x)
+    self.cursorTime = (self.cursorTime + dt / 200) % 1
+    if self:numBees() == 0 then
+        return
+    end
+
     if love.mouse.isDown(1) then
         self.usingMouse = true
         local delta = self.mouse - self.pos
@@ -60,9 +66,6 @@ function Player:update(dt)
         end
         self.pos = self.pos + self.vel * dt
     end
-
-    self.distance = math.max(self.distance, self.pos.x)
-    self.cursorTime = (self.cursorTime + dt / 200) % 1
 end
 
 function Player:getPosition()
