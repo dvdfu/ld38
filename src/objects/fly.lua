@@ -7,7 +7,7 @@ local Constants = require 'src.constants'
 local Fly = Class.new()
 Fly:include(Enemy)
 
-Fly.RADIUS = 20
+Fly.RADIUS = 24
 Fly.SPEED = 6
 Fly.DAMPING = 0.9
 Fly.LOCKING_DISTANCE = 200

@@ -18,6 +18,7 @@ function Player:init(objects, x, y)
     self.usingMouse = true
     self.bees = {}
     self.objects = objects
+    self.cursorTime = 0
 
     for i = 1, Player.BEE_COUNT do
         self:spawnBee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
@@ -61,6 +62,7 @@ function Player:update(dt)
     end
 
     self.distance = math.max(self.distance, self.pos.x)
+    self.cursorTime = (self.cursorTime + dt / 200) % 1
 end
 
 function Player:getPosition()
@@ -106,10 +108,19 @@ function Player:shoot()
 end
 
 function Player:draw()
+    local point
     if self.usingMouse then
-        love.graphics.draw(sprites.cursor, self.mouse.x, self.mouse.y, 0, 1, 1, 16, 16)
+        point = self.mouse
     else
-        love.graphics.draw(sprites.cursor, self.pos.x, self.pos.y, 0, 1, 1, 16, 16)
+        point = self.pos
+    end
+
+    local radius = 4 + math.floor(self:numBees() * 0.8)
+    for i = 1, radius do
+        local time = self.cursorTime + i / radius
+        local x = radius * math.cos(time * math.pi * 2)
+        local y = radius * math.sin(time * math.pi * 2)
+        love.graphics.circle('fill', point.x + x, point.y + y, 1)
     end
 end
 
