@@ -18,7 +18,7 @@ local Player = require 'src.objects.player'
 local Flower = require 'src.objects.flower'
 
 local Game = {}
-Game.DISTANCE = 20000
+Game.DISTANCE = Constants.GAME_WIDTH * (Constants.DEBUG and 2 or 20)
 
 local sprites = {
     background = love.graphics.newImage('res/background_blur.png'),
