@@ -20,7 +20,7 @@ local Player = require 'src.objects.player'
 local Flower = require 'src.objects.flower'
 
 local Game = {}
-Constants.TOTAL_CHUNKS = Constants.DEBUG and 1 or Constants.TOTAL_CHUNKS
+-- Constants.TOTAL_CHUNKS = Constants.DEBUG and 1 or Constants.TOTAL_CHUNKS
 Game.DISTANCE = Constants.GAME_WIDTH * Constants.TOTAL_CHUNKS
 
 local sprites = {
