@@ -63,7 +63,6 @@ local Flower = Class.new()
 Flower:include(Object)
 Flower.POLLINATION_RADIUS = 100
 
--- (x, y) is the point at the bottom of the stem, so the bottom middle of the entire flower
 function Flower:init(objects, x, y)
     Object.init(self, objects, x, y)
     self.shear = math.random()
