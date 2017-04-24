@@ -7,11 +7,13 @@ local Constants = require 'src.constants'
 local Flower = Class.new()
 Flower:include(Object)
 
+Flower.POLLINATION_RADIUS = 100
+
 local sprites = {
     petals = love.graphics.newImage('res/flower_petals.png'),
     stamen = love.graphics.newImage('res/flower_stamen.png'),
     stem = love.graphics.newImage('res/flower_stem.png'),
-    droplet = love.graphics.newImage('res/droplet.png')
+    droplet = love.graphics.newImage('res/droplet.png'),
 }
 
 -- (x, y) is the point at the bottom of the stem, so the bottom middle of the entire flower
@@ -37,14 +39,22 @@ function Flower:init(objects, x, y)
     self.timer:every(10, function()
         self.particles:emit(1)
     end)
+
+    self.pollinated = false
+    self.numBees = math.random(4, 6)
 end
 
 -- the bounding box encompasses the petals
 function Flower:build(world, x, y)
     self.body = love.physics.newBody(world, x, y)
-    self.shape = love.physics.newRectangleShape(140, 24)
+    self.shape = love.physics.newRectangleShape(118, 20)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
+
+    local leftSide = love.physics.newCircleShape(-118 / 2, 0, 20 / 2)
+    local rightSide = love.physics.newCircleShape(118 / 2, 0, 20 / 2)
+    love.physics.newFixture(self.body, leftSide):setUserData(self)
+    love.physics.newFixture(self.body, rightSide):setUserData(self)
 end
 
 function Flower:update(dt)
