@@ -45,14 +45,14 @@ end
 local Dandelion = Class.new()
 Dandelion:include(Object)
 
-function Dandelion:init(objects, x, y)
+function Dandelion:init(objects, x, y, height)
     Object.init(self, objects, x, y)
-    self:build(objects:getWorld(), x, Constants.GAME_HEIGHT)
+    self:build(objects:getWorld(), x, y)
     self:addTag('dandelion')
-    self.height = Constants.GAME_HEIGHT - y
-    self.seeds = Seeds(objects, x, y, math.random(30, 40))
+    self.height = height
+    self.seeds = Seeds(objects, x, y - height, math.random(30, 40))
     local a, b = self.seeds.body:getPosition()
-    self.rope = love.physics.newRopeJoint(self.body, self.seeds.body, x, Constants.GAME_HEIGHT, a, b, self.height, true)
+    self.rope = love.physics.newRopeJoint(self.body, self.seeds.body, x, y, a, b, self.height, true)
 end
 
 function Dandelion:build(world, x, y)
@@ -68,7 +68,7 @@ function Dandelion:draw()
 
     love.graphics.push('all')
         local x1, y1, x2, y2 = self.rope:getAnchors()
-        love.graphics.setLineWidth(8)
+        love.graphics.setLineWidth(9)
         love.graphics.setColor(135, 156, 107)
         love.graphics.line(x1, y1, x2, y2 - 2)
     love.graphics.pop()

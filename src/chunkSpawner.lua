@@ -68,8 +68,8 @@ end
 function Chunk:spawnDandelions(n)
     for i = 1, n do
         local x = (i - math.random()) * Constants.GAME_WIDTH / n
-        local h = math.random(40, 200)
-        Dandelion(self.objects, self.x + x, self.h - h)
+        local h = 100 + math.random(40, 200)
+        Dandelion(self.objects, self.x + x, self.h + 100, h)
     end
 end
 
