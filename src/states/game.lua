@@ -119,22 +119,22 @@ function Game:update(dt)
     self.camera:update(dt)
 
     if px >= Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH - Constants.GAME_WIDTH / 2 and not self.reachedEnd then
-        -- self.reachedEnd = true
-        -- self.timer:after(100, function()
-        --     self.timer:every(10, function()
-        --         if self.player:numBees() < 100 then
-        --             self.player:spawnBee(self.objects, Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH - Constants.GAME_WIDTH / 2 + math.random(-Constants.GAME_WIDTH / 3, Constants.GAME_WIDTH / 3), math.random(-300, -100), self.player)
-        --         end
-        --     end)
-        -- end)
-        --
-        -- self.timer:after(200, function()
-        --     self.showCredits = true
-        --     self.timer:tween(100, self.credits, { opacity = 175 }, 'in-out-cubic')
-        --     self.timer:after(80, function()
-        --         self.timer:tween(100, self.credits, { textPos = Constants.GAME_HEIGHT - 30 }, 'in-out-cubic')
-        --     end)
-        -- end)
+        self.reachedEnd = true
+        self.timer:after(100, function()
+            self.timer:every(10, function()
+                if self.player:numBees() < 100 then
+                    self.player:spawnBee(self.objects, Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH - Constants.GAME_WIDTH / 2 + math.random(-Constants.GAME_WIDTH / 3, Constants.GAME_WIDTH / 3), math.random(-300, -100), self.player)
+                end
+            end)
+        end)
+
+        self.timer:after(200, function()
+            self.showCredits = true
+            self.timer:tween(100, self.credits, { opacity = 125 }, 'in-out-cubic')
+            self.timer:after(80, function()
+                self.timer:tween(100, self.credits, { textPos = Constants.GAME_HEIGHT - 30 }, 'in-out-cubic')
+            end)
+        end)
     end
 
     self.rain:update(dt)
