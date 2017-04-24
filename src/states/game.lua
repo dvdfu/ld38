@@ -11,6 +11,7 @@ local Constants = require 'src.constants'
 local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
+local Flower = require 'src.objects.flower'
 
 local Game = {}
 
