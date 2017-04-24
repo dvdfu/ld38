@@ -45,9 +45,14 @@ end
 -- the bounding box encompasses the petals
 function Flower:build(world, x, y)
     self.body = love.physics.newBody(world, x, y)
-    self.shape = love.physics.newRectangleShape(140, 24)
+    self.shape = love.physics.newRectangleShape(118, 20)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
+
+    local leftSide = love.physics.newCircleShape(-118 / 2, 0, 20 / 2)
+    local rightSide = love.physics.newCircleShape(118 / 2, 0, 20 / 2)
+    love.physics.newFixture(self.body, leftSide):setUserData(self)
+    love.physics.newFixture(self.body, rightSide):setUserData(self)
 end
 
 function Flower:update(dt)
