@@ -20,7 +20,10 @@ function Dead:enter()
 end
 
 function Dead:keypressed(key)
-    if not self.transitioning and key == 'return' then
+    if key == 'escape' then
+        local Intro = require 'src.states.intro'
+        Gamestate.switch(Intro)
+    elseif not self.transitioning and key == 'return' then
         self.transitioning = true
         self.transition:fadeOut(function()
             local Intro = require 'src.states.intro'

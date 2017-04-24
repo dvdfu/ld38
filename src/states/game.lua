@@ -79,12 +79,6 @@ function Game:enter()
 
     self.reachedEnd = false
 
-    self.showCredits = false
-    self.credits = {
-        opacity = 0,
-        textPos = Constants.GAME_HEIGHT
-    }
-
     sounds.thunder:play()
 end
 
@@ -125,12 +119,9 @@ function Game:update(dt)
             end)
         end)
 
-        self.timer:after(700, function()
-            self.showCredits = true
-            self.timer:tween(100, self.credits, { opacity = 125 }, 'in-out-cubic')
-            self.timer:after(80, function()
-                self.timer:tween(100, self.credits, { textPos = Constants.GAME_HEIGHT - 30 }, 'in-out-cubic')
-            end)
+        self.timer:after(100, function() --700, function()
+            local Finale = require 'src.states.finale'
+            Gamestate.switch(Finale)
         end)
     end
 
@@ -206,7 +197,6 @@ function Game:draw()
     end)
 
     self:drawHUD()
-    self:drawCredits()
 
     self.transition:draw()
 end
@@ -226,15 +216,5 @@ function Game:drawHUD()
     love.graphics.printf('x' .. self.beeCount, Constants.GAME_WIDTH / 2 - 120 + 240 * progress - 20, 29, 40, 'center')
 end
 
-function Game:drawCredits()
-    if not self.showCredits then return end
-    love.graphics.push('all')
-        love.graphics.setColor(0, 0, 0, self.credits.opacity)
-        love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
-
-        love.graphics.setColor(255, 255, 255)
-        love.graphics.print("Made by David Fu, Seikun Kambashi and Hamdan Javeed", 22, self.credits.textPos)
-    love.graphics.pop()
-end
 
 return Game
