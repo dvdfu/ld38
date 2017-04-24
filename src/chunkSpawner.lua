@@ -1,6 +1,7 @@
 local Class = require 'modules.hump.class'
 local Timer = require 'modules.hump.timer'
 local Flower = require 'src.objects.flower'
+local Dandelion = require 'src.objects.dandelion'
 local Fly = require 'src.objects.fly'
 local Frog = require 'src.objects.frog'
 local Raindrop = require 'src.objects.raindrop'
@@ -19,7 +20,8 @@ function Chunk:init(objects, id, player)
     if id == Constants.TOTAL_CHUNKS then
         self:spawnTree()
     elseif id == 1 then
-        self:spawnFlowers(3)
+        self:spawnFlowers(2)
+        self:spawnDandelions(1)
         return
     elseif id > 12 and math.random(1, 4) == 1 then
         self:spawnFrog()
@@ -31,9 +33,11 @@ function Chunk:init(objects, id, player)
             self:spawnFlies(numFlies)
         end
         local numDrips = math.random(0, 2) + math.floor(id / 8)
-        local numFlowers = math.random(2, 5) - math.floor(id / 12)
+        local numFlowers = math.random(2, 4) - math.floor(id / 12)
+        local numDandelions = math.random(1, 2) - math.floor(id / 12)
         self:spawnDrips(numDrips)
         self:spawnFlowers(numFlowers)
+        self:spawnDandelions(numDandelions)
     end
 end
 
@@ -58,6 +62,14 @@ function Chunk:spawnFlowers(n)
         local x = (i - math.random()) * Constants.GAME_WIDTH / n
         local h = math.random(40, 200)
         Flower(self.objects, self.x + x, self.h - h)
+    end
+end
+
+function Chunk:spawnDandelions(n)
+    for i = 1, n do
+        local x = (i - math.random()) * Constants.GAME_WIDTH / n
+        local h = math.random(40, 200)
+        Dandelion(self.objects, self.x + x, self.h - h)
     end
 end
 
