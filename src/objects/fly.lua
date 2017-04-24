@@ -8,7 +8,7 @@ local Fly = Class.new()
 Fly:include(Enemy)
 
 Fly.RADIUS = 24
-Fly.SPEED = 6
+Fly.SPEED = 3
 Fly.DAMPING = 0.9
 Fly.LOCKING_DISTANCE = 200
 Fly.PASSIVE_DISTANCE = 500
