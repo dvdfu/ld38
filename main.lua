@@ -18,9 +18,7 @@ end
 
 function love.keypressed(key)
     Gamestate.keypressed(key)
-    if key == 'escape' then
-        love.event.quit()
-    elseif key == '-' then
+    if key == '-' then
         Music.volume_down()
     elseif key == '=' then
         Music.volume_up()

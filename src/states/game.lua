@@ -20,7 +20,6 @@ local Player = require 'src.objects.player'
 local Flower = require 'src.objects.flower'
 
 local Game = {}
--- Constants.TOTAL_CHUNKS = Constants.DEBUG and 1 or Constants.TOTAL_CHUNKS
 Game.DISTANCE = Constants.GAME_WIDTH * Constants.TOTAL_CHUNKS
 
 local sprites = {
@@ -153,7 +152,7 @@ function Game:update(dt)
     end
 
     -- for now
-    Music.setFade(1 - self.beeCount / 100)
+    Music.setFade(self.player:getDistance() / Game.DISTANCE)
 
     -- if the player is under something, quieten the rain
     Music.setPrevQuietRain()
@@ -170,24 +169,18 @@ function Game:update(dt)
         end)
     end
     Music.tryPlayingLoudRain()
-
-    -- if self.player:getDistance() >= Game.DISTANCE then
-    --     if not self.transitioning then
-    --         self.transitioning = true
-    --         self.transition:fadeOut(function()
-    --             Gamestate.switch(Finale)
-    --         end)
-    --     end
-    -- end
 end
 
 function Game:keypressed(key)
-    if Constants.DEBUG and key == 'r' then
+    if key == 'escape' then
+        local Intro = require 'src.states.intro'
+        Gamestate.switch(Intro)
+    elseif Constants.DEBUG and key == 'r' then
         Gamestate.switch(Game)
     elseif key == 'e' then
-        Constants.DEBUG = not Constants.DEBUG
+        -- Constants.DEBUG = not Constants.DEBUG
     elseif key == 'space' then
-        self.player:shoot()
+        -- self.player:shoot()
     end
 end
 

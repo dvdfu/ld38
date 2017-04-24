@@ -48,7 +48,9 @@ function Intro:update(dt)
 end
 
 function Intro:keypressed(key)
-    if not self.transitioning and key == 'return' then
+    if key == 'escape' then
+        love.event.quit()
+    elseif not self.transitioning and key == 'return' then
         self.transitioning = true
         self.transition:fadeOut(function()
             Gamestate.switch(Game)
