@@ -10,7 +10,15 @@ local sprites = {
 
 local Dead = {}
 
+Dead.STRINGS = {
+    "Gone but not forgotten.",
+    "The death of one bee is a tradegy, the death of a million is a statistic.",
+    "If you encounter enemies, then you're going the right way.",
+    "gg",
+}
+
 function Dead:enter()
+    self.dead_string = Dead.STRINGS[math.random(#Dead.STRINGS)]
     self.transition = Transition()
     self.transition:fadeIn()
     self.enableInput = false
@@ -60,7 +68,8 @@ function Dead:draw()
     love.graphics.setColor(0, 0, 0, self.state.opacity)
     love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
     love.graphics.setColor(255, 255, 255, self.state.textOpacity)
-    love.graphics.printf("Try again?", Constants.GAME_WIDTH / 2 - 100, self.state.textPos, 200, 'center')
+    love.graphics.printf(self.dead_string, Constants.GAME_WIDTH / 2 - 100, self.state.textPos, 200, 'center')
+    love.graphics.printf("Press ENTER to try again", Constants.GAME_WIDTH / 2 - 100, self.state.textPos + 50, 200, 'center')
     love.graphics.setColor(255, 255, 255)
 
     self.transition:draw()
