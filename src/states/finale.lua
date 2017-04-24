@@ -5,7 +5,7 @@ local Music = require 'src.music'
 local Timer = require 'modules.hump.timer'
 
 local sprites = {
-    backgroundBlur = love.graphics.newImage('res/background_blur.png'),
+    background = love.graphics.newImage('res/ending_swarm.png'),
 }
 
 local Finale = {}
@@ -24,9 +24,11 @@ function Finale:enter()
     self.transitioning = false
     self.transition:fadeIn()
 
-    self.timer:tween(100, self.credits, { opacity = 125 }, 'in-out-cubic')
-    self.timer:after(80, function()
-        self.timer:tween(100, self.credits, { textPos = Constants.GAME_HEIGHT - 30 }, 'in-out-cubic')
+    self.timer:after(200, function()
+        self.timer:tween(60, self.credits, {
+            opacity = 125,
+            textPos = Constants.GAME_HEIGHT - 30
+        }, 'in-out-cubic')
     end)
 end
 
@@ -57,8 +59,7 @@ function Finale:drawCredits()
 end
 
 function Finale:draw()
-    love.graphics.draw(sprites.backgroundBlur, 0, 0)
-    love.graphics.draw(sprites.backgroundBlur, 480, 0)
+    love.graphics.draw(sprites.background, 0, 0)
 
     self:drawCredits()
     self.transition:draw()
