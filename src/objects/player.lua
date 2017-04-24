@@ -5,7 +5,7 @@ local Constants = require 'src.constants'
 
 local Player = Class.new()
 Player.BEE_COUNT = 20
-Player.MOVE_SPEED = 3
+Player.MOVE_SPEED = 6
 
 local sprites = {
     cursor = love.graphics.newImage('res/cursor.png')

@@ -18,7 +18,8 @@ local Player = require 'src.objects.player'
 local Flower = require 'src.objects.flower'
 
 local Game = {}
-Game.DISTANCE = Constants.GAME_WIDTH * (Constants.DEBUG and 2 or 20)
+Constants.TOTAL_CHUNKS = Constants.DEBUG and 1 or Constants.TOTAL_CHUNKS
+Game.DISTANCE = Constants.GAME_WIDTH * Constants.TOTAL_CHUNKS
 
 local sprites = {
     background = love.graphics.newImage('res/background_blur.png'),
@@ -71,6 +72,14 @@ function Game:enter()
     self.splashParticles:setSpread(math.pi / 2)
     self.splashParticles:setSpeed(2, 4)
     self.splashParticles:setLinearAcceleration(0, 0.2)
+
+    self.reachedEnd = false
+
+    self.showCredits = false
+    self.credits = {
+        opacity = 0,
+        textPos = Constants.GAME_HEIGHT
+    }
 end
 
 function Game:update(dt)
@@ -99,6 +108,26 @@ function Game:update(dt)
     self.camera:follow(px + 100)
     self.chunkSpawner:update(dt)
     self.camera:update(dt)
+
+    if px >= Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH - Constants.GAME_WIDTH / 2 and not self.reachedEnd then
+        -- self.reachedEnd = true
+        -- self.timer:after(100, function()
+        --     self.timer:every(10, function()
+        --         if self.player:numBees() < 100 then
+        --             self.player:spawnBee(self.objects, Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH - Constants.GAME_WIDTH / 2 + math.random(-Constants.GAME_WIDTH / 3, Constants.GAME_WIDTH / 3), math.random(-300, -100), self.player)
+        --         end
+        --     end)
+        -- end)
+        --
+        -- self.timer:after(200, function()
+        --     self.showCredits = true
+        --     self.timer:tween(100, self.credits, { opacity = 175 }, 'in-out-cubic')
+        --     self.timer:after(80, function()
+        --         self.timer:tween(100, self.credits, { textPos = Constants.GAME_HEIGHT - 30 }, 'in-out-cubic')
+        --     end)
+        -- end)
+    end
+
     self.rain:update(dt)
     self.timer:update(dt)
     self.splashParticles:update(dt)
@@ -124,14 +153,14 @@ function Game:update(dt)
     end
     Music.tryPlayingLoudRain()
 
-    if self.player:getDistance() >= Game.DISTANCE then
-        if not self.transitioning then
-            self.transitioning = true
-            self.transition:fadeOut(function()
-                Gamestate.switch(Finale)
-            end)
-        end
-    end
+    -- if self.player:getDistance() >= Game.DISTANCE then
+    --     if not self.transitioning then
+    --         self.transitioning = true
+    --         self.transition:fadeOut(function()
+    --             Gamestate.switch(Finale)
+    --         end)
+    --     end
+    -- end
 end
 
 function Game:keypressed(key)
@@ -168,6 +197,10 @@ function Game:draw()
 
     self:drawHUD()
 
+    if self.showCredits then
+        self:drawCredits()
+    end
+
     self.transition:draw()
 end
 
@@ -184,6 +217,16 @@ function Game:drawHUD()
 
     love.graphics.setFont(Constants.FONTS.REDALERT)
     love.graphics.printf(self.beeCount, Constants.GAME_WIDTH / 2 - 120 + 240 * progress - 20, 29, 40, 'center')
+end
+
+function Game:drawCredits()
+    love.graphics.push('all')
+        love.graphics.setColor(0, 0, 0, self.credits.opacity)
+        love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
+
+        love.graphics.setColor(255, 255, 255)
+        love.graphics.print("Made by David Fu, Seikun Kambashi and Hamdan Javeed", 22, self.credits.textPos)
+    love.graphics.pop()
 end
 
 return Game

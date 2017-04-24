@@ -5,26 +5,35 @@ local Fly = require 'src.objects.fly'
 local Frog = require 'src.objects.frog'
 local Raindrop = require 'src.objects.raindrop'
 local Constants = require 'src.constants'
+local Tree = require 'src.objects.tree'
 
 local Chunk = Class.new()
 
 function Chunk:init(objects, id, player)
-    self.x = id * Constants.GAME_WIDTH
+    self.x = (id - 1) * Constants.GAME_WIDTH
     self.h = Constants.GAME_HEIGHT
     self.timer = Timer.new()
     self.objects = objects
     self.player = player
 
-    if id == 0 then return end
-
-    if math.random(1, 4) == 1 then
-        self:spawnFrog()
-        self:spawnDrips(math.random(1, 2))
+    if id == Constants.TOTAL_CHUNKS then
+        self:spawnTree()
+    elseif id == 1 then
+        return
     else
-        self:spawnFlies(math.random(0, 1))
-        self:spawnDrips(math.random(1, 4))
-        self:spawnFlowers(math.random(1, 5))
+        if math.random(1, 4) == 0 then
+            self:spawnFrog()
+            self:spawnDrips(math.random(1, 2))
+        else
+            self:spawnFlies(math.random(0, 1))
+            self:spawnDrips(math.random(1, 4))
+            self:spawnFlowers(math.random(1, 5))
+        end
     end
+end
+
+function Chunk:spawnTree()
+    Tree(self.objects, self.x + Constants.GAME_WIDTH)
 end
 
 function Chunk:spawnFrog()
@@ -79,12 +88,12 @@ end
 --------------------------------------------------------------------------------
 
 local ChunkSpawner = Class.new()
-ChunkSpawner.NUM_CHUNKS = 2
+ChunkSpawner.NUM_CHUNKS = 1
 
 function ChunkSpawner:init(objects, player)
     self.objects = objects
     self.player = player
-    self.chunkCount = 0
+    self.chunkId = 1
     self.chunks = {}
 
     self:generateChunks()
@@ -92,13 +101,13 @@ end
 
 function ChunkSpawner:generateChunks()
     for i = 1, ChunkSpawner.NUM_CHUNKS do
-        table.insert(self.chunks, Chunk(self.objects, self.chunkCount, self.player))
-        self.chunkCount = self.chunkCount + 1
+        table.insert(self.chunks, Chunk(self.objects, self.chunkId, self.player))
+        self.chunkId = self.chunkId + 1
     end
 end
 
 function ChunkSpawner:update(dt)
-    if self.player:getPosition().x > (self.chunkCount - 1) * Constants.GAME_WIDTH then
+    if self.player:getPosition().x > (self.chunkId - 2) * Constants.GAME_WIDTH and self.chunkId <= Constants.TOTAL_CHUNKS then
         self:generateChunks()
     end
 

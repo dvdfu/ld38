@@ -27,7 +27,7 @@ function Camera:update(dt)
 end
 
 function Camera:follow(x)
-    if x > self.target.x then
+    if x > self.target.x and x < (Constants.TOTAL_CHUNKS) * Constants.GAME_WIDTH - Constants.GAME_WIDTH / 2 then
         self.target.x = x
     end
 end
