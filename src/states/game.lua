@@ -14,11 +14,14 @@ local Rain = require 'src.rain'
 local Flower = require 'src.objects.flower'
 
 local Game = {}
+Game.DISTANCE = 20000
 
 local sprites = {
     background = love.graphics.newImage('res/background_blur.png'),
     foreground = love.graphics.newImage('res/foreground_blur.png'),
     splash = love.graphics.newImage('res/raindrop_particle.png'),
+    hudTree = love.graphics.newImage('res/hud_tree.png'),
+    hudBee = love.graphics.newImage('res/hud_bee.png'),
 }
 
 function Game:init()
@@ -153,21 +156,22 @@ function Game:draw()
         self.player:draw()
     end)
 
-    love.graphics.setFont(Constants.FONTS.REDALERT)
-
-    -- print HUD distance
-    local distance = math.floor(self.player:getDistance() / 12)
-    local meters = math.floor(distance / 100)
-    local centimeters = distance % 100
-    if centimeters < 10 then
-        centimeters = '0' .. centimeters
-    end
-    love.graphics.printf(meters .. '.' .. centimeters .. ' m',
-        Constants.GAME_WIDTH - 80, 40, 40, 'right')
-    love.graphics.printf(self.beeCount,
-        Constants.GAME_WIDTH - 80, 52, 40, 'right')
+    self:drawHUD()
 
     self.transition:draw()
+end
+
+function Game:drawHUD()
+    love.graphics.setColor(255, 255, 255, 128)
+    love.graphics.rectangle('fill', Constants.GAME_WIDTH / 2 - 120, 24 - 2, 240, 4)
+    love.graphics.setColor(255, 255, 255, 255)
+
+    local progress = self.player:getDistance() / Game.DISTANCE
+    love.graphics.draw(sprites.hudTree, Constants.GAME_WIDTH / 2 + 120, 24, 0, 1, 1, 8, 8)
+    love.graphics.draw(sprites.hudBee, Constants.GAME_WIDTH / 2 - 120 + 240 * progress, 24 - 1, 0, 1, 1, 8, 8)
+
+    love.graphics.setFont(Constants.FONTS.REDALERT)
+    love.graphics.printf(self.beeCount, Constants.GAME_WIDTH / 2 - 120 + 240 * progress - 20, 29, 40, 'center')
 end
 
 return Game
