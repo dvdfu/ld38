@@ -80,7 +80,7 @@ function Frog:init(objects, x, y, player)
     self.particles:setPosition(x, y - 70)
     self.particles:setOffset(16, 32)
     self.particles:setParticleLifetime(10)
-    self.particles:setAreaSpread('ellipse', 128, 24)
+    self.particles:setAreaSpread('uniform', 128, 24)
 
     self.timer = Timer.new()
     self.timer:every(4, function()
