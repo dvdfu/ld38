@@ -27,7 +27,7 @@ end
 
 function Player:spawnBee(objects, x, y, player, radius, lag)
     radius = radius or 3 + 2 * math.random()
-    lag = lag or 1 + 1 * math.random()
+    lag = lag or 1 + math.random(1, 40) / 100
 
     table.insert(self.bees, Bee(objects, x, y, radius, lag, player))
 end
