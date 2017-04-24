@@ -26,14 +26,14 @@ function Dead:enter()
     self.timer = Timer.new()
     self.state = {
         opacity = 0,
-        textPos = Constants.GAME_HEIGHT / 2 + 50,
+        textPos = Constants.GAME_HEIGHT / 2,
         textOpacity = 0
     }
 
     self.timer:after(200, function()
         self.timer:tween(60, self.state, {
             opacity = 125,
-            textPos = Constants.GAME_HEIGHT / 2,
+            textPos = Constants.GAME_HEIGHT / 2 - 75,
             textOpacity = 255
         }, 'in-out-cubic', function()
             self.enableInput = true
