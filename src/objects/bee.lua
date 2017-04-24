@@ -72,7 +72,7 @@ function Bee:collide(col, other)
     else
         if other:hasTag('raindrop') or other:hasTag('enemy') or other:hasTag('tongue') then
             self:die(other)
-        elseif other:hasTag('pollen') then
+        elseif not self.dead and other:hasTag('pollen') then
             other:pollinate()
         end
     end

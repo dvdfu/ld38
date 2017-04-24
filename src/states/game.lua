@@ -57,6 +57,7 @@ function Game:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
     self.beeCount = self.player:numBees()
+    self.gameOver = false
 
     self.splashParticles = love.graphics.newParticleSystem(sprites.splash)
     self.splashParticles:setOffset(8, 8)
@@ -95,8 +96,17 @@ function Game:update(dt)
     self.splashParticles:update(dt)
     Music.update(dt)
 
-    -- for now
     self.beeCount = self.player:numBees()
+    if self.beeCount == 0 and not self.gameOver then
+        self.gameOver = true
+        self.timer:after(120, function()
+            self.transition:fadeOut(function()
+                Gamestate.switch(Game)
+            end)
+        end)
+    end
+
+    -- for now
     Music.setFade(1 - self.beeCount / 100)
 
     -- if the player is under something, quieten the rain
