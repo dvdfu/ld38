@@ -1,4 +1,5 @@
 local Class = require 'modules.hump.class'
+local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
@@ -21,7 +22,9 @@ function Pollen:init(objects, x, y)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y)
     self:addTag('pollen')
-    self.puff = Animation(sprites.puff, 8, 2, true)
+    self.puff = Animation(sprites.puff, 8, 4, true)
+    self.numBees = math.random(4, 6)
+    self.dead = false
 end
 
 function Pollen:build(world, x, y)
@@ -34,6 +37,11 @@ end
 
 function Pollen:update(dt)
     self.puff:update(dt)
+    if self.pollinated and not self.dead then
+        self.dead = true
+        local x, y = self.pos:unpack()
+        Signal.emit('pollinate', x, y, self.numBees)
+    end
 end
 
 function Pollen:pollinate()
@@ -44,12 +52,10 @@ function Pollen:pollinate()
 end
 
 function Pollen:draw()
-    local x, y = self.body:getPosition()
-    self.puff:draw(x, y, 0, 1, 1, 32, 64)
+    local x, y = self.pos:unpack()
+    self.puff:draw(x, y + 8, 0, 1, 1, 32, 64)
     if self.pollinated then
-        love.graphics.setColor(255, 255, 255, 128)
         love.graphics.draw(sprites.pollen, x, y + 8, 0, 1, 1, 64, 16)
-        love.graphics.setColor(255, 255, 255, 255)
     end
 end
 
@@ -81,8 +87,6 @@ function Flower:init(objects, x, y)
     self.timer:every(10, function()
         self.particles:emit(1)
     end)
-
-    self.numBees = math.random(4, 6)
 end
 
 -- the bounding box encompasses the petals

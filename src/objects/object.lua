@@ -25,7 +25,7 @@ function Object:isDead()
     return self.body:isDestroyed()
 end
 
-function Object:destory()
+function Object:destroy()
     self.body:destroy()
 end
 
