@@ -14,7 +14,7 @@ function Finale:enter()
     Music.finale()
     self.transition = Transition()
     self.transition:fadeIn()
-    self.transitioning = false
+    self.enableInput = false
     self.timer = Timer.new()
     self.state = {
         opacity = 0,
@@ -25,7 +25,9 @@ function Finale:enter()
         self.timer:tween(60, self.state, {
             opacity = 125,
             textPos = Constants.GAME_HEIGHT - 30
-        }, 'in-out-cubic')
+        }, 'in-out-cubic', function()
+            self.enableInput = true
+        end)
     end)
 end
 
@@ -33,8 +35,8 @@ function Finale:keypressed(key)
     if key == 'escape' then
         local Intro = require 'src.states.intro'
         Gamestate.switch(Intro)
-    elseif not self.transitioning and key == 'return' then
-        self.transitioning = true
+    elseif self.enableInput and key == 'return' then
+        self.enableInput = false
         self.transition:fadeOut(function()
             local Intro = require 'src.states.intro'
             Gamestate.switch(Intro)

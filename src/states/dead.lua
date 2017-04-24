@@ -13,7 +13,7 @@ local Dead = {}
 function Dead:enter()
     self.transition = Transition()
     self.transition:fadeIn()
-    self.transitioning = false
+    self.enableInput = false
     self.timer = Timer.new()
     self.state = {
         opacity = 0,
@@ -26,7 +26,9 @@ function Dead:enter()
             opacity = 125,
             textPos = Constants.GAME_HEIGHT / 2,
             textOpacity = 255
-        }, 'in-out-cubic')
+        }, 'in-out-cubic', function()
+            self.enableInput = true
+        end)
     end)
 end
 
@@ -38,8 +40,8 @@ function Dead:keypressed(key)
     if key == 'escape' then
         local Intro = require 'src.states.intro'
         Gamestate.switch(Intro)
-    elseif not self.transitioning and key == 'return' then
-        self.transitioning = true
+    elseif self.enableInput and key == 'return' then
+        self.enableInput = false
         self.transition:fadeOut(function()
             local Intro = require 'src.states.intro'
             Gamestate.switch(Intro)
