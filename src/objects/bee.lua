@@ -43,14 +43,18 @@ function Bee:update(dt)
     Object.update(self, dt)
     if self.dead then
         self.body:applyForce(0, 0.02)
-    elseif self.state == 'bullet' then
-        local x, y = (self.delta * Bee.BULLET_SPEED):trimmed(Bee.BULLET_SPEED):unpack()
-        self.body:setLinearVelocity(x, y)
-        self.offset = (self.offset + dt / 60) % 1
-        self.wingAnim:update(dt)
     else
-        local delta = self.player:getPosition() - self:getPosition()
-        delta = delta:trimmed(Bee.MAX_SPEED) / 100 / self.lag
+        local delta
+        local speed
+        if self:isBullet() then
+            delta = self.delta
+            speed = Bee.BULLET_SPEED
+        else
+            delta = self.player:getPosition() - self:getPosition()
+            speed = Bee.MAX_SPEED
+        end
+
+        delta = delta:trimmed(speed) / 100 / self.lag
         self.body:applyForce(delta:unpack())
         self.offset = (self.offset + dt / 60) % 1
         self.wingAnim:update(dt)
@@ -59,13 +63,13 @@ function Bee:update(dt)
 end
 
 function Bee:collide(col, other)
-    if self.state == 'bee' then
-        if other:hasTag('raindrop') or other:hasTag('enemy') or other:hasTag('tongue') then
+    if self:isBullet() then
+        if other:hasTag('raindrop') or other:hasTag('enemy') then
+            Signal.emit('cam_shake', 8)
             self:die(other)
         end
     else
-        if other:hasTag('raindrop') or other:hasTag('enemy') then
-            Signal.emit('cam_shake', 8)
+        if other:hasTag('raindrop') or other:hasTag('enemy') or other:hasTag('tongue') then
             self:die(other)
         end
     end
@@ -87,8 +91,12 @@ function Bee:die(other)
     end
 end
 
+function Bee:isBullet()
+    return self.state == 'bullet'
+end
+
 function Bee:shoot()
-    if self.state == 'bee' then
+    if not self:isBullet() then
         self.state = 'bullet'
         self:addTag('bullet')
         self.delta = self.player:getMouse() - self:getPosition()
@@ -104,6 +112,7 @@ function Bee:draw()
     local x, y = self.body:getPosition()
     local vx, vy = self.body:getLinearVelocity()
     local direction = vx < 0 and -1 or 1
+    if self:isBullet() then direction = 1 end
     local angle = math.atan2(vy, vx * direction)
     local offset = math.sin(self.offset * math.pi * 2) * 2
     self.wingAnim:draw(             x, y + offset, angle, direction * self.radius / 4, self.radius / 4, 4, 4)
