@@ -17,6 +17,7 @@ function Player:init(objects, x, y)
     self.mouse = Vector()
     self.usingMouse = true
     self.bees = {}
+    self.objects = objects
 
     for i = 1, Player.BEE_COUNT do
         self:spawnBee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
@@ -84,6 +85,24 @@ end
 
 function Player:setMouse(pos)
     self.mouse = pos
+end
+
+function Player:getMouse()
+    return self.mouse
+end
+
+function Player:shoot()
+    if self:numBees() < 2 then return end
+    local bullet_bee
+    for k, bee in pairs(self.bees) do
+        if bee:isDead() then
+            self.bees[k] = nil
+        else
+            bee:shoot()
+            self.bees[k] = nil
+            break
+        end
+    end
 end
 
 function Player:draw()
