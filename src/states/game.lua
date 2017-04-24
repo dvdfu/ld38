@@ -54,7 +54,7 @@ function Game:enter()
     self.transitioning = false
     self.transition:fadeIn()
     self.objects = Objects()
-    self.player = Player(self.objects, 0, 120)
+    self.player = Player(self.objects, 0, 120, false)
     local x, y = self.player:getPosition():unpack()
     self.camera = Camera(x, Constants.GAME_HEIGHT / 2, 12)
     self.chunkSpawner = ChunkSpawner(self.objects, self.player)
