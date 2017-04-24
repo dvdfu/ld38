@@ -3,6 +3,7 @@ local Gamestate = require 'modules.hump.gamestate'
 local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
 local Transition = require 'src.states.transition'
+local Flower = require 'src.objects.flower'
 local Player = require 'src.objects.player'
 local Raindrop = require 'src.objects.raindrop'
 local Camera = require 'src.camera'
@@ -11,7 +12,6 @@ local Constants = require 'src.constants'
 local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
-local Flower = require 'src.objects.flower'
 
 local Game = {}
 Game.DISTANCE = 20000
