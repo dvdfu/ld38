@@ -12,7 +12,6 @@ local Chunk = Class.new()
 
 function Chunk:init(objects, id, player)
     self.x = (id - 1) * Constants.GAME_WIDTH
-    self.h = Constants.GAME_HEIGHT
     self.timer = Timer.new()
     self.objects = objects
     self.player = player
@@ -62,15 +61,16 @@ function Chunk:spawnFlowers(n)
     for i = 1, n do
         local x = (i - math.random()) * Constants.GAME_WIDTH / n
         local h = math.random(40, 200)
-        Flower(self.objects, self.x + x, self.h - h)
+        Flower(self.objects, self.x + x, Constants.GAME_HEIGHT - h)
     end
 end
 
 function Chunk:spawnDandelions(n)
     for i = 1, n do
         local x = (i - math.random()) * Constants.GAME_WIDTH / n
-        local h = 100 + math.random(40, 200)
-        Dandelion(self.objects, self.x + x, self.h + 100, h)
+        local height = 100 + math.random(40, 160)
+        local radius = math.random(35, 50)
+        Dandelion(self.objects, self.x + x, Constants.GAME_HEIGHT + 100, height, radius)
     end
 end
 
@@ -98,7 +98,7 @@ function Chunk:draw()
                 love.graphics.setColor(231, 76, 60, 50)
             end
 
-            love.graphics.rectangle('fill', self.x, 0, Constants.GAME_WIDTH, self.h)
+            love.graphics.rectangle('fill', self.x, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
         love.graphics.pop()
     end
 end
