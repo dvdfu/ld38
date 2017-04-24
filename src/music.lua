@@ -108,4 +108,9 @@ function Music.update(dt)
     end
 end
 
+function Music.finale()
+    Music.setFade(0)
+    rain:stop()
+end
+
 return Music

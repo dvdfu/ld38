@@ -11,7 +11,6 @@ local sprites = {
 local Finale = {}
 
 function Finale:init()
-    Music.init()
     self.timer = Timer.new()
     self.transition = Transition()
     self.credits = {
@@ -21,6 +20,7 @@ function Finale:init()
 end
 
 function Finale:enter()
+    Music.finale()
     self.transitioning = false
     self.transition:fadeIn()
 
@@ -45,16 +45,15 @@ end
 
 function Finale:update(dt)
     self.transition:update(dt)
+    self.timer:update(dt)
 end
 
 function Finale:drawCredits()
-    love.graphics.push('all')
-        love.graphics.setColor(0, 0, 0, self.credits.opacity)
-        love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
+    love.graphics.setColor(0, 0, 0, self.credits.opacity)
+    love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
 
-        love.graphics.setColor(255, 255, 255)
-        love.graphics.print("Made by David Fu, Seikun Kambashi and Hamdan Javeed", 22, self.credits.textPos)
-    love.graphics.pop()
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.print("Made by David Fu, Seikun Kambashi and Hamdan Javeed", 22, self.credits.textPos)
 end
 
 function Finale:draw()
