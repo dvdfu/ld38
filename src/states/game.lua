@@ -47,8 +47,6 @@ function Game:init()
             self.player:spawnBee(self.objects, x, y, self.player)
         end
     end)
-
-    Music.game()
     self.transition = Transition()
 end
 

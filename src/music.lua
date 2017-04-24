@@ -28,18 +28,15 @@ function Music.init()
     soft:setLooping(true)
     loud:setLooping(true)
     ambient:setLooping(true)
+    rain:setLooping(true)
     Music.setFade(0)
 
     soft:play()
     loud:play()
     ambient:play()
-    love.audio.setVolume(music_volume / 10)
-end
-
-function Music.game()
-    rain:setLooping(true)
     rain:setVolume(musicModifiers.rainVolume)
     rain:play()
+    love.audio.setVolume(music_volume / 10)
 end
 
 function Music.setFade(x)

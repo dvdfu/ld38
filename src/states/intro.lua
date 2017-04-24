@@ -17,11 +17,11 @@ local sprites = {
 local Intro = {}
 
 function Intro:init()
-    Music.init()
     self.transition = Transition()
 end
 
 function Intro:enter()
+    Music.init()
     self.objects = Objects()
     self.player = Player(self.objects, Constants.GAME_WIDTH / 2 + 80, Constants.GAME_HEIGHT * 3 / 4)
     self.rain = Rain()
@@ -35,7 +35,6 @@ function Intro:enter()
 
     self.transitioning = false
     self.transition:fadeIn()
-    Music.setFade(0)
 end
 
 function Intro:update(dt)
@@ -65,7 +64,7 @@ function Intro:draw()
     love.graphics.setFont(Constants.FONTS.REDALERT)
     love.graphics.print("Click & hold or WASD to move", 100, 220)
     love.graphics.print("Visit flowers to recruit bees", 100, 220 + 16)
-    love.graphics.print("Get home safe! Press ENTER", 100, 220 + 32)
+    love.graphics.print("Get home safe! Press ENTER to START!", 100, 220 + 32)
     love.graphics.setColor(128, 128, 128)
     love.graphics.print("@dvdfu, Hamdan Javeed, Seikun Kambashi", 100, 220 + 48)
     love.graphics.print("Ludum Dare 38: Small World", 100, 220 + 64)
