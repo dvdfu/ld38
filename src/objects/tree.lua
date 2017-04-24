@@ -1,9 +1,6 @@
 local Class = require 'modules.hump.class'
 local Object = require 'src.objects.object'
 
-local Branch = Class.new()
-Branch:include(Object)
-
 local sprites = {
     hive = love.graphics.newImage('res/tree_hive.png'),
     branch = love.graphics.newImage('res/tree_branch.png'),
@@ -29,23 +26,28 @@ end
 
 function Hive:draw()
     local x, y = self.body:getPosition()
-    love.graphics.draw(sprites.hive, x - sprites.hive:getWidth() / 2, y - sprites.hive:getHeight() / 2)
+    love.graphics.draw(sprites.hive, x, y, 0, 1, 1, 32, 32)
 end
 
 function Hive:update(dt)
-    self.body:applyForce(0, 1)
+    Object.update(self, dt)
+    self.body:applyForce(0, 0.3)
 end
 
 --------------------------------------------------------------------------------
 
-function Branch:init(objects, x, y, hive)
+local Branch = Class.new()
+Branch:include(Object)
+
+function Branch:init(objects, x, y)
     Object.init(self, objects, x, y)
-    self:build(objects:getWorld(), x, y, hive)
-    love.physics.newRopeJoint(self.body, hive.body, 0, 8, 0, 0, 50, false)
+    self:build(objects:getWorld(), x, y)
     self:addTag('branch')
+    local hive = Hive(objects, x, y + 8)
+    love.physics.newRopeJoint(self.body, hive.body, 0, 8, 0, -28, 10, true)
 end
 
-function Branch:build(world, x, y, hive)
+function Branch:build(world, x, y)
     self.body = love.physics.newBody(world, x, y)
     self.shape = love.physics.newRectangleShape(128, 8)
     self.fixture = love.physics.newFixture(self.body, self.shape)
@@ -54,7 +56,7 @@ end
 
 function Branch:draw()
     local x, y = self.body:getPosition()
-    love.graphics.draw(sprites.branch, x - sprites.branch:getWidth() / 2, y - sprites.branch:getHeight() / 2)
+    love.graphics.draw(sprites.branch, x + 64, y, 0, 1, 1, 160, 16)
 end
 
 --------------------------------------------------------------------------------
@@ -67,9 +69,7 @@ function Tree:init(objects, x)
     Object.init(self, objects, x)
     self:build(objects:getWorld(), x)
     self:addTag('tree')
-
-    self.hive = Hive(objects, x - 168, 150)
-    self.branch = Branch(objects, x - 168, 80, self.hive)
+    Branch(objects, x - 167, 80)
 end
 
 function Tree:build(world, x)
