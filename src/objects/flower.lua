@@ -44,14 +44,15 @@ function Flower:init(objects, x, y)
 
     self.droplets = love.graphics.newParticleSystem(sprites.dropletSmall)
     self.droplets:setSizes(0.4, 0)
-    -- self.droplets:setPosition(x - 75, y - 3)
     self.droplets:setPosition(x, y)
     self.droplets:setAreaSpread('uniform', 70, 4)
     self.droplets:setParticleLifetime(30)
     self.droplets:setLinearAcceleration(0, 0.2)
 
     self.dripTimer = Timer.new()
-    self:drip()
+    self.dripTimer:every(8, function()
+        self.droplets:emit(1)
+    end)
 
     self.pollinated = false
     self.numBees = math.random(4, 6)
@@ -78,14 +79,6 @@ function Flower:update(dt)
     self.droplets:update(dt)
     self.timer:update(dt)
     self.dripTimer:update(dt)
-end
-
-function Flower:drip()
-    self.dripTimer:every(math.random(100, 200), function()
-        self.dripTimer:after(math.random(1, 100), function()
-            self.droplets:emit(1)
-        end)
-    end)
 end
 
 function Flower:draw()
