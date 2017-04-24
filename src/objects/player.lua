@@ -4,7 +4,7 @@ local Bee = require 'src.objects.bee'
 local Constants = require 'src.constants'
 
 local Player = Class.new()
-Player.BEE_COUNT = 100
+Player.BEE_COUNT = 20
 Player.MOVE_SPEED = 3
 
 local sprites = {
@@ -19,15 +19,17 @@ function Player:init(objects, x, y)
     self.bees = {}
 
     for i = 1, Player.BEE_COUNT do
-        self.bees[i] = Bee(objects,
-            x + math.random(-50, 50),
-            y + math.random(-50, 50),
-            3 + 2 * math.random(),
-            1 + 1 * math.random(),
-            self)
+        self:spawnBee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
     end
 
     self.distance = 0
+end
+
+function Player:spawnBee(objects, x, y, player, radius, lag)
+    radius = radius or 3 + 2 * math.random()
+    lag = lag or 1 + 1 * math.random()
+
+    table.insert(self.bees, Bee(objects, x, y, radius, lag, player))
 end
 
 function Player:update(dt)

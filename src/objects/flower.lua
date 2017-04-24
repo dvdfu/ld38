@@ -37,6 +37,9 @@ function Flower:init(objects, x, y)
     self.timer:every(10, function()
         self.particles:emit(1)
     end)
+
+    self.pollinated = false
+    self.numBees = math.random(4, 6)
 end
 
 -- the bounding box encompasses the petals

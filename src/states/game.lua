@@ -75,6 +75,19 @@ function Game:update(dt)
         end
     end
 
+    for _, object in pairs(self.objects.objects) do
+        if object:hasTag('flower') and
+           not object.pollinated and
+           object:getPosition():dist(self.player:getPosition()) < 100 then
+               object.pollinated = true
+
+               local x, y = object:getPosition():unpack()
+               for i = 1, object.numBees do
+                   self.player:spawnBee(self.objects, x, y, self.player)
+               end
+        end
+    end
+
     self.objects:update(dt)
 
     local px, py = self.player:getPosition():unpack()
