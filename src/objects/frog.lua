@@ -12,6 +12,10 @@ local sprites = {
     droplet = love.graphics.newImage('res/droplet.png'),
 }
 
+local sounds = {
+    frog = love.audio.newSource('res/sounds/ribbit.wav')
+}
+
 local Tongue = Class.new()
 Tongue:include(Object)
 Tongue.FORCE = 80
@@ -49,6 +53,7 @@ function Tongue:shoot(pos)
     self.timer:after(Tongue.COOLDOWN, function()
         self.frog:resetAttack()
     end)
+    sounds.frog:play()
 end
 
 --------------------------------------------------------------------------------

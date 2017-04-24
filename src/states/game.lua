@@ -12,6 +12,8 @@ local Transition = require 'src.states.transition'
 
 local ChunkSpawner = require 'src.chunkSpawner'
 local Rain = require 'src.rain'
+local Raindrop = require 'src.objects.raindrop'
+
 local Objects = require 'src.objects'
 
 local Player = require 'src.objects.player'
@@ -27,6 +29,10 @@ local sprites = {
     splash = love.graphics.newImage('res/raindrop_particle.png'),
     hudTree = love.graphics.newImage('res/hud_tree.png'),
     hudBee = love.graphics.newImage('res/hud_bee.png'),
+}
+
+local sounds = {
+    thunder = love.audio.newSource('res/sounds/thunder.wav')
 }
 
 function Game:init()
@@ -63,6 +69,7 @@ function Game:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
     self.beeCount = self.player:numBees()
+    self.gameOver = false
 
     self.splashParticles = love.graphics.newParticleSystem(sprites.splash)
     self.splashParticles:setOffset(8, 8)
@@ -80,6 +87,8 @@ function Game:enter()
         opacity = 0,
         textPos = Constants.GAME_HEIGHT
     }
+
+    sounds.thunder:play()
 end
 
 function Game:update(dt)
@@ -133,8 +142,17 @@ function Game:update(dt)
     self.splashParticles:update(dt)
     Music.update(dt)
 
-    -- for now
     self.beeCount = self.player:numBees()
+    if self.beeCount == 0 and not self.gameOver then
+        self.gameOver = true
+        self.timer:after(120, function()
+            self.transition:fadeOut(function()
+                Gamestate.switch(Game)
+            end)
+        end)
+    end
+
+    -- for now
     Music.setFade(1 - self.beeCount / 100)
 
     -- if the player is under something, quieten the rain
