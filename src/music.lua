@@ -10,10 +10,10 @@ Music.QUIET_RAIN_VOLUME = 0.4
 Music.QUIET_RAIN_PITCH = 0.6
 Music.AUDIO_MAX_VOLUME = 10
 
-local loud = love.audio.newSource('res/sounds/bee_dangerous.wav')
-local soft = love.audio.newSource('res/sounds/bee_calm.wav')
-local ambient = love.audio.newSource('res/sounds/bee_ambient.wav')
-local rain = love.audio.newSource('res/sounds/rain.wav')
+local loud = love.audio.newSource('res/sounds/bee_dangerous.mp3')
+local soft = love.audio.newSource('res/sounds/bee_calm.mp3')
+local ambient = love.audio.newSource('res/sounds/bee_ambient.mp3')
+local rain = love.audio.newSource('res/sounds/rain.mp3')
 
 local prevQuietRain = false
 local quietRain = false
