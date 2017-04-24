@@ -127,7 +127,7 @@ function Game:update(dt)
             end)
         end)
 
-        self.timer:after(200, function()
+        self.timer:after(400, function()
             self.showCredits = true
             self.timer:tween(100, self.credits, { opacity = 125 }, 'in-out-cubic')
             self.timer:after(80, function()

@@ -21,17 +21,19 @@ function Chunk:init(objects, id, player)
     elseif id == 1 then
         self:spawnFlowers(3)
         return
-    elseif id > 8 and math.random(1, 4) == 1 then
+    elseif id > 12 and math.random(1, 4) == 1 then
         self:spawnFrog()
         self:spawnDrips(math.random(1, 2))
-        self:spawnFlowers(math.random(0, 1))
+        self:spawnFlies(math.random(0, 1))
     else
-        if id > 5 then
-            self:spawnFlies(math.random(1, 3))
+        if id > 6 then
+            local numFlies = math.random(0, 1) + math.floor(id / 8)
+            self:spawnFlies(numFlies)
         end
-
-        self:spawnDrips(math.random(1, 4))
-        self:spawnFlowers(math.random(1, 5))
+        local numDrips = math.random(0, 2) + math.floor(id / 8)
+        local numFlowers = math.random(2, 5) - math.floor(id / 12)
+        self:spawnDrips(numDrips)
+        self:spawnFlowers(numFlowers)
     end
 end
 
