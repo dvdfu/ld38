@@ -4,6 +4,7 @@ local Bee = require 'src.objects.bee'
 local Constants = require 'src.constants'
 
 local Player = Class.new()
+
 Player.BEE_COUNT = 1
 Player.MOVE_SPEED = 3
 
@@ -69,6 +70,9 @@ function Player:update(dt)
 
     if self.pos.y < 0 then self.pos.y = 0 end
     if self.pos.y > Constants.GAME_HEIGHT then self.pos.y = Constants.GAME_HEIGHT end
+    if self.pos.x > Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH then
+        self.pos.x = Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH
+    end
 end
 
 function Player:getPosition()

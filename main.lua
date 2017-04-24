@@ -5,8 +5,6 @@ math.randomseed(os.time())
 
 local Gamestate = require 'modules.hump.gamestate'
 local Intro = require 'src.states.intro'
-local Game = require 'src.states.game'
-local Constants = require 'src.constants'
 local Music = require 'src.music'
 
 function love.load()
@@ -20,9 +18,7 @@ end
 
 function love.keypressed(key)
     Gamestate.keypressed(key)
-    if key == 'escape' then
-        love.event.quit()
-    elseif key == '-' then
+    if key == '-' then
         Music.volume_down()
     elseif key == '=' then
         Music.volume_up()
