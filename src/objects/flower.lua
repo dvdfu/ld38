@@ -14,7 +14,7 @@ local sprites = {
     stamen = love.graphics.newImage('res/flower_stamen.png'),
     stem = love.graphics.newImage('res/flower_stem.png'),
     splash = love.graphics.newImage('res/droplet.png'),
-    droplet_small = love.graphics.newImage('res/droplet_small.png')
+    dropletSmall = love.graphics.newImage('res/droplet_small.png')
 }
 
 -- (x, y) is the point at the bottom of the stem, so the bottom middle of the entire flower
@@ -42,7 +42,7 @@ function Flower:init(objects, x, y)
         self.splashes:emit(1)
     end)
 
-    self.droplets = love.graphics.newParticleSystem(sprites.droplet_small)
+    self.droplets = love.graphics.newParticleSystem(sprites.dropletSmall)
     self.droplets:setSizes(0.4, 0)
     -- self.droplets:setPosition(x - 75, y - 3)
     self.droplets:setPosition(x, y)
