@@ -10,7 +10,7 @@ function Transition:init(props)
     self.progress = 0
     props = props or {}
     self.props = {
-        length = props.length or 20,
+        length = props.length or 60,
         limit = props.limit or 1,
         easeOut = props.easeOut or 'linear',
         easeIn = props.easeIn or 'linear',

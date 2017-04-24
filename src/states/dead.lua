@@ -5,33 +5,46 @@ local Constants = require 'src.constants'
 local Music = require 'src.music'
 
 local sprites = {
-    background = love.graphics.newImage('res/ending_swarm.png'),
+    background = love.graphics.newImage('res/ending_death.png'),
 }
 
-local Finale = {}
+local Dead = {}
 
-function Finale:enter()
-    Music.finale()
+Dead.STRINGS = {
+    "Gone but not forgotten.",
+    "The death of one bee is a tradegy, the death of a million is a statistic.",
+    "If you encounter enemies, then you're going the right way.",
+    "gg",
+}
+
+function Dead:enter()
+    self.dead_string = Dead.STRINGS[math.random(#Dead.STRINGS)]
     self.transition = Transition()
     self.transition:fadeIn()
     self.enableInput = false
     self.timer = Timer.new()
     self.state = {
         opacity = 0,
-        textPos = Constants.GAME_HEIGHT
+        textPos = Constants.GAME_HEIGHT / 2 + 50,
+        textOpacity = 0
     }
 
     self.timer:after(200, function()
         self.timer:tween(60, self.state, {
             opacity = 125,
-            textPos = Constants.GAME_HEIGHT - 30
+            textPos = Constants.GAME_HEIGHT / 2,
+            textOpacity = 255
         }, 'in-out-cubic', function()
             self.enableInput = true
         end)
     end)
 end
 
-function Finale:keypressed(key)
+function Dead:update(dt)
+    self.timer:update(dt)
+end
+
+function Dead:keypressed(key)
     if key == 'escape' then
         local Intro = require 'src.states.intro'
         Gamestate.switch(Intro)
@@ -44,24 +57,22 @@ function Finale:keypressed(key)
     end
 end
 
-function Finale:update(dt)
+function Dead:update(dt)
     self.transition:update(dt)
     self.timer:update(dt)
 end
 
-function Finale:drawCredits()
-    love.graphics.setColor(0, 0, 0, self.state.opacity)
-    love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
-
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.print("Made by David Fu, Seikun Kambashi and Hamdan Javeed", 22, self.state.textPos)
-end
-
-function Finale:draw()
+function Dead:draw()
     love.graphics.draw(sprites.background, 0, 0)
 
-    self:drawCredits()
+    love.graphics.setColor(0, 0, 0, self.state.opacity)
+    love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
+    love.graphics.setColor(255, 255, 255, self.state.textOpacity)
+    love.graphics.printf(self.dead_string, Constants.GAME_WIDTH / 2 - 100, self.state.textPos, 200, 'center')
+    love.graphics.printf("Press ENTER to try again", Constants.GAME_WIDTH / 2 - 100, self.state.textPos + 50, 200, 'center')
+    love.graphics.setColor(255, 255, 255)
+
     self.transition:draw()
 end
 
-return Finale
+return Dead

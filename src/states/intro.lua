@@ -1,6 +1,5 @@
 local Gamestate = require 'modules.hump.gamestate'
 local Vector = require 'modules.hump.vector'
-local Game = require 'src.states.game'
 local Transition = require 'src.states.transition'
 local Player = require 'src.objects.player'
 local Constants = require 'src.constants'
@@ -53,6 +52,7 @@ function Intro:keypressed(key)
     elseif not self.transitioning and key == 'return' then
         self.transitioning = true
         self.transition:fadeOut(function()
+            local Game = require 'src.states.game'
             Gamestate.switch(Game)
         end)
     end
