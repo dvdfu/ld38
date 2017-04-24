@@ -10,9 +10,10 @@ local sprites = {
     petals = love.graphics.newImage('res/flower_petals.png'),
     stamen = love.graphics.newImage('res/flower_stamen.png'),
     stem = love.graphics.newImage('res/flower_stem.png'),
-    droplet = love.graphics.newImage('res/droplet.png'),
     puff = love.graphics.newImage('res/yellow_puff.png'),
     pollen = love.graphics.newImage('res/flower_pollen.png'),
+    splash = love.graphics.newImage('res/droplet.png'),
+    dropletSmall = love.graphics.newImage('res/droplet_small.png')
 }
 
 local Pollen = Class.new()
@@ -66,25 +67,38 @@ Flower.POLLINATION_RADIUS = 100
 function Flower:init(objects, x, y)
     Object.init(self, objects, x, y)
     self.shear = math.random()
+    self.petalRotation = math.random()
 
     self:build(objects:getWorld(), x, y)
     self.pollen = Pollen(objects, x, y - 10)
     self:addTag('flower')
 
-    self.particles = love.graphics.newParticleSystem(sprites.droplet)
+    self.splashes = love.graphics.newParticleSystem(sprites.splash)
     local quads = {}
     for i = 1, 4 do
         quads[i] = love.graphics.newQuad((i - 1) * 32, 0, 32, 32, 32 * 4, 32)
     end
-    self.particles:setQuads(quads)
-    self.particles:setPosition(x, y)
-    self.particles:setOffset(16, 32)
-    self.particles:setParticleLifetime(10)
-    self.particles:setAreaSpread('uniform', 70, 4)
+    self.splashes:setQuads(quads)
+    self.splashes:setPosition(x, y)
+    self.splashes:setOffset(16, 32)
+    self.splashes:setParticleLifetime(10)
+    self.splashes:setAreaSpread('uniform', 70, 4)
 
     self.timer = Timer.new()
     self.timer:every(10, function()
-        self.particles:emit(1)
+        self.splashes:emit(1)
+    end)
+
+    self.droplets = love.graphics.newParticleSystem(sprites.dropletSmall)
+    self.droplets:setSizes(0.4, 0)
+    self.droplets:setPosition(x, y)
+    self.droplets:setAreaSpread('uniform', 70, 4)
+    self.droplets:setParticleLifetime(30)
+    self.droplets:setLinearAcceleration(0, 0.2)
+
+    self.dripTimer = Timer.new()
+    self.dripTimer:every(8, function()
+        self.droplets:emit(1)
     end)
 end
 
@@ -104,18 +118,23 @@ end
 function Flower:update(dt)
     Object.update(self, dt)
     self.shear = (self.shear + dt / 60) % 1
-    self.particles:update(dt)
+    self.petalRotation = (self.petalRotation + dt / 120) % 1
+    self.splashes:update(dt)
+    self.droplets:update(dt)
     self.timer:update(dt)
+    self.dripTimer:update(dt)
 end
 
 function Flower:draw()
     local x, y = self.body:getPosition()
     local shear = math.sin(self.shear * math.pi * 2) / 10
+    local petalRotation = math.sin(self.petalRotation * math.pi * 2) / 40
     local height = Constants.GAME_HEIGHT - y
     love.graphics.draw(sprites.stem, x, y + 24, 0, 1, height / 64, 29, 0)
-    love.graphics.draw(sprites.petals, x, y, 0, 1, 1, 80, 18)
+    love.graphics.draw(self.droplets)
+    love.graphics.draw(sprites.petals, x, y, petalRotation, 1, 1, 80, 18, petalRotation)
     love.graphics.draw(sprites.stamen, x, y - 2, 0, 1, 1, 16, 32, shear)
-    love.graphics.draw(self.particles)
+    love.graphics.draw(self.splashes)
 end
 
 return Flower
