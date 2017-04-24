@@ -25,6 +25,7 @@ function Seeds:build(world, x, y, radius)
     self.body:setSleepingAllowed(false)
     self.shape = love.physics.newCircleShape(radius)
     self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.fixture:setFilterData(0xFFFF, 0xFFFF, -1)
     self.fixture:setDensity(0.1)
     self.fixture:setUserData(self)
 end
