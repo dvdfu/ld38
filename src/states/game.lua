@@ -162,11 +162,13 @@ function Game:draw()
 end
 
 function Game:drawHUD()
+    local progress = self.player:getDistance() / Game.DISTANCE
+
     love.graphics.setColor(255, 255, 255, 128)
     love.graphics.rectangle('fill', Constants.GAME_WIDTH / 2 - 120, 24 - 2, 240, 4)
     love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.rectangle('fill', Constants.GAME_WIDTH / 2 - 120, 24 - 2, 240 * progress, 4)
 
-    local progress = self.player:getDistance() / Game.DISTANCE
     love.graphics.draw(sprites.hudTree, Constants.GAME_WIDTH / 2 + 120, 24, 0, 1, 1, 8, 8)
     love.graphics.draw(sprites.hudBee, Constants.GAME_WIDTH / 2 - 120 + 240 * progress, 24 - 1, 0, 1, 1, 8, 8)
 
