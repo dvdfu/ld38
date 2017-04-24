@@ -24,6 +24,10 @@ local sprites = {
     hudBee = love.graphics.newImage('res/hud_bee.png'),
 }
 
+local sounds = {
+    thunder = love.audio.newSource('res/sounds/thunder.wav')
+}
+
 function Game:init()
     Signal.register('cam_shake', function(shake)
         self.camera:shake(shake)
@@ -67,6 +71,8 @@ function Game:enter()
     self.splashParticles:setSpread(math.pi / 2)
     self.splashParticles:setSpeed(2, 4)
     self.splashParticles:setLinearAcceleration(0, 0.2)
+
+    sounds.thunder:play()
 end
 
 function Game:update(dt)

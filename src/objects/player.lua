@@ -4,7 +4,7 @@ local Bee = require 'src.objects.bee'
 local Constants = require 'src.constants'
 
 local Player = Class.new()
-Player.BEE_COUNT = 20
+Player.BEE_COUNT = 1
 Player.MOVE_SPEED = 3
 
 local sprites = {
@@ -66,6 +66,9 @@ function Player:update(dt)
         end
         self.pos = self.pos + self.vel * dt
     end
+
+    if self.pos.y < 0 then self.pos.y = 0 end
+    if self.pos.y > Constants.GAME_HEIGHT then self.pos.y = Constants.GAME_HEIGHT end
 end
 
 function Player:getPosition()
