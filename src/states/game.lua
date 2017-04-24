@@ -79,18 +79,17 @@ function Game:update(dt)
         end
     end
 
-    for _, object in pairs(self.objects.objects) do
-        if object:hasTag('flower') and
-           not object.pollinated and
-           object:getPosition():dist(self.player:getPosition()) < Flower.POLLINATION_RADIUS then
-               object.pollinated = true
-
-               local x, y = object:getPosition():unpack()
-               for i = 1, object.numBees do
-                   self.player:spawnBee(self.objects, x, y, self.player)
-               end
-        end
-    end
+    -- TODO use fixture on flower
+    -- for _, object in pairs(self.objects.objects) do
+    --     if object:hasTag('flower') and not object.pollinated and
+    --         object:getPosition():dist(self.player:getPosition()) < Flower.POLLINATION_RADIUS then
+    --         object:pollinate()
+    --         local x, y = object:getPosition():unpack()
+    --         for i = 1, object.numBees do
+    --            self.player:spawnBee(self.objects, x, y, self.player)
+    --         end
+    --     end
+    -- end
 
     self.objects:update(dt)
 
