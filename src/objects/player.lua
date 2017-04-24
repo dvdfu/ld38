@@ -85,6 +85,10 @@ function Player:setMouse(pos)
     self.mouse = pos
 end
 
+function Player:getMouse()
+    return self.mouse
+end
+
 function Player:shoot()
     if self:numBees() < 2 then return end
     local bullet_bee

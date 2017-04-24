@@ -44,7 +44,8 @@ function Bee:update(dt)
     if self.dead then
         self.body:applyForce(0, 0.02)
     elseif self.state == 'bullet' then
-        self.body:setLinearVelocity(Bee.BULLET_SPEED, 0)
+        local x, y = (self.delta * Bee.BULLET_SPEED):trimmed(Bee.BULLET_SPEED):unpack()
+        self.body:setLinearVelocity(x, y)
         self.offset = (self.offset + dt / 60) % 1
         self.wingAnim:update(dt)
     else
@@ -90,6 +91,7 @@ function Bee:shoot()
     if self.state == 'bee' then
         self.state = 'bullet'
         self:addTag('bullet')
+        self.delta = self.player:getMouse() - self:getPosition()
         self.fixture:setSensor(true)
         self.timer:after(180, function()
             self:die()
