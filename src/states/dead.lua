@@ -7,19 +7,19 @@ local sprites = {
     backgroundBlur = love.graphics.newImage('res/background_blur.png'),
 }
 
-local Finale = {}
+local Dead = {}
 
-function Finale:init()
+function Dead:init()
     Music.init()
     self.transition = Transition()
 end
 
-function Finale:enter()
+function Dead:enter()
     self.transitioning = false
     self.transition:fadeIn()
 end
 
-function Finale:keypressed(key)
+function Dead:keypressed(key)
     if not self.transitioning and key == 'return' then
         self.transitioning = true
         self.transition:fadeOut(function()
@@ -29,15 +29,15 @@ function Finale:keypressed(key)
     end
 end
 
-function Finale:update(dt)
+function Dead:update(dt)
     self.transition:update(dt)
 end
 
-function Finale:draw()
+function Dead:draw()
     love.graphics.draw(sprites.backgroundBlur, 0, 0)
     love.graphics.draw(sprites.backgroundBlur, 480, 0)
 
     self.transition:draw()
 end
 
-return Finale
+return Dead

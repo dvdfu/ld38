@@ -144,7 +144,8 @@ function Game:update(dt)
         self.gameOver = true
         self.timer:after(120, function()
             self.transition:fadeOut(function()
-                Gamestate.switch(Game)
+                local Dead = require 'src.states.dead'
+                Gamestate.switch(Dead)
             end)
         end)
     end
