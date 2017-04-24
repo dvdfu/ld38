@@ -18,13 +18,13 @@ local sprites = {
 
 local Pollen = Class.new()
 Pollen:include(Object)
+Pollen.NUM_BEES = 2
 
 function Pollen:init(objects, x, y)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y)
     self:addTag('pollen')
     self.puff = Animation(sprites.puff, 8, 4, true)
-    self.numBees = math.random(4, 6)
     self.dead = false
 end
 
@@ -41,7 +41,7 @@ function Pollen:update(dt)
     if self.pollinated and not self.dead then
         self.dead = true
         local x, y = self.pos:unpack()
-        Signal.emit('pollinate', x, y, self.numBees)
+        Signal.emit('pollinate', x, y, Pollen.NUM_BEES)
     end
 end
 

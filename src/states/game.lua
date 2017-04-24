@@ -3,6 +3,7 @@ local Gamestate = require 'modules.hump.gamestate'
 local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
 local Transition = require 'src.states.transition'
+local Flower = require 'src.objects.flower'
 local Player = require 'src.objects.player'
 local Raindrop = require 'src.objects.raindrop'
 local Camera = require 'src.camera'
@@ -11,7 +12,6 @@ local Constants = require 'src.constants'
 local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
-local Flower = require 'src.objects.flower'
 
 local Game = {}
 Game.DISTANCE = 20000
@@ -22,6 +22,10 @@ local sprites = {
     splash = love.graphics.newImage('res/raindrop_particle.png'),
     hudTree = love.graphics.newImage('res/hud_tree.png'),
     hudBee = love.graphics.newImage('res/hud_bee.png'),
+}
+
+local sounds = {
+    thunder = love.audio.newSource('res/sounds/thunder.wav')
 }
 
 function Game:init()
@@ -57,6 +61,7 @@ function Game:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
     self.beeCount = self.player:numBees()
+    self.gameOver = false
 
     self.splashParticles = love.graphics.newParticleSystem(sprites.splash)
     self.splashParticles:setOffset(8, 8)
@@ -66,6 +71,8 @@ function Game:enter()
     self.splashParticles:setSpread(math.pi / 2)
     self.splashParticles:setSpeed(2, 4)
     self.splashParticles:setLinearAcceleration(0, 0.2)
+
+    sounds.thunder:play()
 end
 
 function Game:update(dt)
@@ -95,8 +102,17 @@ function Game:update(dt)
     self.splashParticles:update(dt)
     Music.update(dt)
 
-    -- for now
     self.beeCount = self.player:numBees()
+    if self.beeCount == 0 and not self.gameOver then
+        self.gameOver = true
+        self.timer:after(120, function()
+            self.transition:fadeOut(function()
+                Gamestate.switch(Game)
+            end)
+        end)
+    end
+
+    -- for now
     Music.setFade(1 - self.beeCount / 100)
 
     -- if the player is under something, quieten the rain

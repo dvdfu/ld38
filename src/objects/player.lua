@@ -4,7 +4,7 @@ local Bee = require 'src.objects.bee'
 local Constants = require 'src.constants'
 
 local Player = Class.new()
-Player.BEE_COUNT = 20
+Player.BEE_COUNT = 1
 Player.MOVE_SPEED = 3
 
 local sprites = {
@@ -35,6 +35,12 @@ function Player:spawnBee(objects, x, y, player, radius, lag)
 end
 
 function Player:update(dt)
+    self.distance = math.max(self.distance, self.pos.x)
+    self.cursorTime = (self.cursorTime + dt / 200) % 1
+    if self:numBees() == 0 then
+        return
+    end
+
     if love.mouse.isDown(1) then
         self.usingMouse = true
         local delta = self.mouse - self.pos
@@ -61,8 +67,8 @@ function Player:update(dt)
         self.pos = self.pos + self.vel * dt
     end
 
-    self.distance = math.max(self.distance, self.pos.x)
-    self.cursorTime = (self.cursorTime + dt / 200) % 1
+    if self.pos.y < 0 then self.pos.y = 0 end
+    if self.pos.y > Constants.GAME_HEIGHT then self.pos.y = Constants.GAME_HEIGHT end
 end
 
 function Player:getPosition()
