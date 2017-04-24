@@ -75,7 +75,8 @@ function Player:update(dt)
         if self.pos.x > Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH then
             self.pos.x = Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH
         end
-        if self.pos.x < self:getDistance() - 200 then self.pos.x = self:getDistance() - 200 end
+        -- TODO: Fix when we have more bandwidth.
+        -- if self.pos.x < self:getDistance() - 200 then self.pos.x = self:getDistance() - 200 end
     end
     if self.isIntro then
         if self.pos.x > Constants.GAME_WIDTH then
