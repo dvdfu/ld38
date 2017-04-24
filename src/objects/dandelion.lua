@@ -1,4 +1,5 @@
 local Class = require 'modules.hump.class'
+local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
 local Constants = require 'src.constants'
 
@@ -30,15 +31,15 @@ function Seeds:build(world, x, y, radius)
     self.fixture:setUserData(self)
 end
 
+function Seeds:update(dt)
+    Object.update(self, dt)
+    self.body:applyForce(0, -1)
+end
+
 function Seeds:draw()
     local x, y = self.body:getPosition()
     love.graphics.draw(sprites.core, x, y, 0, 1, 1, 16, 16)
     love.graphics.draw(sprites.seeds, x, y, 0, self.radius / 36, self.radius / 36, 40, 40)
-end
-
-function Seeds:update(dt)
-    Object.update(self, dt)
-    self.body:applyForce(0, -1)
 end
 
 --------------------------------------------------------------------------------
@@ -46,12 +47,13 @@ end
 local Dandelion = Class.new()
 Dandelion:include(Object)
 
-function Dandelion:init(objects, x, y, height)
+function Dandelion:init(objects, x, y, height, radius)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y)
     self:addTag('dandelion')
     self.height = height
-    self.seeds = Seeds(objects, x, y - height, math.random(25, 50))
+    self.radius = radius
+    self.seeds = Seeds(objects, x, y - height, radius)
     local a, b = self.seeds.body:getPosition()
     self.rope = love.physics.newRopeJoint(self.body, self.seeds.body, x, y, a, b, self.height, true)
 end
@@ -65,14 +67,17 @@ end
 
 function Dandelion:draw()
     if self.rope:isDestroyed() then return end
-    local x, y = self.body:getPosition()
 
-    love.graphics.push('all')
-        local x1, y1, x2, y2 = self.rope:getAnchors()
-        love.graphics.setLineWidth(9)
-        love.graphics.setColor(135, 156, 107)
-        love.graphics.line(x1, y1, x2, y2 - 2)
-    love.graphics.pop()
+    local x1, y1, x2, y2 = self.rope:getAnchors()
+    local root = Vector(x1, y1)
+    local seed = Vector(x2, y2)
+    love.graphics.setLineWidth(self.radius / 4)
+    love.graphics.setColor(135, 156, 107)
+    love.graphics.line(seed.x, seed.y, root.x, root.y)
+    love.graphics.setColor(91, 119, 86)
+    root = seed + (root - seed):trimmed(self.radius + 20)
+    love.graphics.line(seed.x, seed.y, root.x, root.y)
+    love.graphics.setColor(255, 255, 255)
 end
 
 return Dandelion
