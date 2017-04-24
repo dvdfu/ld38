@@ -3,7 +3,6 @@ love.graphics.setDefaultFilter('nearest', 'nearest')
 
 math.randomseed(os.time())
 
-
 local Gamestate = require 'modules.hump.gamestate'
 local Intro = require 'src.states.intro'
 local Game = require 'src.states.game'
