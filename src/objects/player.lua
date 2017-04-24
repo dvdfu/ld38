@@ -12,7 +12,7 @@ local sprites = {
     cursor = love.graphics.newImage('res/cursor.png')
 }
 
-function Player:init(objects, x, y)
+function Player:init(objects, x, y, isIntro)
     self.pos = Vector(x, y)
     self.vel = Vector()
     self.mouse = Vector()
@@ -20,6 +20,7 @@ function Player:init(objects, x, y)
     self.bees = {}
     self.objects = objects
     self.cursorTime = 0
+    self.isIntro = isIntro
 
     for i = 1, Player.BEE_COUNT do
         self:spawnBee(objects, x + math.random(-50, 50), y + math.random(-50, 50), self)
@@ -70,10 +71,18 @@ function Player:update(dt)
 
     if self.pos.y < 0 then self.pos.y = 0 end
     if self.pos.y > Constants.GAME_HEIGHT then self.pos.y = Constants.GAME_HEIGHT end
-    if self.pos.x > Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH then
-        self.pos.x = Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH
+    if not self.isIntro then
+        if self.pos.x > Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH then
+            self.pos.x = Constants.TOTAL_CHUNKS * Constants.GAME_WIDTH
+        end
+        if self.pos.x < self:getDistance() - 200 then self.pos.x = self:getDistance() - 200 end
     end
-    if self.pos.x < self:getDistance() - 200 then self.pos.x = self:getDistance() - 200 end
+    if self.isIntro then
+        if self.pos.x > Constants.GAME_WIDTH then
+            self.pos.x = Constants.GAME_WIDTH
+        end
+        if self.pos.x < 0 then self.pos.x = 0 end
+    end
 end
 
 function Player:getPosition()

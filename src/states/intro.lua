@@ -23,7 +23,7 @@ end
 function Intro:enter()
     Music.init()
     self.objects = Objects()
-    self.player = Player(self.objects, Constants.GAME_WIDTH / 2 + 80, Constants.GAME_HEIGHT * 3 / 4)
+    self.player = Player(self.objects, Constants.GAME_WIDTH / 2 + 80, Constants.GAME_HEIGHT * 3 / 4, true)
     self.rain = Rain()
     self.timer = Timer.new()
     self.timer:every(1, function()
