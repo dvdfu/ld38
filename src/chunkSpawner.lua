@@ -17,6 +17,11 @@ function Chunk:init(objects, id, player)
 
     if id == 0 then return end
 
+    if id == 0 then
+        self:spawnFlowers(math.random(1, 3))
+        return
+    end
+
     if math.random(1, 4) == 1 then
         self:spawnFrog()
         self:spawnDrips(math.random(1, 2))

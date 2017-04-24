@@ -8,6 +8,7 @@ local Music = require 'src.music'
 local Objects = require 'src.objects'
 local Rain = require 'src.rain'
 local Timer = require 'modules.hump.timer'
+local Flower = require 'src.objects.flower'
 
 local sprites = {
     logo = love.graphics.newImage('res/title_logo.png'),
@@ -29,6 +30,9 @@ function Intro:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
+
+    Flower(self.objects, Constants.GAME_WIDTH - 150, Constants.GAME_HEIGHT - 50)
+
     self.transitioning = false
     self.transition:fadeIn()
 end
