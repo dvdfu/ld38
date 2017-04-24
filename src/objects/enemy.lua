@@ -1,5 +1,6 @@
 local Class = require 'modules.hump.class'
 local Object = require 'src.objects.object'
+local Constants = require 'src.constants'
 
 local Enemy = Class.new()
 Enemy:include(Object)
@@ -18,6 +19,7 @@ function Enemy:build(world, x, y)
     self.shape = love.physics.newCircleShape(self:getRadius())
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
+    self.fixture:setFilterData(0xFFFF, 0xFFFF, -1)
 end
 
 function Enemy:update(dt)

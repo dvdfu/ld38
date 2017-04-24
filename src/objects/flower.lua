@@ -34,6 +34,7 @@ function Pollen:build(world, x, y)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setSensor(true)
     self.fixture:setUserData(self)
+    self.fixture:setFilterData(0xFFFF, 0xFFFF, -1)
 end
 
 function Pollen:update(dt)
@@ -108,11 +109,16 @@ function Flower:build(world, x, y)
     self.shape = love.physics.newRectangleShape(118, 20)
     self.fixture = love.physics.newFixture(self.body, self.shape)
     self.fixture:setUserData(self)
+    self.fixture:setFilterData(0xFFFF, 0xFFFF, -1)
 
     local leftSide = love.physics.newCircleShape(-118 / 2, 0, 20 / 2)
     local rightSide = love.physics.newCircleShape(118 / 2, 0, 20 / 2)
-    love.physics.newFixture(self.body, leftSide):setUserData(self)
-    love.physics.newFixture(self.body, rightSide):setUserData(self)
+    local leftFixture = love.physics.newFixture(self.body, leftSide)
+    leftFixture:setUserData(self)
+    leftFixture:setFilterData(0xFFFF, 0xFFFF, -1)
+    local rightFixture = love.physics.newFixture(self.body, rightSide)
+    rightFixture:setUserData(self)
+    rightFixture:setFilterData(0xFFFF, 0xFFFF, -1)
 end
 
 function Flower:update(dt)
