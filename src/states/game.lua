@@ -207,10 +207,7 @@ function Game:draw()
     end)
 
     self:drawHUD()
-
-    if self.showCredits then
-        self:drawCredits()
-    end
+    self:drawCredits()
 
     self.transition:draw()
 end
@@ -227,10 +224,11 @@ function Game:drawHUD()
     love.graphics.draw(sprites.hudBee, Constants.GAME_WIDTH / 2 - 120 + 240 * progress, 24 - 1, 0, 1, 1, 8, 8)
 
     love.graphics.setFont(Constants.FONTS.REDALERT)
-    love.graphics.printf(self.beeCount, Constants.GAME_WIDTH / 2 - 120 + 240 * progress - 20, 29, 40, 'center')
+    love.graphics.printf('x' .. self.beeCount, Constants.GAME_WIDTH / 2 - 120 + 240 * progress - 20, 29, 40, 'center')
 end
 
 function Game:drawCredits()
+    if not self.showCredits then return end
     love.graphics.push('all')
         love.graphics.setColor(0, 0, 0, self.credits.opacity)
         love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)

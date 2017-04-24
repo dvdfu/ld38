@@ -35,6 +35,7 @@ function Intro:enter()
 
     self.transitioning = false
     self.transition:fadeIn()
+    Music.setFade(0)
 end
 
 function Intro:update(dt)

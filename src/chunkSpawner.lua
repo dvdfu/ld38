@@ -21,21 +21,17 @@ function Chunk:init(objects, id, player)
     elseif id == 1 then
         self:spawnFlowers(3)
         return
-    elseif math.random(1, 4) == 1 then
+    elseif id > 8 and math.random(1, 4) == 1 then
         self:spawnFrog()
         self:spawnDrips(math.random(1, 2))
+        self:spawnFlowers(math.random(0, 1))
     else
-        if id > 8 and math.random(1, 4) == 1 then
-            self:spawnFrog()
-            self:spawnDrips(math.random(1, 2))
-        else
-            if id > 5 then
-                self:spawnFlies(math.random(0, 1))
-            end
-
-            self:spawnDrips(math.random(1, 4))
-            self:spawnFlowers(math.random(1, 5))
+        if id > 5 then
+            self:spawnFlies(math.random(1, 3))
         end
+
+        self:spawnDrips(math.random(1, 4))
+        self:spawnFlowers(math.random(1, 5))
     end
 end
 
@@ -66,7 +62,7 @@ end
 function Chunk:spawnDrips(n)
     for i = 1, n do
         local size = math.random(4, 24)
-        local cooldown = 32 + 2 * size
+        local cooldown = 50 + 2 * size
         local x = math.random() * Constants.GAME_WIDTH
         self.timer:every(cooldown, function()
             Raindrop(self.objects, self.x + x, -50, size)
