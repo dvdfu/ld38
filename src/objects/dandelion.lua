@@ -50,7 +50,7 @@ function Dandelion:init(objects, x, y, height)
     self:build(objects:getWorld(), x, y)
     self:addTag('dandelion')
     self.height = height
-    self.seeds = Seeds(objects, x, y - height, math.random(30, 40))
+    self.seeds = Seeds(objects, x, y - height, math.random(25, 50))
     local a, b = self.seeds.body:getPosition()
     self.rope = love.physics.newRopeJoint(self.body, self.seeds.body, x, y, a, b, self.height, true)
 end
