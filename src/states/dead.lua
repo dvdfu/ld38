@@ -11,10 +11,11 @@ local sprites = {
 local Dead = {}
 
 Dead.STRINGS = {
-    "Gone but not forgotten.",
-    "The death of one bee is a tradegy, the death of a million is a statistic.",
-    "If you encounter enemies, then you're going the right way.",
-    "gg",
+    "Bees are the only insect in the world that make food that humans can eat.",
+    "Worker bees live about six weeks in summer, and several months in the winter.",
+    "The average bee will make only 1/12th of a teaspoon of honey in its lifetime.",
+    "Pollen is needed to feed to the baby bees to help them grow.",
+    "Bees have five eyes - two compound eyes and three tiny ocelli eyes.",
 }
 
 function Dead:enter()
