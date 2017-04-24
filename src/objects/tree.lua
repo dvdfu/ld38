@@ -45,9 +45,9 @@ function Branch:init(objects, x, y)
     Object.init(self, objects, x, y)
     self:build(objects:getWorld(), x, y)
     self:addTag('branch')
-    local hive = Hive(objects, x - 64, y + 8)
-    local a, b = hive.body:getPosition()
-    love.physics.newRopeJoint(self.body, hive.body, x - 64, y + 4, a, b - 28, 64, true)
+    self.hive = Hive(objects, x - 64, y + 8)
+    local a, b = self.hive.body:getPosition()
+    self.rope = love.physics.newRopeJoint(self.body, self.hive.body, x - 64, y + 4, a, b - 28, 64, true)
 end
 
 function Branch:build(world, x, y)
@@ -59,7 +59,15 @@ end
 
 function Branch:draw()
     local x, y = self.body:getPosition()
+    local hx, hy = self.hive.body:getPosition()
     love.graphics.draw(sprites.branch, x + 64, y, 0, 1, 1, 160, 16)
+
+    love.graphics.push('all')
+        local x1, y1, x2, y2 = self.rope:getAnchors()
+        love.graphics.setLineWidth(3)
+        love.graphics.setColor(101, 84, 58)
+        love.graphics.line(x1, y1, x2, y2)
+    love.graphics.pop()
 end
 
 --------------------------------------------------------------------------------
