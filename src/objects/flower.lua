@@ -4,6 +4,8 @@ local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
 local Constants = require 'src.constants'
 
+Flower.POLLINATION_RADIUS = 100
+
 local Flower = Class.new()
 Flower:include(Object)
 

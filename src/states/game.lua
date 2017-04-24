@@ -78,7 +78,7 @@ function Game:update(dt)
     for _, object in pairs(self.objects.objects) do
         if object:hasTag('flower') and
            not object.pollinated and
-           object:getPosition():dist(self.player:getPosition()) < 100 then
+           object:getPosition():dist(self.player:getPosition()) < Flower.POLLINATION_RADIUS then
                object.pollinated = true
 
                local x, y = object:getPosition():unpack()
