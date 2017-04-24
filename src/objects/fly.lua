@@ -66,9 +66,6 @@ function Fly:die(other)
     self.dead = true
 
     self.body:destroy()
-
-    local delta = (self:getPosition() - other:getPosition()):trimmed(0.1)
-    self.body:applyLinearImpulse(delta:unpack())
 end
 
 
