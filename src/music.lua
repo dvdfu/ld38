@@ -8,6 +8,7 @@ Music.LOUD_RAIN_VOLUME = 0.75
 Music.LOUD_RAIN_PITCH = 1.0
 Music.QUIET_RAIN_VOLUME = 0.4
 Music.QUIET_RAIN_PITCH = 0.6
+Music.AUDIO_MAX_VOLUME = 10
 
 local loud = love.audio.newSource('res/sounds/bee_dangerous.wav')
 local soft = love.audio.newSource('res/sounds/bee_calm.wav')
@@ -21,6 +22,8 @@ local musicModifiers = { rainVolume = Music.LOUD_RAIN_VOLUME, rainPitch = Music.
 local modifiersChanging = false
 local modifierTimer = Timer.new()
 
+local music_volume = 2
+
 function Music.init()
     soft:setLooping(true)
     loud:setLooping(true)
@@ -31,6 +34,7 @@ function Music.init()
     soft:play()
     loud:play()
     ambient:play()
+    love.audio.setVolume(music_volume / 10)
 end
 
 function Music.game()
@@ -82,6 +86,20 @@ function Music.tryPlayingQuietRain()
     end
 
     quietRain = true
+end
+
+function Music.volume_up()
+    if music_volume < Music.AUDIO_MAX_VOLUME then
+        music_volume = music_volume + 1
+        love.audio.setVolume(music_volume / 10)
+    end
+end
+
+function Music.volume_down()
+    if music_volume > 0 then
+        music_volume = music_volume - 1
+        love.audio.setVolume(music_volume / 10)
+    end
 end
 
 function Music.update(dt)
