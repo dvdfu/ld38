@@ -48,15 +48,15 @@ function Bee:update(dt)
         local delta
         local speed
         if self:isBullet() then
-            delta = self.delta
-            speed = Bee.BULLET_SPEED
+            local x, y = (self.delta * Bee.BULLET_SPEED):trimmed(Bee.BULLET_SPEED):unpack()
+            self.body:setLinearVelocity(x, y)
         else
             delta = self.player:getPosition() - self:getPosition()
             speed = Bee.MAX_SPEED
+            delta = delta:trimmed(speed) / 100 / self.lag
+            self.body:applyForce(delta:unpack())
         end
 
-        delta = delta:trimmed(speed) / 100 / self.lag
-        self.body:applyForce(delta:unpack())
         self.offset = (self.offset + dt / 60) % 1
         self.wingAnim:update(dt)
     end
@@ -65,7 +65,7 @@ end
 
 function Bee:collide(col, other)
     if self:isBullet() then
-        if other:hasTag('raindrop') or other:hasTag('enemy') then
+        if other:hasTag('raindrop') or other:hasTag('enemy') or other:hasTag('frog') or other:hasTag('tongue') then
             Signal.emit('cam_shake', 8)
             self:die(other)
         end
