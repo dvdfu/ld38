@@ -111,6 +111,8 @@ end
 function Music.finale()
     Music.setFade(0)
     rain:stop()
+    ambient:stop()
+    love.audio.setVolume(music_volume / 10)
 end
 
 return Music
