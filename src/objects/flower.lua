@@ -2,6 +2,7 @@ local Class = require 'modules.hump.class'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
+local Animation = require 'src.animation'
 local Constants = require 'src.constants'
 
 local Flower = Class.new()
@@ -14,6 +15,7 @@ local sprites = {
     stamen = love.graphics.newImage('res/flower_stamen.png'),
     stem = love.graphics.newImage('res/flower_stem.png'),
     droplet = love.graphics.newImage('res/droplet.png'),
+    puff = love.graphics.newImage('res/yellow_puff.png'),
 }
 
 -- (x, y) is the point at the bottom of the stem, so the bottom middle of the entire flower
@@ -42,6 +44,7 @@ function Flower:init(objects, x, y)
 
     self.pollinated = false
     self.numBees = math.random(4, 6)
+    self.puff = Animation(sprites.puff, 8, 2)
 end
 
 -- the bounding box encompasses the petals
@@ -62,6 +65,7 @@ function Flower:update(dt)
     self.shear = (self.shear + dt / 60) % 1
     self.particles:update(dt)
     self.timer:update(dt)
+    self.puff:update(dt)
 end
 
 function Flower:draw()
@@ -72,6 +76,7 @@ function Flower:draw()
     love.graphics.draw(sprites.petals, x, y, 0, 1, 1, 80, 18)
     love.graphics.draw(sprites.stamen, x, y - 2, 0, 1, 1, 16, 32, shear)
     love.graphics.draw(self.particles)
+    self.puff:draw(x, y, 0, 1, 1, 32, 64)
 end
 
 return Flower
