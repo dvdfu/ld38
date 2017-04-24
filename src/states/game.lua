@@ -32,6 +32,11 @@ function Game:init()
         self.splashParticles:setPosition(x, y + size / 2)
         self.splashParticles:emit(math.floor(size / 4))
     end)
+    Signal.register('pollinate', function(x, y, n)
+        for i = 1, n do
+            self.player:spawnBee(self.objects, x, y, self.player)
+        end
+    end)
 
     Music.game()
     self.transition = Transition()
@@ -76,19 +81,6 @@ function Game:update(dt)
             if not object:isDead() then
                 object.body:destroy()
             end
-        end
-    end
-
-    for _, object in pairs(self.objects.objects) do
-        if object:hasTag('flower') and
-           not object.pollinated and
-           object:getPosition():dist(self.player:getPosition()) < Flower.POLLINATION_RADIUS then
-               object.pollinated = true
-
-               local x, y = object:getPosition():unpack()
-               for i = 1, object.numBees do
-                   self.player:spawnBee(self.objects, x, y, self.player)
-               end
         end
     end
 

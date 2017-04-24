@@ -1,29 +1,76 @@
 local Class = require 'modules.hump.class'
+local Signal = require 'modules.hump.signal'
 local Timer = require 'modules.hump.timer'
 local Vector = require 'modules.hump.vector'
 local Object = require 'src.objects.object'
+local Animation = require 'src.animation'
 local Constants = require 'src.constants'
-
-local Flower = Class.new()
-Flower:include(Object)
-
-Flower.POLLINATION_RADIUS = 100
 
 local sprites = {
     petals = love.graphics.newImage('res/flower_petals.png'),
     stamen = love.graphics.newImage('res/flower_stamen.png'),
     stem = love.graphics.newImage('res/flower_stem.png'),
+    puff = love.graphics.newImage('res/yellow_puff.png'),
+    pollen = love.graphics.newImage('res/flower_pollen.png'),
     splash = love.graphics.newImage('res/droplet.png'),
     dropletSmall = love.graphics.newImage('res/droplet_small.png')
 }
 
--- (x, y) is the point at the bottom of the stem, so the bottom middle of the entire flower
+local Pollen = Class.new()
+Pollen:include(Object)
+
+function Pollen:init(objects, x, y)
+    Object.init(self, objects, x, y)
+    self:build(objects:getWorld(), x, y)
+    self:addTag('pollen')
+    self.puff = Animation(sprites.puff, 8, 4, true)
+    self.numBees = math.random(4, 6)
+    self.dead = false
+end
+
+function Pollen:build(world, x, y)
+    self.body = love.physics.newBody(world, x, y)
+    self.shape = love.physics.newCircleShape(20)
+    self.fixture = love.physics.newFixture(self.body, self.shape)
+    self.fixture:setSensor(true)
+    self.fixture:setUserData(self)
+end
+
+function Pollen:update(dt)
+    self.puff:update(dt)
+    if self.pollinated and not self.dead then
+        self.dead = true
+        local x, y = self.pos:unpack()
+        Signal.emit('pollinate', x, y, self.numBees)
+    end
+end
+
+function Pollen:pollinate()
+    if self.pollinated then return false end
+    self.pollinated = true
+    self.puff:play()
+    return true
+end
+
+function Pollen:draw()
+    local x, y = self.pos:unpack()
+    self.puff:draw(x, y + 8, 0, 1, 1, 32, 64)
+    if self.pollinated then
+        love.graphics.draw(sprites.pollen, x, y + 8, 0, 1, 1, 64, 16)
+    end
+end
+
+local Flower = Class.new()
+Flower:include(Object)
+Flower.POLLINATION_RADIUS = 100
+
 function Flower:init(objects, x, y)
     Object.init(self, objects, x, y)
     self.shear = math.random()
     self.petalRotation = math.random()
 
     self:build(objects:getWorld(), x, y)
+    self.pollen = Pollen(objects, x, y - 10)
     self:addTag('flower')
 
     self.splashes = love.graphics.newParticleSystem(sprites.splash)
@@ -53,9 +100,6 @@ function Flower:init(objects, x, y)
     self.dripTimer:every(8, function()
         self.droplets:emit(1)
     end)
-
-    self.pollinated = false
-    self.numBees = math.random(4, 6)
 end
 
 -- the bounding box encompasses the petals

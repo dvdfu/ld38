@@ -25,10 +25,6 @@ function Object:isDead()
     return self.body:isDestroyed()
 end
 
-function Object:destory()
-    self.body:destroy()
-end
-
 function Object:addTag(tag)
     self.tags[tag] = true
 end

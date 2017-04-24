@@ -115,13 +115,15 @@ function Player:draw()
         point = self.pos
     end
 
-    local radius = 4 + math.floor(self:numBees() * 0.8)
+    love.graphics.setColor(255, 208, 20)
+    local radius = 1 + 2 * math.floor(math.sqrt(7 * self:numBees()))
     for i = 1, radius do
         local time = self.cursorTime + i / radius
         local x = radius * math.cos(time * math.pi * 2)
         local y = radius * math.sin(time * math.pi * 2)
         love.graphics.circle('fill', point.x + x, point.y + y, 1)
     end
+    love.graphics.setColor(255, 255, 255)
 end
 
 return Player
