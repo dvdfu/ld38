@@ -34,27 +34,32 @@ function Player:spawnBee(objects, x, y, player, radius, lag)
     table.insert(self.bees, Bee(objects, x, y, radius, lag, player))
 end
 
+function Player:getMoveSpeed()
+    if Constants.DEBUG then return 40 end
+    return Player.MOVE_SPEED
+end
+
 function Player:update(dt)
     if love.mouse.isDown(1) then
         self.usingMouse = true
         local delta = self.mouse - self.pos
-        self.pos = self.pos + delta:trimmed(Player.MOVE_SPEED) * dt
+        self.pos = self.pos + delta:trimmed(self:getMoveSpeed()) * dt
     else
         if love.keyboard.isDown('a') then
             self.usingMouse = false
-            self.vel.x = -Player.MOVE_SPEED
+            self.vel.x = -self:getMoveSpeed()
         elseif love.keyboard.isDown('d') then
             self.usingMouse = false
-            self.vel.x = Player.MOVE_SPEED
+            self.vel.x = self:getMoveSpeed()
         else
             self.vel.x = 0
         end
         if love.keyboard.isDown('w') then
             self.usingMouse = false
-            self.vel.y = -Player.MOVE_SPEED
+            self.vel.y = -self:getMoveSpeed()
         elseif love.keyboard.isDown('s') then
             self.usingMouse = false
-            self.vel.y = Player.MOVE_SPEED
+            self.vel.y = self:getMoveSpeed()
         else
             self.vel.y = 0
         end

@@ -1,16 +1,20 @@
 local Vector = require 'modules.hump.vector'
-local Gamestate = require 'modules.hump.gamestate'
 local Signal = require 'modules.hump.signal'
+local Gamestate = require 'modules.hump.gamestate'
 local Timer = require 'modules.hump.timer'
-local Transition = require 'src.states.transition'
-local Player = require 'src.objects.player'
-local Raindrop = require 'src.objects.raindrop'
-local Camera = require 'src.camera'
-local ChunkSpawner = require 'src.chunkSpawner'
+
 local Constants = require 'src.constants'
+local Camera = require 'src.camera'
 local Music = require 'src.music'
-local Objects = require 'src.objects'
+
+local Finale = require 'src.states.finale'
+local Transition = require 'src.states.transition'
+
+local ChunkSpawner = require 'src.chunkSpawner'
 local Rain = require 'src.rain'
+local Objects = require 'src.objects'
+
+local Player = require 'src.objects.player'
 local Flower = require 'src.objects.flower'
 
 local Game = {}
@@ -38,6 +42,7 @@ function Game:init()
 end
 
 function Game:enter()
+    self.transitioning = false
     self.transition:fadeIn()
     self.objects = Objects()
     self.player = Player(self.objects, 0, 120)
@@ -122,6 +127,15 @@ function Game:update(dt)
         end)
     end
     Music.tryPlayingLoudRain()
+
+    if self.player:getDistance() >= Game.DISTANCE then
+        if not self.transitioning then
+            self.transitioning = true
+            self.transition:fadeOut(function()
+                Gamestate.switch(Finale)
+            end)
+        end
+    end
 end
 
 function Game:keypressed(key)

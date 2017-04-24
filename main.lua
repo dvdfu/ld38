@@ -5,8 +5,6 @@ math.randomseed(os.time())
 
 local Gamestate = require 'modules.hump.gamestate'
 local Intro = require 'src.states.intro'
-local Game = require 'src.states.game'
-local Constants = require 'src.constants'
 local Music = require 'src.music'
 
 function love.load()
