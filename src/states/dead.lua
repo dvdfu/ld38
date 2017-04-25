@@ -27,13 +27,16 @@ function Dead:enter()
     self.state = {
         opacity = 0,
         textPos = Constants.GAME_HEIGHT / 2,
-        textOpacity = 0
+        textOpacity = 0,
+        bgScale = 1.0
     }
+
+    self.timer:tween(2000, self.state, { bgScale = 1.5 }, 'linear')
 
     self.timer:after(200, function()
         self.timer:tween(60, self.state, {
             opacity = 125,
-            textPos = Constants.GAME_HEIGHT / 2 - 75,
+            textPos = Constants.GAME_HEIGHT / 2 - 50,
             textOpacity = 255
         }, 'in-out-cubic', function()
             self.enableInput = true
@@ -64,7 +67,7 @@ function Dead:update(dt)
 end
 
 function Dead:draw()
-    love.graphics.draw(sprites.background, 0, 0)
+    love.graphics.draw(sprites.background, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT / 2, 0, self.state.bgScale, self.state.bgScale, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT / 2)
 
     love.graphics.setColor(0, 0, 0, self.state.opacity)
     love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
