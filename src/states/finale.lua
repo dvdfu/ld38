@@ -54,7 +54,7 @@ function Finale:drawCredits()
     love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
 
     love.graphics.setColor(255, 255, 255)
-    love.graphics.print("Made by David Fu, Seikun Kambashi and Hamdan Javeed", 22, self.state.textPos)
+    love.graphics.print("Made by David Fu, Hamdan Javeed, and Seikun Kambashi", 22, self.state.textPos)
 end
 
 function Finale:draw()
