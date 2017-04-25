@@ -14,7 +14,6 @@ local sprites = {
 }
 
 local Intro = {}
-Intro.START_TIME = 60
 
 function Intro:init()
     self.transition = Transition()
@@ -23,7 +22,7 @@ end
 function Intro:enter()
     Music.init()
     self.objects = Objects()
-    self.player = Player(self.objects, Constants.GAME_WIDTH / 2 + 80, Constants.GAME_HEIGHT * 3 / 4, true)
+    self.player = Player(self.objects, Constants.GAME_WIDTH / 2 - 20, Constants.GAME_HEIGHT - 110, true)
     self.rain = Rain()
     self.timer = Timer.new()
     self.timer:every(1, function()
@@ -34,7 +33,6 @@ function Intro:enter()
     self.flower = Flower(self.objects, Constants.GAME_WIDTH - 150, Constants.GAME_HEIGHT - 50)
 
     self.state = { countdown = 3, textOpacity = 0 }
-    self.timeRemaining = Intro.START_TIME
     self.transitioning = false
     self.transition:fadeIn()
 end
@@ -47,24 +45,8 @@ function Intro:update(dt)
     self.rain:update(dt)
     self.transition:update(dt)
 
-    local dist
-    for _, b in pairs(self.player.bees) do
-        dist = b:getPosition():dist(self.flower:getPosition())
-        break
-    end
-    if dist < 50 then
-        if self.timeRemaining > dt then
-            self.timeRemaining = self.timeRemaining - dt
-        else
-            self.timeRemaining = 0
-            self:gotoNextState()
-        end
-    elseif not self.transitioning then
-        if self.timeRemaining + dt < Intro.START_TIME then
-            self.timeRemaining = self.timeRemaining + dt
-        else
-            self.timeRemaining = Intro.START_TIME
-        end
+    if self.flower.pollen.pollinated then
+        self:gotoNextState()
     end
 end
 
@@ -95,7 +77,6 @@ function Intro:draw()
     love.graphics.print("Ludum Dare 38: Small World", 100, 220 + 64)
     love.graphics.setColor(255, 255, 255)
 
-    love.graphics.arc('fill', 480, 240, 16, -math.pi / 2 + (self.timeRemaining / Intro.START_TIME) * math.pi * 2, math.pi * 3 / 2, 100)
     self.objects:draw()
     self.player:draw()
     self.rain:draw()
