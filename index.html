@@ -14,7 +14,7 @@
         <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
         <canvas id="loadingCanvas" oncontextmenu="event.preventDefault()" width="800" height="600"></canvas>
       </div>
-      <div id="errorMessage" class="hidden">
+      <div id="errorMessage" style="display: none;">
           <h1>Try reloading the page while ignoring the cache (usually Ctrl-Shift-R or Cmd-Shift-R)</h1>
       </div>
     </center>
@@ -79,7 +79,7 @@
       Module.setStatus('Downloading...');
       window.onerror = function(event) {
           console.log("Honey Home crashed")
-          document.getElementById("errorMessage").classList.remove("hidden");
+          document.getElementById("errorMessage").style.display = "block";
         // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
         Module.setStatus('Exception thrown, see JavaScript console');
         Module.setStatus = function(text) {
