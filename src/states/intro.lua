@@ -30,7 +30,11 @@ function Intro:enter()
         self.rain:add(math.random() * Constants.GAME_WIDTH)
     end)
 
-    Flower(self.objects, Constants.GAME_WIDTH - 150, Constants.GAME_HEIGHT - 50)
+    self.flower = Flower(self.objects, Constants.GAME_WIDTH - 150, Constants.GAME_HEIGHT - 50)
+
+    self.state = { countdown = 3, textOpacity = 0 }
+    self.starting = false
+    self.startTimer = Timer.new()
 
     self.transitioning = false
     self.transition:fadeIn()
@@ -44,6 +48,36 @@ function Intro:update(dt)
     self.rain:update(dt)
     self.transition:update(dt)
     self.timer:update(dt)
+    self.startTimer:update(dt)
+
+    local dist = self.player:getPosition():dist(self.flower:getPosition())
+    local flowerDist = 50
+    local slope = 1.0 * (255) / (-flowerDist)
+    self.state.textOpacity = slope * (dist - flowerDist)
+    if self.state.textOpacity < 0 then self.state.textOpacity = 0 end
+    if self.state.textOpacity > 200 then self.state.textOpacity = 255 end
+
+    if dist < flowerDist and not self.starting then
+        self.starting = true
+        self.startTimer:after(60, function()
+            self.state.countdown = 2
+            self.startTimer:after(60, function()
+                self.state.countdown = 1
+                self.startTimer:after(60, function()
+                    self.state.countdown = "Go!"
+                    self.transitioning = true
+                    self.transition:fadeOut(function()
+                        local Game = require 'src.states.game'
+                        Gamestate.switch(Game)
+                    end)
+                end)
+            end)
+        end)
+    elseif self.starting and dist >= flowerDist then
+        self.startTimer:clear()
+        self.state.countdown = 3
+        self.starting = false
+    end
 end
 
 function Intro:keypressed(key)
@@ -64,10 +98,16 @@ function Intro:draw()
     love.graphics.setFont(Constants.FONTS.REDALERT)
     love.graphics.print("Click & hold or WASD to move", 100, 220)
     love.graphics.print("Visit flowers to recruit bees", 100, 220 + 16)
-    love.graphics.print("Get home safe! Press ENTER to START!", 100, 220 + 32)
+    love.graphics.print("Get home safe! Fly to the flower to start!", 100, 220 + 32)
     love.graphics.setColor(128, 128, 128)
     love.graphics.print("@dvdfu, Hamdan Javeed, Seikun Kambashi", 100, 220 + 48)
     love.graphics.print("Ludum Dare 38: Small World", 100, 220 + 64)
+
+    love.graphics.push('all')
+        love.graphics.setColor(255, 255, 255, self.state.textOpacity)
+        love.graphics.setFont(Constants.FONTS.REDALERT_LARGE)
+        love.graphics.printf(self.state.countdown, 375, 190, 150, 'center')
+    love.graphics.pop()
     love.graphics.setColor(255, 255, 255)
 
     self.objects:draw()

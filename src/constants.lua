@@ -4,6 +4,7 @@ return {
     DEBUG = false,
     TOTAL_CHUNKS = 24,
     FONTS = {
-        REDALERT = love.graphics.newFont('res/fonts/redalert.ttf', 13)
+        REDALERT = love.graphics.newFont('res/fonts/redalert.ttf', 13),
+        REDALERT_LARGE = love.graphics.newFont('res/fonts/redalert.ttf', 48)
     },
 }
