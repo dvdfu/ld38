@@ -50,7 +50,11 @@ function Intro:update(dt)
     self.timer:update(dt)
     self.startTimer:update(dt)
 
-    local dist = self.player:getPosition():dist(self.flower:getPosition())
+    local dist
+    for _, b in pairs(self.player.bees) do
+        dist = b:getPosition():dist(self.flower:getPosition())
+        break
+    end
     local flowerDist = 50
     local slope = 1.0 * (255) / (-flowerDist)
     self.state.textOpacity = slope * (dist - flowerDist)
@@ -65,11 +69,7 @@ function Intro:update(dt)
                 self.state.countdown = 1
                 self.startTimer:after(60, function()
                     self.state.countdown = "Go!"
-                    self.transitioning = true
-                    self.transition:fadeOut(function()
-                        local Game = require 'src.states.game'
-                        Gamestate.switch(Game)
-                    end)
+                    self:gotoNextState()
                 end)
             end)
         end)
@@ -91,14 +91,6 @@ end
 function Intro:keypressed(key)
     if key == 'escape' then
         love.event.quit()
-    elseif not self.transitioning and key == 'return' then
-        self:gotoNextState()
-    end
-end
-
-function Intro:mousepressed(x, y, button)
-    if not self.transitioning then
-        self:gotoNextState()
     end
 end
 
