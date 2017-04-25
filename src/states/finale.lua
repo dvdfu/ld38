@@ -37,16 +37,26 @@ function Finale:enter()
     end)
 end
 
+function Finale:gotoNextState()
+    self.enableInput = false
+    self.transition:fadeOut(function()
+        local Intro = require 'src.states.intro'
+        Gamestate.switch(Intro)
+    end)
+end
+
 function Finale:keypressed(key)
     if key == 'escape' then
         local Intro = require 'src.states.intro'
         Gamestate.switch(Intro)
     elseif self.enableInput and key == 'return' then
-        self.enableInput = false
-        self.transition:fadeOut(function()
-            local Intro = require 'src.states.intro'
-            Gamestate.switch(Intro)
-        end)
+        self:gotoNextState()
+    end
+end
+
+function Finale:mousepressed()
+    if self.enableInput then
+        self:gotoNextState()
     end
 end
 
@@ -60,8 +70,8 @@ function Finale:drawCredits()
     love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
 
     love.graphics.setColor(255, 255, 255, self.state.textOpacity)
+
     love.graphics.print("Made by David Fu, Hamdan Javeed, and Seikun Kambashi", 22, self.state.textPos)
-    love.graphics.printf("Press ENTER to try again", Constants.GAME_WIDTH / 2 - 100, self.state.restartTextPos, 200, 'center')
     love.graphics.setColor(255, 255, 255)
 end
 

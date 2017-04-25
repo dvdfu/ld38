@@ -80,15 +80,25 @@ function Intro:update(dt)
     end
 end
 
+function Intro:gotoNextState()
+    self.transitioning = true
+    self.transition:fadeOut(function()
+        local Game = require 'src.states.game'
+        Gamestate.switch(Game)
+    end)
+end
+
 function Intro:keypressed(key)
     if key == 'escape' then
         love.event.quit()
     elseif not self.transitioning and key == 'return' then
-        self.transitioning = true
-        self.transition:fadeOut(function()
-            local Game = require 'src.states.game'
-            Gamestate.switch(Game)
-        end)
+        self:gotoNextState()
+    end
+end
+
+function Intro:mousepressed(x, y, button)
+    if not self.transitioning then
+        self:gotoNextState()
     end
 end
 
