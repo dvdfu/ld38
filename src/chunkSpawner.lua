@@ -29,10 +29,10 @@ function Chunk:init(objects, id, player)
         self:spawnDandelions(0, 1)
     else
         if id > 6 then
-            local numFlies = math.random(0, 1) + math.floor(id / 8)
+            local numFlies = math.random(0, 1) + math.floor(id / 12)
             self:spawnFlies(numFlies)
         end
-        local numDrips = math.random(0, 2) + math.floor(id / 8)
+        local numDrips = math.random(0, 2) + math.floor(id / 12)
         local numFlowers = math.random(2, 4) - math.floor(id / 12)
         local numDandelions = math.random(0, 2)
         self:spawnDrips(numDrips)
