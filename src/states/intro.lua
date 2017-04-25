@@ -14,6 +14,7 @@ local sprites = {
 }
 
 local Intro = {}
+Intro.START_TIME = 60
 
 function Intro:init()
     self.transition = Transition()
@@ -33,9 +34,7 @@ function Intro:enter()
     self.flower = Flower(self.objects, Constants.GAME_WIDTH - 150, Constants.GAME_HEIGHT - 50)
 
     self.state = { countdown = 3, textOpacity = 0 }
-    self.starting = false
-    self.startTimer = Timer.new()
-
+    self.timeRemaining = Intro.START_TIME
     self.transitioning = false
     self.transition:fadeIn()
 end
@@ -47,40 +46,30 @@ function Intro:update(dt)
     self.player:update(dt)
     self.rain:update(dt)
     self.transition:update(dt)
-    self.timer:update(dt)
-    self.startTimer:update(dt)
 
     local dist
     for _, b in pairs(self.player.bees) do
         dist = b:getPosition():dist(self.flower:getPosition())
         break
     end
-    local flowerDist = 50
-    local slope = 1.0 * (255) / (-flowerDist)
-    self.state.textOpacity = slope * (dist - flowerDist)
-    if self.state.textOpacity < 0 then self.state.textOpacity = 0 end
-    if self.state.textOpacity > 200 then self.state.textOpacity = 255 end
-
-    if dist < flowerDist and not self.starting then
-        self.starting = true
-        self.startTimer:after(60, function()
-            self.state.countdown = 2
-            self.startTimer:after(60, function()
-                self.state.countdown = 1
-                self.startTimer:after(60, function()
-                    self.state.countdown = "Go!"
-                    self:gotoNextState()
-                end)
-            end)
-        end)
-    elseif self.starting and dist >= flowerDist then
-        self.startTimer:clear()
-        self.state.countdown = 3
-        self.starting = false
+    if dist < 50 then
+        if self.timeRemaining > dt then
+            self.timeRemaining = self.timeRemaining - dt
+        else
+            self.timeRemaining = 0
+            self:gotoNextState()
+        end
+    elseif not self.transitioning then
+        if self.timeRemaining + dt < Intro.START_TIME then
+            self.timeRemaining = self.timeRemaining + dt
+        else
+            self.timeRemaining = Intro.START_TIME
+        end
     end
 end
 
 function Intro:gotoNextState()
+    if self.transitioning then return end
     self.transitioning = true
     self.transition:fadeOut(function()
         local Game = require 'src.states.game'
@@ -104,14 +93,9 @@ function Intro:draw()
     love.graphics.setColor(128, 128, 128)
     love.graphics.print("@dvdfu, Hamdan Javeed, Seikun Kambashi", 100, 220 + 48)
     love.graphics.print("Ludum Dare 38: Small World", 100, 220 + 64)
-
-    love.graphics.push('all')
-        love.graphics.setColor(255, 255, 255, self.state.textOpacity)
-        love.graphics.setFont(Constants.FONTS.REDALERT_LARGE)
-        love.graphics.printf(self.state.countdown, 375, 190, 150, 'center')
-    love.graphics.pop()
     love.graphics.setColor(255, 255, 255)
 
+    love.graphics.arc('fill', 480, 240, 16, -math.pi / 2 + (self.timeRemaining / Intro.START_TIME) * math.pi * 2, math.pi * 3 / 2, 100)
     self.objects:draw()
     self.player:draw()
     self.rain:draw()
