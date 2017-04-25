@@ -42,7 +42,6 @@ end
 function Music.setFade(x)
     if x < 0 then x = 0 end
     if x > Music.SOUNDTRACK_MAX_VOLUME then x = Music.SOUNDTRACK_MAX_VOLUME end
-    -- soft:setVolume(Music.SOUNDTRACK_MAX_VOLUME - x)
     loud:setVolume(x)
     ambient:setVolume(x)
 end
