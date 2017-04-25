@@ -22,7 +22,7 @@ local musicModifiers = { rainVolume = Music.LOUD_RAIN_VOLUME, rainPitch = Music.
 local modifiersChanging = false
 local modifierTimer = Timer.new()
 
-local music_volume = 2
+local music_volume = 6
 
 function Music.init()
     soft:setLooping(true)

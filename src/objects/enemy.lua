@@ -5,6 +5,10 @@ local Constants = require 'src.constants'
 local Enemy = Class.new()
 Enemy:include(Object)
 
+local sounds = {
+    buzz = love.audio.newSource('res/sounds/fly.mp3')
+}
+
 function Enemy:init(objects, x, y, player)
     Object.init(self, objects, x, y)
     self.player = player
@@ -36,6 +40,7 @@ function Enemy:update(dt)
         if delta:len() < self:getLockingDistance() then
             self.state = 'locked'
             self.delta = delta
+            sounds.buzz:play()
         end
     elseif self.state == 'locked' then
         delta = self.delta

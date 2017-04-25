@@ -16,6 +16,10 @@ local sprites = {
     dropletSmall = love.graphics.newImage('res/droplet_small.png')
 }
 
+local sounds = {
+    poof = love.audio.newSource('res/sounds/poof.mp3')
+}
+
 local Pollen = Class.new()
 Pollen:include(Object)
 Pollen.NUM_BEES = 2
@@ -50,6 +54,7 @@ function Pollen:pollinate()
     if self.pollinated then return false end
     self.pollinated = true
     self.puff:play()
+    sounds.poof:play()
     return true
 end
 
