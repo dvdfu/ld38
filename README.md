@@ -1,4 +1,4 @@
-# ld38
+# Honey Home
 ## Ludum Dare 38
 
 When it rains, it pours. Guide your bees back to their hive to stay out of the weather! Visit flowers to get some bee reinforcement, and bring as many bees back home while avoiding the massive dangers of the tiny bee world.
