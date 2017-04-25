@@ -46,15 +46,25 @@ function Intro:update(dt)
     self.timer:update(dt)
 end
 
+function Intro:gotoNextState()
+    self.transitioning = true
+    self.transition:fadeOut(function()
+        local Game = require 'src.states.game'
+        Gamestate.switch(Game)
+    end)
+end
+
 function Intro:keypressed(key)
     if key == 'escape' then
         love.event.quit()
     elseif not self.transitioning and key == 'return' then
-        self.transitioning = true
-        self.transition:fadeOut(function()
-            local Game = require 'src.states.game'
-            Gamestate.switch(Game)
-        end)
+        self:gotoNextState()
+    end
+end
+
+function Intro:mousepressed(x, y, button)
+    if not self.transitioning then
+        self:gotoNextState()
     end
 end
 
@@ -64,7 +74,7 @@ function Intro:draw()
     love.graphics.setFont(Constants.FONTS.REDALERT)
     love.graphics.print("Click & hold or WASD to move", 100, 220)
     love.graphics.print("Visit flowers to recruit bees", 100, 220 + 16)
-    love.graphics.print("Get home safe! Press ENTER to START!", 100, 220 + 32)
+    love.graphics.print("Get home safe!", 100, 220 + 32)
     love.graphics.setColor(128, 128, 128)
     love.graphics.print("@dvdfu, Hamdan Javeed, Seikun Kambashi", 100, 220 + 48)
     love.graphics.print("Ludum Dare 38: Small World", 100, 220 + 64)

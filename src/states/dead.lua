@@ -44,8 +44,12 @@ function Dead:enter()
     end)
 end
 
-function Dead:update(dt)
-    self.timer:update(dt)
+function Dead:gotoNextState()
+    self.enableInput = false
+    self.transition:fadeOut(function()
+        local Intro = require 'src.states.intro'
+        Gamestate.switch(Intro)
+    end)
 end
 
 function Dead:keypressed(key)
@@ -53,11 +57,13 @@ function Dead:keypressed(key)
         local Intro = require 'src.states.intro'
         Gamestate.switch(Intro)
     elseif self.enableInput and key == 'return' then
-        self.enableInput = false
-        self.transition:fadeOut(function()
-            local Intro = require 'src.states.intro'
-            Gamestate.switch(Intro)
-        end)
+        self:gotoNextState()
+    end
+end
+
+function Dead:mousepressed()
+    if self.enableInput then
+        self:gotoNextState()
     end
 end
 
@@ -73,7 +79,7 @@ function Dead:draw()
     love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
     love.graphics.setColor(255, 255, 255, self.state.textOpacity)
     love.graphics.printf(self.dead_string, Constants.GAME_WIDTH / 2 - 100, self.state.textPos, 200, 'center')
-    love.graphics.printf("Press ENTER to try again", Constants.GAME_WIDTH / 2 - 100, self.state.textPos + 50, 200, 'center')
+    love.graphics.printf("TAP or press ENTER to try again", Constants.GAME_WIDTH / 2 - 100, self.state.textPos + 50, 200, 'center')
     love.graphics.setColor(255, 255, 255)
 
     self.transition:draw()

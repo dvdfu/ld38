@@ -16,6 +16,10 @@ function love.update(dt)
     Gamestate.update(dt)
 end
 
+function love.mousepressed(x, y, button, isTouch)
+    Gamestate.mousepressed(x, y, button, isTouch)
+end
+
 function love.keypressed(key)
     Gamestate.keypressed(key)
     if key == '-' then
