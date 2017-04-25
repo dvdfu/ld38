@@ -53,10 +53,7 @@ function Dead:gotoNextState()
 end
 
 function Dead:keypressed(key)
-    if key == 'escape' then
-        local Intro = require 'src.states.intro'
-        Gamestate.switch(Intro)
-    elseif self.enableInput and key == 'return' then
+    if self.enableInput and (key == 'return' or key == 'escape') then
         self:gotoNextState()
     end
 end
