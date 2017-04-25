@@ -18,12 +18,18 @@ function Finale:enter()
     self.timer = Timer.new()
     self.state = {
         opacity = 0,
-        textPos = Constants.GAME_HEIGHT
+        textOpacity = 0,
+        textPos = Constants.GAME_HEIGHT,
+        restartTextPos = Constants.GAME_HEIGHT / 2 - 50,
+        bgScale = 1.0
     }
+
+    self.timer:tween(2000, self.state, { bgScale = 1.25 }, 'linear')
 
     self.timer:after(200, function()
         self.timer:tween(60, self.state, {
             opacity = 125,
+            textOpacity = 255,
             textPos = Constants.GAME_HEIGHT - 30
         }, 'in-out-cubic', function()
             self.enableInput = true
@@ -53,12 +59,15 @@ function Finale:drawCredits()
     love.graphics.setColor(0, 0, 0, self.state.opacity)
     love.graphics.rectangle('fill', 0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT)
 
-    love.graphics.setColor(255, 255, 255)
+    love.graphics.setColor(255, 255, 255, self.state.textOpacity)
     love.graphics.print("Made by David Fu, Hamdan Javeed, and Seikun Kambashi", 22, self.state.textPos)
+    love.graphics.printf("Press ENTER to try again", Constants.GAME_WIDTH / 2 - 100, self.state.restartTextPos, 200, 'center')
+    love.graphics.setColor(255, 255, 255)
 end
 
 function Finale:draw()
-    love.graphics.draw(sprites.background, 0, 0)
+    love.graphics.draw(sprites.background, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT / 2, 0, self.state.bgScale, self.state.bgScale, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT / 2)
+
 
     self:drawCredits()
     self.transition:draw()
