@@ -54,8 +54,13 @@ function Finale:keypressed(key)
     end
 end
 
+function Finale:mousepressed()
+    if self.enableInput then
+        self:gotoNextState()
+    end
+end
+
 function Finale:update(dt)
-    if self.enableInput and love.mouse.isDown(1) then self:gotoNextState() end
     self.transition:update(dt)
     self.timer:update(dt)
 end

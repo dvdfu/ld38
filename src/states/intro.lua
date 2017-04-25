@@ -37,7 +37,6 @@ function Intro:enter()
 end
 
 function Intro:update(dt)
-    if not self.transitioning and love.mouse.isDown(1) then self:gotoNextState() end
     local mousePos = Vector(love.mouse.getPosition()) / 2
     self.player:setMouse(mousePos)
     self.objects:update(dt)
@@ -59,6 +58,12 @@ function Intro:keypressed(key)
     if key == 'escape' then
         love.event.quit()
     elseif not self.transitioning and key == 'return' then
+        self:gotoNextState()
+    end
+end
+
+function Intro:mousepressed(x, y, button)
+    if not self.transitioning then
         self:gotoNextState()
     end
 end

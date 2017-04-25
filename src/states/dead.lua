@@ -61,8 +61,13 @@ function Dead:keypressed(key)
     end
 end
 
+function Dead:mousepressed()
+    if self.enableInput then
+        self:gotoNextState()
+    end
+end
+
 function Dead:update(dt)
-    if self.enableInput and love.mouse.isDown(1) then self:gotoNextState() end
     self.transition:update(dt)
     self.timer:update(dt)
 end
