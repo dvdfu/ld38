@@ -18,8 +18,11 @@ function Finale:enter()
     self.timer = Timer.new()
     self.state = {
         opacity = 0,
-        textPos = Constants.GAME_HEIGHT
+        textPos = Constants.GAME_HEIGHT,
+        bgScale = 1.0
     }
+
+    self.timer:tween(200, self.state, { bgScale = 1.5 }, 'linear')
 
     self.timer:after(200, function()
         self.timer:tween(60, self.state, {
@@ -58,7 +61,8 @@ function Finale:drawCredits()
 end
 
 function Finale:draw()
-    love.graphics.draw(sprites.background, 0, 0)
+    love.graphics.draw(sprites.background, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT / 2, 0, self.state.bgScale, self.state.bgScale, Constants.GAME_WIDTH / 2, Constants.GAME_HEIGHT / 2)
+
 
     self:drawCredits()
     self.transition:draw()
