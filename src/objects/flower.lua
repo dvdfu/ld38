@@ -146,6 +146,8 @@ function Flower:draw()
     love.graphics.draw(sprites.petals, x, y, petalRotation, 1, 1, 80, 18, petalRotation)
     love.graphics.draw(sprites.stamen, x, y - 2, 0, 1, 1, 16, 32, shear)
     love.graphics.draw(self.splashes)
+    
+    self.pollen:draw()
 end
 
 return Flower
