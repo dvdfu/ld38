@@ -78,6 +78,8 @@ function Dandelion:draw()
     root = seed + (root - seed):trimmed(self.radius + 20)
     love.graphics.line(seed.x, seed.y, root.x, root.y)
     love.graphics.setColor(255, 255, 255)
+    
+    self.seeds:draw()
 end
 
 return Dandelion
