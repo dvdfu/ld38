@@ -6,7 +6,7 @@ local Enemy = Class.new()
 Enemy:include(Object)
 
 local sounds = {
-    buzz = love.audio.newSource('res/sounds/fly.mp3')
+    buzz = love.audio.newSource('res/sounds/fly.mp3', "stream")
 }
 
 function Enemy:init(objects, x, y, player)

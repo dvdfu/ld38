@@ -15,7 +15,7 @@ local sprites = {
 }
 
 local sounds = {
-    droplet = love.audio.newSource('res/sounds/droplet.wav')
+    droplet = love.audio.newSource('res/sounds/droplet.wav', "stream")
 }
 
 function Raindrop:init(objects, x, y, radius)
