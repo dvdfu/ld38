@@ -17,7 +17,7 @@ local sprites = {
 }
 
 local sounds = {
-    poof = love.audio.newSource('res/sounds/poof.mp3')
+    poof = love.audio.newSource('res/sounds/poof.mp3', "stream")
 }
 
 local Pollen = Class.new()

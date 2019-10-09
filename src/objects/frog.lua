@@ -13,7 +13,7 @@ local sprites = {
 }
 
 local sounds = {
-    frog = love.audio.newSource('res/sounds/ribbit.wav')
+    frog = love.audio.newSource('res/sounds/ribbit.wav', "stream")
 }
 
 local Tongue = Class.new()

@@ -1,6 +1,6 @@
 [submodule "modules/hump"]
 	path = modules/hump
-	url = git@github.com:vrld/hump.git
+	url = https://github.com/vrld/hump.git
 [submodule "modules/bump"]
 	path = modules/bump
-	url = git@github.com:kikito/bump.lua.git
+	url = https://github.com/kikito/bump.lua.git
