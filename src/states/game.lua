@@ -31,7 +31,7 @@ local sprites = {
 }
 
 local sounds = {
-    thunder = love.audio.newSource('res/sounds/thunder.mp3')
+    thunder = love.audio.newSource('res/sounds/thunder.mp3', "stream")
 }
 
 function Game:init()
